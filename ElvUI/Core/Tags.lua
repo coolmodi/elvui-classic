@@ -168,7 +168,7 @@ end
 do
 	local function NameHealthColor(tags,hex,unit,default)
 		if hex == 'class' or hex == 'reaction' then
-			return tags.namecolor(unit)
+			return tags.namecolor(unit) or default
 		elseif hex and strmatch(hex, '^%x%x%x%x%x%x$') then
 			return '|cFF'..hex
 		end
@@ -178,7 +178,7 @@ do
 	E.TagFunctions.NameHealthColor = NameHealthColor
 
 	-- the third arg here is added from the user as like [name:health{ff00ff:00ff00}] or [name:health{class:00ff00}]
-	ElvUF.Tags.Events['name:health'] = 'UNIT_NAME_UPDATE UNIT_FACTION UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH'
+	ElvUF.Tags.Events['name:health'] = 'UNIT_NAME_UPDATE UNIT_FACTION UNIT_HEALTH_FREQUENT UNIT_HEALTH UNIT_MAXHEALTH'
 	ElvUF.Tags.Methods['name:health'] = function(unit, _, args)
 		local name = UnitName(unit)
 		if not name then return '' end
