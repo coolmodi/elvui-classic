@@ -165,34 +165,6 @@ ElvUF.Tags.Methods['name:last'] = function(unit)
 	return name
 end
 
-do
-	local function NameHealthColor(tags,hex,unit,default)
-		if hex == 'class' or hex == 'reaction' then
-			return tags.namecolor(unit) or default
-		elseif hex and strmatch(hex, '^%x%x%x%x%x%x$') then
-			return '|cFF'..hex
-		end
-
-		return default
-	end
-	E.TagFunctions.NameHealthColor = NameHealthColor
-
-	-- the third arg here is added from the user as like [name:health{ff00ff:00ff00}] or [name:health{class:00ff00}]
-	ElvUF.Tags.Events['name:health'] = 'UNIT_NAME_UPDATE UNIT_FACTION UNIT_HEALTH_FREQUENT UNIT_HEALTH UNIT_MAXHEALTH'
-	ElvUF.Tags.Methods['name:health'] = function(unit, _, args)
-		local name = UnitName(unit)
-		if not name then return '' end
-
-		local min, max, bco, fco = UnitHealth(unit), UnitHealthMax(unit), strsplit(':', args or '')
-		local to = ceil(utf8len(name) * (min / max))
-
-		local fill = NameHealthColor(_TAGS, fco, unit, '|cFFff3333')
-		local base = NameHealthColor(_TAGS, bco, unit, '|cFFffffff')
-
-		return to > 0 and (base..utf8sub(name, 0, to)..fill..utf8sub(name, to+1, -1)) or fill..name
-	end
-end
-
 ElvUF.Tags.Events['health:deficit-percent:nostatus'] = 'UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH'
 ElvUF.Tags.Methods['health:deficit-percent:nostatus'] = function(unit)
 	local min, max = UnitHealth(unit), UnitHealthMax(unit)
@@ -396,6 +368,34 @@ ElvUF.Tags.Methods['mana:max:shortvalue'] = function(unit)
 	local max = UnitPowerMax(unit, SPELL_POWER_MANA)
 
 	return E:GetFormattedText('CURRENT', max, max, nil, true)
+end
+
+do
+	local function NameHealthColor(tags,hex,unit,default)
+		if hex == 'class' or hex == 'reaction' then
+			return tags.namecolor(unit) or default
+		elseif hex and strmatch(hex, '^%x%x%x%x%x%x$') then
+			return '|cFF'..hex
+		end
+
+		return default
+	end
+	E.TagFunctions.NameHealthColor = NameHealthColor
+
+	-- the third arg here is added from the user as like [name:health{ff00ff:00ff00}] or [name:health{class:00ff00}]
+	ElvUF.Tags.Events['name:health'] = 'UNIT_NAME_UPDATE UNIT_FACTION UNIT_HEALTH_FREQUENT UNIT_HEALTH UNIT_MAXHEALTH'
+	ElvUF.Tags.Methods['name:health'] = function(unit, _, args)
+		local name = UnitName(unit)
+		if not name then return '' end
+
+		local min, max, bco, fco = UnitHealth(unit), UnitHealthMax(unit), strsplit(':', args or '')
+		local to = ceil(utf8len(name) * (min / max))
+
+		local fill = NameHealthColor(_TAGS, fco, unit, '|cFFff3333')
+		local base = NameHealthColor(_TAGS, bco, unit, '|cFFffffff')
+
+		return to > 0 and (base..utf8sub(name, 0, to)..fill..utf8sub(name, to+1, -1)) or fill..name
+	end
 end
 
 ElvUF.Tags.Events['health:deficit-percent:name'] = 'UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_NAME_UPDATE'
