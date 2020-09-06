@@ -24,14 +24,26 @@ local BAG_TYPES = {
 
 local function OnEvent(self)
 	lastPanel = self
-	local free, total = 0, 0
+	local free, total, used = 0, 0
 	for i = 0, NUM_BAG_SLOTS do
 		local bagFreeSlots, bagType = GetContainerNumFreeSlots(i)
 		if not bagType or bagType == 0 then
 			free, total = free + bagFreeSlots, total + GetContainerNumSlots(i)
 		end
 	end
-	self.text:SetFormattedText(displayString, L["Bags"]..': ', free, total)
+	used = total - free
+
+	local textFormat = E.global.datatexts.settings.Bags.textFormat
+
+	if textFormat == "FREE" then
+		self.text:SetFormattedText(displayString, L["Bags"]..": ", free)
+	elseif textFormat == "USED" then
+		self.text:SetFormattedText(displayString, L["Bags"]..": ", used)
+	elseif textFormat == "FREE_TOTAL" then
+		self.text:SetFormattedText(displayString, L["Bags"]..": ", free, total)
+	else
+		self.text:SetFormattedText(displayString, L["Bags"]..": ", used, total)
+	end
 end
 
 local function OnClick()
@@ -69,7 +81,12 @@ local function OnEnter(self)
 end
 
 local function ValueColorUpdate(hex)
-	displayString = strjoin('', '%s', hex, '%d/%d|r')
+	local textFormat = E.global.datatexts.settings.Bags.textFormat
+	if textFormat == "FREE" or textFormat == "USED" then
+		displayString = strjoin('', '%s', hex, '%d|r')
+	else
+		displayString = strjoin('', '%s', hex, '%d/%d|r')
+	end
 
 	if lastPanel ~= nil then
 		OnEvent(lastPanel)
@@ -77,4 +94,4 @@ local function ValueColorUpdate(hex)
 end
 E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
-DT:RegisterDatatext('Bags', nil, {'BAG_UPDATE'}, OnEvent, nil, OnClick, OnEnter, nil, L["Bags"])
+DT:RegisterDatatext('Bags', nil, {'BAG_UPDATE'}, OnEvent, nil, OnClick, OnEnter, nil, L["Bags"], nil, ValueColorUpdate)
