@@ -20,7 +20,7 @@ function DB:PetExperienceBar_Update()
 	end
 
 	local color = DB.db.colors.petExperience
-	bar:SetStatusBarColor(color.r, color.g, color.b)
+	bar:SetStatusBarColor(color.r, color.g, color.b, color.a)
 
 	local cur, max = GetPetExperience()
 	if max <= 0 then max = 1 end
