@@ -19,19 +19,21 @@ local UIDropDownMenu_SetAnchor = UIDropDownMenu_SetAnchor
 local UnregisterStateDriver = UnregisterStateDriver
 local MISCELLANEOUS = MISCELLANEOUS
 
+local LFG_TYPE_DUNGEON = LFG_TYPE_DUNGEON
+local expansion = _G['EXPANSION_NAME'..GetExpansionLevel()]
 local ActivateHyperMode
 local HyperList = {}
+
+DT.tooltip = CreateFrame('GameTooltip', 'DataTextTooltip', E.UIParent, 'GameTooltipTemplate')
+DT.EasyMenu = CreateFrame('Frame', 'DataTextEasyMenu', E.UIParent, 'UIDropDownMenuTemplate')
 
 DT.SelectedDatatext = nil
 DT.HyperList = HyperList
 DT.RegisteredPanels = {}
 DT.RegisteredDataTexts = {}
 DT.LoadedInfo = {}
-DT.PanelPool = {
-	InUse = {},
-	Free = {},
-	Count = 0
-}
+DT.PanelPool = { InUse = {}, Free = {}, Count = 0 }
+DT.AssignedDatatexts = {}
 DT.UnitEvents = {
 	UNIT_AURA = true,
 	UNIT_RESISTANCES = true,
@@ -394,6 +396,19 @@ function DT:AssignPanelToDataText(dt, data, event, ...)
 	end
 end
 
+function DT:ForceUpdate_DataText(name)
+	for dtSlot, dtName in pairs(DT.AssignedDatatexts) do
+		if dtName.name == name then
+			if dtName.colorUpdate then
+				dtName.colorUpdate(E.media.hexvaluecolor)
+			end
+			if dtName.eventFunc then
+				dtName.eventFunc(dtSlot, 'ELVUI_FORCE_UPDATE')
+			end
+		end
+	end
+end
+
 function DT:GetTextAttributes(panel, db)
 	local panelWidth, panelHeight = panel:GetSize()
 	local numPoints = db and db.numPoints or panel.numPoints or 1
@@ -493,6 +508,7 @@ function DT:UpdatePanelInfo(panelName, panel, ...)
 			dt:SetScript('OnClick', DT.ToggleBattleStats)
 		else
 			local assigned = DT.RegisteredDataTexts[ DT.db.panels[panelName][i] ]
+			DT.AssignedDatatexts[dt] = assigned
 			if assigned then DT:AssignPanelToDataText(dt, assigned, ...) end
 		end
 	end
@@ -600,15 +616,23 @@ function DT:RegisterHyperDT()
 		local category = DT:GetMenuListCategory(info.category or MISCELLANEOUS)
 		if not category then
 			category = #HyperList + 1
-			tinsert(HyperList, { text = info.category or MISCELLANEOUS, notCheckable = true, hasArrow = true, menuList = {} } )
+			tinsert(HyperList, { order = 0, text = info.category or MISCELLANEOUS, notCheckable = true, hasArrow = true, menuList = {} } )
 		end
 
-		tinsert(HyperList[category].menuList, { text = info.localizedName or name, checked = function() return DT.EasyMenu.MenuGetItem(DT.SelectedDatatext, name) end, func = function() DT.EasyMenu.MenuSetItem(DT.SelectedDatatext, name) end })
+		tinsert(HyperList[category].menuList, {
+			text = info.localizedName or name,
+			checked = function() return DT.EasyMenu.MenuGetItem(DT.SelectedDatatext, name) end,
+			func = function() DT.EasyMenu.MenuSetItem(DT.SelectedDatatext, name) end
+		})
 	end
 
-	DT:SortMenuList(HyperList)
-	tinsert(HyperList, { text = L["NONE"], checked = function() return DT.EasyMenu.MenuGetItem(DT.SelectedDatatext, '') end, func = function() DT.EasyMenu.MenuSetItem(DT.SelectedDatatext, '') end })
+	tinsert(HyperList, {
+		order = 100, text = L["NONE"],
+		checked = function() return DT.EasyMenu.MenuGetItem(DT.SelectedDatatext, '') end,
+		func = function() DT.EasyMenu.MenuSetItem(DT.SelectedDatatext, '') end
+	})
 
+	DT:SortMenuList(HyperList)
 	DT:RegisterEvent('MODIFIER_STATE_CHANGED', 'SingleHyperMode')
 end
 
@@ -616,9 +640,6 @@ function DT:Initialize()
 	DT.Initialized = true
 	DT.db = E.db.datatexts
 
-	DT.tooltip = CreateFrame('GameTooltip', 'DataTextTooltip', E.UIParent, 'GameTooltipTemplate')
-	DT.EasyMenu = CreateFrame("Frame", "DataTextEasyMenu", E.UIParent, "UIDropDownMenuTemplate")
-	DT.HyperDTMenuFrame = DT.EasyMenu
 	DT.EasyMenu:SetClampedToScreen(true)
 	DT.EasyMenu:EnableMouse(true)
 	DT.EasyMenu.MenuSetItem = function(dt, value)
@@ -676,14 +697,16 @@ end
 	localizedName - localized name of the datetext
 	objectEvent - register events on an object, using E.RegisterEventForObject instead of panel.RegisterEvent
 ]]
-function DT:RegisterDatatext(name, category, events, eventFunc, updateFunc, clickFunc, onEnterFunc, onLeaveFunc, localizedName, objectEvent)
-	if not name then error('Cannot register datatext no name was provided.') end
-	local data = {name = name, category = category}
+function DT:RegisterDatatext(name, category, events, eventFunc, updateFunc, clickFunc, onEnterFunc, onLeaveFunc, localizedName, objectEvent, colorUpdate)
+	if not name then return end
+	if type(category) ~= 'string' and category ~= nil then return E:Print(format('%s is an invalid DataText.', name)) end
 
-	if type(events) ~= 'table' and events ~= nil then
-		error('Events must be registered as a table.')
+	local data = { name = name, category = category }
+
+	if type(events) == 'function' then
+		return E:Print(format('%s is an invalid DataText. Events must be registered as a table or a string.', name))
 	else
-		data.events = events
+		data.events = type(events) == 'string' and { strsplit('[, ]', events) } or events
 		data.eventFunc = eventFunc
 		data.objectEvent = objectEvent
 	end
@@ -706,6 +729,10 @@ function DT:RegisterDatatext(name, category, events, eventFunc, updateFunc, clic
 
 	if localizedName and type(localizedName) == 'string' then
 		data.localizedName = localizedName
+	end
+
+	if colorUpdate and type(colorUpdate) == 'function' then
+		data.colorUpdate = colorUpdate
 	end
 
 	DT.RegisteredDataTexts[name] = data

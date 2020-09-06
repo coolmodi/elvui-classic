@@ -9,8 +9,8 @@ local GetAddOnInfo = GetAddOnInfo
 local GetAddOnMetadata = GetAddOnMetadata
 local GetNumAddOns = GetNumAddOns
 local IsShiftKeyDown = IsShiftKeyDown
-local ReloadUI = ReloadUI
 local InCombatLockdown = InCombatLockdown
+local ReloadUI = ReloadUI
 
 local displayString = ""
 local configText = "ElvUI"
@@ -66,4 +66,4 @@ local function ValueColorUpdate(hex)
 end
 E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
-DT:RegisterDatatext('ElvUI Config', nil, nil, OnEvent, nil, Click, OnEnter)
+DT:RegisterDatatext('ElvUI Config', nil, nil, OnEvent, nil, Click, OnEnter, nil, nil, nil, ValueColorUpdate)

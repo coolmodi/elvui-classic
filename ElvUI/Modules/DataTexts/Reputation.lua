@@ -25,7 +25,7 @@ local function OnEvent(self, event, eventType)
 
 	local color = _G.FACTION_BAR_COLORS[reaction]
 	local text = name
-	local textFormat = E.DataBars.db.reputation.textFormat
+	local textFormat = E.global.datatexts.settings.Reputation.textFormat
 
 	standingLabel = E:RGBToHex(color.r, color.g, color.b, nil, _G['FACTION_STANDING_LABEL'..reaction]..'|r')
 
@@ -35,9 +35,8 @@ local function OnEvent(self, event, eventType)
 		maxMinDiff = 1
 	end
 
-	if isCapped and textFormat ~= 'NONE' then
-		-- show only name and standing on exalted
-		text = format('%s: [%s]', name, standingLabel)
+	if isCapped then
+		text = format('%s: [%s]', name, isFriend and friendText or standingLabel)
 	else
 		if textFormat == 'PERCENT' then
 			text = format('%s: %d%% [%s]', name, ((value - min) / (maxMinDiff) * 100), standingLabel)

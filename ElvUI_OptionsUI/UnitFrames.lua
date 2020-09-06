@@ -11,7 +11,7 @@ local tconcat, tinsert, tremove, type, wipe, tonumber = table.concat, tinsert, t
 local GetScreenWidth = GetScreenWidth
 
 -- GLOBALS: ElvUF_Parent, ElvUF_Player, ElvUF_Pet, ElvUF_PetTarget, ElvUF_Party, ElvUF_Raidpet
--- GLOBALS: ElvUF_Target, ElvUF_TargetTarget, ElvUF_TargetTargetTarget, ElvUF_Focus, ElvUF_FocusTarget
+-- GLOBALS: ElvUF_Target, ElvUF_TargetTarget, ElvUF_TargetTargetTarget
 
 local positionValues = {
 	TOPLEFT = 'TOPLEFT',
@@ -1298,8 +1298,6 @@ local function UpdateCustomTextGroup(unit)
 	if unit == 'party' or unit:find('raid') then
 		for i = 1, UF[unit]:GetNumChildren() do
 			local child = select(i, UF[unit]:GetChildren())
-			UF:Configure_CustomTexts(child)
-			child:UpdateTags()
 
 			for x = 1, child:GetNumChildren() do
 				local subchild = select(x, child:GetChildren())
@@ -1354,6 +1352,7 @@ local function CreateCustomTextGroup(unit, objectName)
 				order = 4,
 				name = L["Font"],
 				values = _G.AceGUIWidgetLSMlists.font,
+				width = 'double',
 			},
 			size = {
 				order = 5,
@@ -1727,7 +1726,7 @@ local function GetOptionsTable_InformationPanel(updateFunc, groupName, numUnits)
 	return config
 end
 
-local function GetOptionsTable_Name(updateFunc, groupName, numUnits)
+local function GetOptionsTable_Name(updateFunc, groupName, numUnits, subGroup)
 	local config = {
 		type = 'group',
 		name = L["Name"],
@@ -1770,6 +1769,12 @@ local function GetOptionsTable_Name(updateFunc, groupName, numUnits)
 			},
 		},
 	}
+
+	if subGroup then
+		config.guiInline = true
+		config.get = function(info) return E.db.unitframe.units[groupName][subGroup].name[info[#info]] end
+		config.set = function(info, value) E.db.unitframe.units[groupName][subGroup].name[info[#info]] = value; updateFunc(UF, groupName, numUnits) end
+	end
 
 	return config
 end
@@ -2311,7 +2316,7 @@ local function GetOptionsTable_RaidDebuff(updateFunc, groupName)
 	return config
 end
 
-local function GetOptionsTable_RaidIcon(updateFunc, groupName, numUnits)
+local function GetOptionsTable_RaidIcon(updateFunc, groupName, numUnits, subGroup)
 	local config = {
 		type = 'group',
 		name = L["Raid Icon"],
@@ -2356,6 +2361,12 @@ local function GetOptionsTable_RaidIcon(updateFunc, groupName, numUnits)
 			},
 		},
 	}
+
+	if subGroup then
+		config.guiInline = true
+		config.get = function(info) return E.db.unitframe.units[groupName][subGroup].raidicon[info[#info]] end
+		config.set = function(info, value) E.db.unitframe.units[groupName][subGroup].raidicon[info[#info]] = value; updateFunc(UF, groupName, numUnits) end
+	end
 
 	return config
 end
@@ -2637,53 +2648,33 @@ end
 local function GetOptionsTable_GeneralGroup(updateFunc, groupName, numUnits)
 	local config = {
 		order = 5,
-		type = "group",
+		type = 'group',
 		name = L["General"],
 		args = {
-			width = {
-				order = 3,
-				name = L["Width"],
-				type = 'range',
-				min = 50, max = 1000, step = 1,
-				set = function(info, value)
-					if E.db.unitframe.units[groupName].castbar and E.db.unitframe.units[groupName].castbar.width == E.db.unitframe.units[groupName][info[#info]] then
-						E.db.unitframe.units[groupName].castbar.width = value;
-					end
-
-					E.db.unitframe.units[groupName][info[#info]] = value;
-					updateFunc(UF, groupName, numUnits)
-				end,
+			orientation = {
+				order = 9,
+				type = 'select',
+				name = L["Frame Orientation"],
+				desc = L["Set the orientation of the UnitFrame."],
+				values = orientationValues,
 			},
-			height = {
-				order = 4,
-				name = L["Height"],
-				type = 'range',
-				min = 5, max = 500, step = 1,
+			disableMouseoverGlow = {
+				order = 12,
+				type = 'toggle',
+				name = L["Block Mouseover Glow"],
+				desc = L["Forces Mouseover Glow to be disabled for these frames"],
+			},
+			disableTargetGlow = {
+				order = 13,
+				type = 'toggle',
+				name = L["Block Target Glow"],
+				desc = L["Forces Target Glow to be disabled for these frames"],
 			},
 			threatStyle = {
 				type = 'select',
 				order = 7,
 				name = L["Threat Display Mode"],
 				values = threatValues,
-			},
-			orientation = {
-				order = 9,
-				type = "select",
-				name = L["Frame Orientation"],
-				desc = L["Set the orientation of the UnitFrame."],
-				values = orientationValues,
-			},
-			disableMouseoverGlow = {
-				order = 11,
-				type = "toggle",
-				name = L["Block Mouseover Glow"],
-				desc = L["Forces Mouseover Glow to be disabled for these frames"],
-			},
-			disableTargetGlow = {
-				order = 12,
-				type = "toggle",
-				name = L["Block Target Glow"],
-				desc = L["Forces Target Glow to be disabled for these frames"],
 			},
 		},
 	}
@@ -2702,19 +2693,58 @@ local function GetOptionsTable_GeneralGroup(updateFunc, groupName, numUnits)
 	if groupName ~= 'party' and groupName ~= 'raid' and groupName ~= 'raid40' and groupName ~= 'raidpet' and groupName ~= 'assist' and groupName ~= 'tank' then
 		config.args.smartAuraPosition = {
 			order = 8,
-			type = "select",
+			type = 'select',
 			name = L["Smart Aura Position"],
 			desc = L["Will show Buffs in the Debuff position when there are no Debuffs active, or vice versa."],
 			values = smartAuraPositionValues,
 		}
 	end
 
-	if groupName == 'party' or groupName == 'raid' or groupName == 'raid40' or groupName == 'raidpet'  then
+	if groupName == 'tank' or groupName == 'assist' then
 		config.args.positionsGroup = {
 			order = 100,
 			name = L["Size and Positions"],
 			type = 'group',
-			guiInline = true,
+			inline = true,
+			set = function(info, value) E.db.unitframe.units[groupName][info[#info]] = value; updateFunc(UF, groupName, numUnits) end,
+			args = {
+				width = {
+					order = 1,
+					name = L["Width"],
+					type = 'range',
+					min = 50, max = 1000, step = 1,
+					set = function(info, value)
+						if E.db.unitframe.units[groupName].castbar and E.db.unitframe.units[groupName].castbar.width == E.db.unitframe.units[groupName][info[#info]] then
+							E.db.unitframe.units[groupName].castbar.width = value;
+						end
+
+						E.db.unitframe.units[groupName][info[#info]] = value;
+						updateFunc(UF, groupName, numUnits)
+					end,
+				},
+				height = {
+					order = 2,
+					name = L["Height"],
+					type = 'range',
+					min = 5, max = 500, step = 1,
+				},
+			},
+		}
+
+		if groupName == 'tank' or groupName == 'assist' then
+			config.args.positionsGroup.args.verticalSpacing = {
+				order = 3,
+				type = 'range',
+				name = L["Vertical Spacing"],
+				min = 0, max = 100, step = 1,
+			}
+		end
+	elseif groupName == 'party' or groupName == 'raid' or groupName == 'raid40' or groupName == 'raidpet' then
+		config.args.positionsGroup = {
+			order = 100,
+			name = L["Size and Positions"],
+			type = 'group',
+			inline = true,
 			set = function(info, value) E.db.unitframe.units[groupName][info[#info]] = value; updateFunc(UF, groupName, numUnits) end,
 			args = {
 				width = {
@@ -2731,7 +2761,7 @@ local function GetOptionsTable_GeneralGroup(updateFunc, groupName, numUnits)
 					min = 5, max = 500, step = 1,
 					set = function(info, value) E.db.unitframe.units[groupName][info[#info]] = value; updateFunc(UF, groupName, numUnits) end,
 				},
-				spacer = ACH:Spacer(3, "full"),
+				spacer = ACH:Spacer(3, 'full'),
 				growthDirection = {
 					order = 4,
 					name = L["Growth Direction"],
@@ -2781,7 +2811,7 @@ local function GetOptionsTable_GeneralGroup(updateFunc, groupName, numUnits)
 				},
 				groupSpacing = {
 					order = 11,
-					type = "range",
+					type = 'range',
 					name = L["Group Spacing"],
 					desc = L["Additional spacing between each individual group."],
 					min = 0, softMax = 50, step = 1,
@@ -2792,7 +2822,7 @@ local function GetOptionsTable_GeneralGroup(updateFunc, groupName, numUnits)
 			order = 200,
 			name = L["Visibility"],
 			type = 'group',
-			guiInline = true,
+			inline = true,
 			set = function(info, value) E.db.unitframe.units[groupName][info[#info]] = value; updateFunc(UF, groupName, numUnits) end,
 			args = {
 				showPlayer = {
@@ -2823,7 +2853,7 @@ local function GetOptionsTable_GeneralGroup(updateFunc, groupName, numUnits)
 		config.args.sortingGroup = {
 			order = 300,
 			type = 'group',
-			guiInline = true,
+			inline = true,
 			name = L["Grouping & Sorting"],
 			set = function(info, value) E.db.unitframe.units[groupName][info[#info]] = value; updateFunc(UF, groupName, numUnits) end,
 			args = {
@@ -2853,7 +2883,7 @@ local function GetOptionsTable_GeneralGroup(updateFunc, groupName, numUnits)
 						DESC = L["Descending"]
 					},
 				},
-				spacer = ACH:Spacer(3, "full"),
+				spacer = ACH:Spacer(3, 'full'),
 				raidWideSorting = {
 					order = 4,
 					name = L["Raid-Wide Sorting"],
@@ -2878,6 +2908,10 @@ local function GetOptionsTable_GeneralGroup(updateFunc, groupName, numUnits)
 		}
 	end
 
+	if groupName == 'party' then
+		config.args.sortingGroup.args.groupBy.values.INDEX = L["Index"]
+	end
+
 	if groupName == 'raid' or groupName == 'raid40' or groupName == 'raidpet' then
 		config.args.positionsGroup.args.numGroups.disabled = function()
 			return E.db.unitframe.smartRaidFilter
@@ -2885,24 +2919,6 @@ local function GetOptionsTable_GeneralGroup(updateFunc, groupName, numUnits)
 		config.args.visibilityGroup.args.visibility.disabled = function()
 			return E.db.unitframe.smartRaidFilter
 		end
-	end
-
-	if (groupName == 'target' or groupName == 'boss' or groupName == 'tank' or groupName == 'arena' or groupName == 'assist') and not IsAddOnLoaded("Clique") then
-		config.args.middleClickFocus = {
-			order = 16,
-			name = L["Middle Click - Set Focus"],
-			desc = L["Middle clicking the unit frame will cause your focus to match the unit."],
-			type = 'toggle',
-		}
-	end
-
-	if groupName == 'tank' or groupName == 'assist' then
-		config.args.verticalSpacing = {
-			order = 5,
-			type = "range",
-			name = L["Vertical Spacing"],
-			min = 0, max = 100, step = 1,
-		}
 	end
 
 	return config
@@ -4482,10 +4498,10 @@ E.Options.args.unitframe.args.individualUnits.args.pet = {
 			type = 'execute',
 			name = L["Show Auras"],
 			func = function()
-				if UF.focus.forceShowAuras then
-					UF.focus.forceShowAuras = nil;
+				if UF.pet.forceShowAuras then
+					UF.pet.forceShowAuras = nil;
 				else
-					UF.focus.forceShowAuras = true;
+					UF.pet.forceShowAuras = true;
 				end
 
 				UF:CreateAndUpdateUF('pet')
@@ -4752,8 +4768,8 @@ E.Options.args.unitframe.args.groupUnits.args.party = {
 					desc = L["An Y offset (in pixels) to be used when anchoring new frames."],
 					min = -500, max = 500, step = 1,
 				},
-				name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, 'party'),
-				raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, 'party'),
+				name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, 'party', nil, 'targetsGroup'),
+				raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, 'party', nil, 'targetsGroup'),
 			},
 		},
 		generalGroup = GetOptionsTable_GeneralGroup(UF.CreateAndUpdateHeaderGroup, 'party'),
@@ -5028,8 +5044,8 @@ E.Options.args.unitframe.args.groupUnits.args.tank = {
 					desc = L["An Y offset (in pixels) to be used when anchoring new frames."],
 					min = -500, max = 500, step = 1,
 				},
-				name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, 'tank'),
-				raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, 'tank'),
+				name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, 'tank', nil, 'targetsGroup'),
+				raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, 'tank', nil, 'targetsGroup'),
 			},
 		},
 		generalGroup = GetOptionsTable_GeneralGroup(UF.CreateAndUpdateHeaderGroup, 'tank'),
@@ -5115,8 +5131,8 @@ E.Options.args.unitframe.args.groupUnits.args.assist = {
 					desc = L["An Y offset (in pixels) to be used when anchoring new frames."],
 					min = -500, max = 500, step = 1,
 				},
-				name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, 'assist'),
-				raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, 'assist'),
+				name = GetOptionsTable_Name(UF.CreateAndUpdateHeaderGroup, 'assist', nil, 'targetsGroup'),
+				raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, 'assist', nil, 'targetsGroup'),
 			},
 		},
 		generalGroup = GetOptionsTable_GeneralGroup(UF.CreateAndUpdateHeaderGroup, 'assist'),

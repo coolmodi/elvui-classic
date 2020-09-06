@@ -27,7 +27,7 @@ E.Options.args.maps.args.worldMap = ACH:Group(L["WORLD_MAP"], nil, 1, 'tab')
 
 E.Options.args.maps.args.worldMap.args.generalGroup = ACH:Group(L["General"], nil, 1, nil, function(info) return E.global.general[info[#info]] end, function(info, value) E.global.general[info[#info]] = value end)
 E.Options.args.maps.args.worldMap.args.generalGroup.guiInline = true
-E.Options.args.maps.args.worldMap.args.generalGroup.args.enable = ACH:Toggle(L["Enable"], L["Enable/Disable the World Map Enhancements."], 0, nil, nil, nil, nil, function(_, value) E.global.general.worldMap = value; E:StaticPopup_Show("PRIVATE_RL") end)
+E.Options.args.maps.args.worldMap.args.generalGroup.args.enable = ACH:Toggle(L["Enable"], L["Enable/Disable the World Map Enhancements."], 0, nil, nil, nil, nil, function(_, value) E.private.general.worldMap = value; E:StaticPopup_Show("PRIVATE_RL") end)
 E.Options.args.maps.args.worldMap.args.generalGroup.args.smallerWorldMap = ACH:Toggle(L["Smaller World Map"], L["Make the world map smaller."], 1, nil, nil, nil, nil, function(_, value) E.global.general.smallerWorldMap = value; E:StaticPopup_Show("GLOBAL_RL") end)
 E.Options.args.maps.args.worldMap.args.generalGroup.args.smallerWorldMapScale = ACH:Range(L["Smaller World Map Scale"], nil, 2, { min = .5, max = .9, step = .01, isPercent = true }, nil, nil, function(_, value) E.global.general.smallerWorldMapScale = value; E:StaticPopup_Show("GLOBAL_RL") end)
 E.Options.args.maps.args.worldMap.args.generalGroup.args.spacer1 = ACH:Spacer(3)
@@ -55,8 +55,8 @@ E.Options.args.maps.args.minimap.args.locationTextGroup.args.locationFontSize = 
 E.Options.args.maps.args.minimap.args.locationTextGroup.args.locationFontOutline = ACH:Select(L["Font Outline"], nil, 4, C.Values.FontFlags)
 
 E.Options.args.maps.args.minimap.args.zoomResetGroup = ACH:Group(L["Reset Zoom"], nil, 3, nil, function(info) return E.db.general.minimap.resetZoom[info[#info]] end, function(info, value) E.db.general.minimap.resetZoom[info[#info]] = value; MM:UpdateSettings() end, function() return not E.private.general.minimap.enable end)
-E.Options.args.maps.args.minimap.args.zoomResetGroup.args.enableZoomReset = ACH:Toggle(L["Reset Zoom"], nil, 1)
-E.Options.args.maps.args.minimap.args.zoomResetGroup.args.zoomResetTime =  ACH:Range(L["Seconds"], nil, 2, { min = 1, max = 15, step = 1 })
+E.Options.args.maps.args.minimap.args.zoomResetGroup.args.enable = ACH:Toggle(L["Reset Zoom"], nil, 1)
+E.Options.args.maps.args.minimap.args.zoomResetGroup.args.time =  ACH:Range(L["Seconds"], nil, 2, { min = 1, max = 15, step = 1 })
 
 E.Options.args.maps.args.minimap.args.icons = ACH:Group(L["Minimap Buttons"], nil, 4, nil, function(info) return E.db.general.minimap.icons[info[#info - 1]][info[#info]] end, function(info, value) E.db.general.minimap.icons[info[#info - 1]][info[#info]] = value; MM:UpdateSettings() end, function() return not E.private.general.minimap.enable end)
 

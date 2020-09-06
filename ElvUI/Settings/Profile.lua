@@ -114,15 +114,35 @@ P.general = {
 	kittys = false
 };
 
-P.databars = {}
+P.databars = {
+	transparent = true,
+	statusbar = 'ElvUI Norm',
+	customTexture = false,
+	colors = {
+		experience = { r = 0, g = .4, b = 1, a = .8 },
+		rested = { r = 1, g = 0, b = 1, a = .2},
+		petExperience = { r = 1, g = 1, b = .41, a = .8 },
+		useCustomFactionColors = false,
+		factionColors = {
+			[1] = { r = .8, g = .3, b = .22},
+			[2] = { r = .8, g = .3, b = .22},
+			[3] = { r = .75, g = .27, b = 0},
+			[4] = { r = .9, g = .7, b = 0},
+			[5] = { r = 0, g = .6, b = .1},
+			[6] = { r = 0, g = .6, b = .1},
+			[7] = { r = 0, g = .6, b = .1},
+			[8] = { r = 0, g = .6, b = .1},
+		}
+	}
+}
 
-for _, databar in pairs({'experience', 'reputation', 'petExperience'}) do
+for _, databar in pairs({'experience', 'reputation', 'petExperience', 'threat'}) do
 	P.databars[databar] = {
 		enable = true,
 		width = 222,
 		height = 10,
 		textFormat = 'NONE',
-		textSize = 11,
+		fontSize = 11,
 		font = "PT Sans Narrow",
 		fontOutline = "NONE",
 		mouseover = false,
@@ -573,6 +593,7 @@ P.nameplates = {
 				width = 130,
 				xOffset = 0,
 				yOffset = 10,
+				spacing = 0,
 			},
 			visibility = {
 				hideDelay = 3,
@@ -603,6 +624,7 @@ P.nameplates = {
 				width = 125,
 				xOffset = 0,
 				yOffset = 30,
+				spacing = 0,
 			},
 		},
 		FRIENDLY_PLAYER = {
@@ -894,41 +916,6 @@ P.datatexts = {
 	battleground = true,
 	noCombatClick = false,
 	noCombatHover = false,
-
-	--Datatext Options
-	---General
-	goldFormat = 'BLIZZARD',
-	goldCoins = false,
-	---Currencies
-	currencies = {
-		displayedCurrency = 'GOLD',
-		displayStyle = 'ICON',
-	},
-	---Durability
-	durability = {
-		percThreshold = 30,
-	},
-	---Time
-	localtime = true,
-	time24 = GetCurrentRegion() ~= 1, -- Non US region will default to the 24-hour clock
-	---Friends
-	friends = {
-		--status
-		hideAFK = false,
-		hideDND = false,
-		--clients
-		hideWoW = false,
-		hideD3 = false,
-		hideVIPR = false,
-		hideWTCG = false, --Hearthstone
-		hideHero = false, --Heros of the Storm
-		hidePro = false, --Overwatch
-		hideS1 = false,
-		hideS2 = false,
-		hideDST2 = false,
-		hideBSAp = false, --Mobile
-		hideApp = false, --Launcher
-	},
 }
 
 --Tooltip

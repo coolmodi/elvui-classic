@@ -10,16 +10,12 @@ local GetMoney = GetMoney
 local IsControlKeyDown = IsControlKeyDown
 local IsLoggedIn = IsLoggedIn
 local IsShiftKeyDown = IsShiftKeyDown
-local PRIEST_COLOR = RAID_CLASS_COLORS.PRIEST
-local BreakUpLargeNumbers = BreakUpLargeNumbers
 -- GLOBALS: ElvDB
 
 local Profit, Spent = 0, 0
 local resetCountersFormatter = strjoin('', '|cffaaaaaa', L["Reset Counters: Hold Ctrl + Right Click"], '|r')
 local resetInfoFormatter = strjoin('', '|cffaaaaaa', L["Reset Data: Hold Shift + Right Click"], '|r')
 local PRIEST_COLOR = RAID_CLASS_COLORS.PRIEST
-
-local iconString = "|T%s:16:16:0:0:64:64:4:60:4:60|t"
 
 local menuList = {}
 
@@ -61,7 +57,7 @@ local function OnEvent(self)
 		Profit = Profit + Change
 	end
 
-	self.text:SetText(E:FormatMoney(NewMoney, E.db.datatexts.goldFormat or 'BLIZZARD', not E.db.datatexts.goldCoins))
+	self.text:SetText(E:FormatMoney(NewMoney, E.global.datatexts.settings.Gold.goldFormat or "BLIZZARD", not E.global.datatexts.settings.Gold.goldCoins))
 end
 
 local function deleteCharacter(self, name)
@@ -97,10 +93,11 @@ local function Click(self, btn)
 end
 
 local myGold = {}
-local function OnEnter(self)
-	DT:SetupTooltip(self)
-	local textOnly = not E.db.datatexts.goldCoins and true or false
-	local style = E.db.datatexts.goldFormat or 'BLIZZARD'
+local function OnEnter()
+	DT.tooltip:ClearLines()
+
+	local textOnly = not E.global.datatexts.settings.Gold.goldCoins and true or false
+	local style = E.global.datatexts.settings.Gold.goldFormat or 'BLIZZARD'
 
 	DT.tooltip:AddLine(L["Session:"])
 	DT.tooltip:AddDoubleLine(L["Earned:"], E:FormatMoney(Profit, style, textOnly), 1, 1, 1, 1, 1, 1)
@@ -123,7 +120,7 @@ local function OnEnter(self)
 				{
 					name = k,
 					amount = ElvDB.gold[E.myrealm][k],
-					amountText = E:FormatMoney(ElvDB.gold[E.myrealm][k], E.db.datatexts.goldFormat or 'BLIZZARD', not E.db.datatexts.goldCoins),
+					amountText = E:FormatMoney(ElvDB.gold[E.myrealm][k], style, textOnly),
 					faction = ElvDB.faction[E.myrealm][k] or '',
 					r = color.r, g = color.g, b = color.b,
 				}

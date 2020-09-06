@@ -305,6 +305,166 @@ function DT:PanelLayoutOptions()
 	end
 end
 
+local function CreateDTOptions(name, data)
+	local settings = E.global.datatexts.settings[name]
+	if not settings then return end
+
+	local optionTable = {
+		order = 1,
+		type = "group",
+		name = data.localizedName or name,
+		guiInline = false,
+		get = function(info) return settings[info[#info]] end,
+		set = function(info, value) settings[info[#info]] = value DT:ForceUpdate_DataText(name) end,
+		args = {},
+	}
+
+	E.Options.args.datatexts.args.settings.args[name] = optionTable
+
+	for key in pairs(settings) do
+		if key == 'decimalLength' then
+			optionTable.args.decimalLength = {
+				type = 'range',
+				name = L['Decimal Length'],
+				min = 0, max = 5, step = 1,
+			}
+		elseif key == 'goldFormat' then
+			optionTable.args.goldFormat = {
+				type = 'select',
+				name = L["Gold Format"],
+				desc = L["The display format of the money text that is shown in the gold datatext and its tooltip."],
+				values = { SMART = L["Smart"], FULL = L["Full"], SHORT = L["SHORT"], SHORTINT = L["Short (Whole Numbers)"], CONDENSED = L["Condensed"], BLIZZARD = L["Blizzard Style"], BLIZZARD2 = L["Blizzard Style"].." 2" },
+			}
+		elseif key == 'goldCoins' then
+			optionTable.args.goldCoins = {
+				type = 'toggle',
+				name = L["Show Coins"],
+				desc = L["Use coin icons instead of colored text."],
+			}
+		elseif key == 'Label' then
+			optionTable.args.Label = {
+				order = 0,
+				type = 'input',
+				name = L['Label'],
+				get = function(info) return settings[info[#info]] and gsub(settings[info[#info]], '\124', '\124\124') end,
+				set = function(info, value) settings[info[#info]] = gsub(value, '\124\124+', '\124') end,
+			}
+		elseif key == 'NoLabel' then
+			optionTable.args.NoLabel = {
+				type = 'toggle',
+				name = L['No Label'],
+			}
+		elseif key == 'textFormat' then
+			optionTable.args.textFormat = {
+				type = 'select',
+				name = L["Text Format"],
+				width = "double",
+				get = function(info) return settings[info[#info]] end,
+				set = function(info, value) settings[info[#info]] = value; DT:ForceUpdate_DataText(name) end,
+				values = {},
+			}
+		end
+	end
+
+	if name == 'Time' then
+		optionTable.args.time24 = {
+			type = 'toggle',
+			name = L["24-Hour Time"],
+			desc = L["Toggle 24-hour mode for the time datatext."],
+		}
+		optionTable.args.localTime = {
+			type = 'toggle',
+			name = L["Local Time"],
+			desc = L["If not set to true then the server time will be displayed instead."],
+		}
+	elseif name == 'Durability' then
+		optionTable.args.percThreshold = {
+			type = "range",
+			name = L["Flash Threshold"],
+			desc = L["The durability percent that the datatext will start flashing.  Set to -1 to disable"],
+			min = -1, max = 99, step = 1,
+			get = function(info) return settings[info[#info]] end,
+			set = function(info, value) settings[info[#info]] = value; DT:ForceUpdate_DataText(name) end,
+		}
+	elseif name == 'Friends' then
+		optionTable.args.description = {
+			order = 1,
+			type = "description",
+			name = L["Hide specific sections in the datatext tooltip."],
+		}
+		optionTable.args.hideGroup1 = {
+			order = 2,
+			type = "multiselect",
+			name = L["Hide by Status"],
+			get = function(_, key) return settings[key] end,
+			set = function(_, key, value) settings[key] = value; DT:ForceUpdate_DataText(name) end,
+			values = {
+				hideAFK = L["AFK"],
+				hideDND = L["DND"],
+			},
+		}
+		optionTable.args.hideGroup2 = {
+			order = 2,
+			type = "multiselect",
+			name = L["Hide by Application"],
+			get = function(_, key) return settings['hide'..key] end,
+			set = function(_, key, value) settings['hide'..key] = value; DT:ForceUpdate_DataText(name) end,
+			sortByValue = true,
+			values = {
+				WoW = "World of Warcraft",
+				App = "App",
+				BSAp = L["Mobile"],
+				D3 = "Diablo 3",
+				WTCG = "Hearthstone",
+				Hero = "Heroes of the Storm",
+				Pro = "Overwatch",
+				S1 = "Starcraft",
+				S2 = "Starcraft 2",
+				VIPR = "COD: Black Ops 4",
+				ODIN = "COD: Modern Warfare",
+				LAZR = "COD: Modern Warfare 2",
+			},
+		}
+	elseif name == 'Reputation' or name == 'Experience' then
+		optionTable.args.textFormat.values = {
+			PERCENT = L["Percent"],
+			CUR = L["Current"],
+			REM = L["Remaining"],
+			CURMAX = L["Current - Max"],
+			CURPERC = L["Current - Percent"],
+			CURREM = L["Current - Remaining"],
+			CURPERCREM = L["Current - Percent (Remaining)"],
+		}
+	elseif name == 'Bags' then
+		optionTable.args.textFormat.values = {
+			["FREE"] = L["Only Free Slots"],
+			["USED"] = L["Only Used Slots"],
+			["FREE_TOTAL"] = L["Free/Total"],
+			["USED_TOTAL"] = L["Used/Total"],
+		}
+	end
+end
+
+local function SetupDTCustomization()
+	local currencyTable = {}
+	for name, data in pairs(DT.RegisteredDataTexts) do
+		currencyTable[name] = data
+	end
+
+	for _, info in pairs(E.global.datatexts.customCurrencies) do
+		local name = info.NAME
+		if currencyTable[name] then
+			currencyTable[name] = nil
+		end
+	end
+
+	for name, data in pairs(currencyTable) do
+		if not data.isLibDataBroker then
+			CreateDTOptions(name, data)
+		end
+	end
+end
+
 E.Options.args.datatexts = {
 	type = "group",
 	name = L["DataTexts"],
@@ -378,91 +538,6 @@ E.Options.args.datatexts = {
 						},
 					},
 				},
-				currencies = {
-					order = 4,
-					type = "group",
-					guiInline = true,
-					name = L["CURRENCY"],
-					args = {
-						displayStyle = {
-							order = 2,
-							type = "select",
-							name = L["Currency Format"],
-							get = function(info) return E.db.datatexts.currencies.displayStyle end,
-							set = function(info, value) E.db.datatexts.currencies.displayStyle = value; DT:LoadDataTexts() end,
-							hidden = function() return (E.db.datatexts.currencies.displayedCurrency == "GOLD") end,
-							values = {
-								["ICON"] = L["Icons Only"],
-								["ICON_TEXT"] = L["Icons and Text"],
-								["ICON_TEXT_ABBR"] = L["Icons and Text (Short)"],
-							},
-						},
-						goldFormat = {
-							order = 3,
-							type = 'select',
-							name = L["Gold Format"],
-							desc = L["The display format of the money text that is shown in the gold datatext and its tooltip."],
-							hidden = function() return (E.db.datatexts.currencies.displayedCurrency ~= "GOLD") end,
-							values = {
-								['SMART'] = L["Smart"],
-								['FULL'] = L["Full"],
-								['SHORT'] = L["SHORT"],
-								['SHORTINT'] = L["Short (Whole Numbers)"],
-								['CONDENSED'] = L["Condensed"],
-								['BLIZZARD'] = L["Blizzard Style"],
-								['BLIZZARD2'] = L["Blizzard Style"].." 2",
-							},
-						},
-						goldCoins = {
-							order = 4,
-							type = 'toggle',
-							name = L["Show Coins"],
-							desc = L["Use coin icons instead of colored text."],
-							hidden = function() return (E.db.datatexts.currencies.displayedCurrency ~= "GOLD") end,
-						},
-					},
-				},
-				time = {
-					order = 6,
-					type = "group",
-					name = L["Time"],
-					guiInline = true,
-					args = {
-						time24 = {
-							order = 2,
-							type = 'toggle',
-							name = L["24-Hour Time"],
-							desc = L["Toggle 24-hour mode for the time datatext."],
-							get = function(info) return E.db.datatexts.time24 end,
-							set = function(info, value) E.db.datatexts.time24 = value; DT:LoadDataTexts() end,
-						},
-						localtime = {
-							order = 3,
-							type = 'toggle',
-							name = L["Local Time"],
-							desc = L["If not set to true then the server time will be displayed instead."],
-							get = function(info) return E.db.datatexts.localtime end,
-							set = function(info, value) E.db.datatexts.localtime = value; DT:LoadDataTexts() end,
-						},
-					},
-				},
-				durability = {
-					order = 8,
-					type = "group",
-					name = L["Durability"],
-					guiInline = true,
-					args = {
-						percThreshold = {
-							order = 1,
-							type = "range",
-							name = L["Flash Threshold"],
-							desc = L["The durability percent that the datatext will start flashing.  Set to -1 to disable"],
-							min = -1, max = 99, step = 1,
-							get = function(info) return E.db.datatexts.durability[info[#info]] end,
-							set = function(info, value) E.db.datatexts.durability[info[#info]] = value; DT:LoadDataTexts() end,
-						},
-					},
-				},
 			},
 		},
 		panels = {
@@ -481,10 +556,10 @@ E.Options.args.datatexts = {
 							order = 0,
 							type = 'input',
 							width = 'full',
-							name = L['Name'],
-							--validate = function(_, value)
-							--	return E.global.datatexts.customPanels[value] and L['Name Taken'] or true
-							--end,
+							name = L["Name"],
+							validate = function(_, value)
+								return E.global.datatexts.customPanels[value] and L["Name Taken"] or true
+							end,
 						},
 						add = {
 							order = 1,
@@ -545,7 +620,7 @@ E.Options.args.datatexts = {
 						},
 						border = {
 							order = 6,
-							name = L["Backdrop"],
+							name = L["Border"],
 							type = "toggle",
 						},
 						panelTransparency = {
@@ -587,7 +662,7 @@ E.Options.args.datatexts = {
 						},
 						border = {
 							order = 6,
-							name = L["Backdrop"],
+							name = L["Border"],
 							type = "toggle",
 						},
 						panelTransparency = {
@@ -640,47 +715,12 @@ E.Options.args.datatexts = {
 				},
 			},
 		},
-		friends = {
-			order = 5,
+		settings = {
+			order = 7,
 			type = "group",
-			name = L["FRIENDS"],
-			args = {
-				description = ACH:Description(L["Hide specific sections in the datatext tooltip."], 1),
-				hideGroup1 = {
-					order = 2,
-					type = "multiselect",
-					name = L["Hide by Status"],
-					get = function(info, key) return E.db.datatexts.friends[key] end,
-					set = function(info, key, value) E.db.datatexts.friends[key] = value; DT:LoadDataTexts() end,
-					values = {
-						hideAFK = L["AFK"],
-						hideDND = L["DND"],
-					},
-				},
-				hideGroup2 = {
-					order = 2,
-					type = "multiselect",
-					name = L["Hide by Application"],
-					get = function(info, key) return E.db.datatexts.friends['hide'..key] end,
-					set = function(info, key, value) E.db.datatexts.friends['hide'..key] = value; DT:LoadDataTexts() end,
-					sortByValue = true,
-					values = {
-						['WoW'] = "World of Warcraft",
-						['App'] = "App",
-						['BSAp'] = L["Mobile"],
-						['D3'] = "Diablo 3",
-						['WTCG'] = "Hearthstone",
-						['Hero'] = "Heroes of the Storm",
-						['Pro'] = "Overwatch",
-						['S1'] = "Starcraft",
-						['S2'] = "Starcraft 2",
-						['VIPR'] = "COD: Black Ops 4",
-						['ODIN'] = "COD: Modern Warfare",
-						['LAZR'] = "COD: Modern Warfare 2",
-					},
-				},
-			},
-		},
+			name = L["DataText Customization"],
+			args = {},
+		}
 	},
 }
 
@@ -689,3 +729,4 @@ E.Options.args.datatexts.args.panels.args.newPanel.args.templateGroup.get = func
 E.Options.args.datatexts.args.panels.args.newPanel.args.templateGroup.set = function(info, key, value) E.global.datatexts.newPanelInfo[key] = value end
 
 DT:PanelLayoutOptions()
+SetupDTCustomization()

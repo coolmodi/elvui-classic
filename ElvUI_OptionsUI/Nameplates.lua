@@ -14,6 +14,9 @@ local GetCVarBool = GetCVarBool
 local GetSpellInfo = GetSpellInfo
 local SetCVar = SetCVar
 
+local CLASS_SORT_ORDER = CLASS_SORT_ORDER
+local LOCALIZED_CLASS_NAMES_MALE = LOCALIZED_CLASS_NAMES_MALE
+
 local raidTargetIcon = "|TInterface\\TargetingFrame\\UI-RaidTargetingIcon_%s:0|t %s"
 local selectedNameplateFilter
 
@@ -1491,6 +1494,7 @@ local function UpdateFilterGroup()
 						return E.global.nameplate.filters[selectedNameplateFilter].actions.hide
 					end
 				},
+				spacer1 = ACH:Spacer(4, "full"),
 				scale = {
 					order = 5,
 					type = "range",
@@ -1561,6 +1565,7 @@ local function UpdateFilterGroup()
 								NP:ConfigureAll()
 							end
 						},
+						spacer1 = ACH:Spacer(3, "full"),
 						power = {
 							name = L["Power"],
 							order = 4,
@@ -1584,6 +1589,7 @@ local function UpdateFilterGroup()
 								NP:ConfigureAll()
 							end
 						},
+						spacer2 = ACH:Spacer(6, "full"),
 						border = {
 							name = L["Border"],
 							order = 7,
@@ -2957,19 +2963,19 @@ local function GetUnitSettings(unit, name)
 						type = "toggle",
 					},
 					width = {
-						order = 2,
+						order = 3,
 						name = L["Width"],
 						type = "range",
 						min = 12, max = 64, step = 1,
 					},
 					height = {
-						order = 3,
+						order = 4,
 						name = L["Height"],
 						type = "range",
 						min = 12, max = 64, step = 1,
 					},
 					position = {
-						order = 4,
+						order = 5,
 						type = "select",
 						name = L["Icon Position"],
 						values = {
@@ -2981,13 +2987,13 @@ local function GetUnitSettings(unit, name)
 						},
 					},
 					xOffset = {
-						order = 5,
+						order = 6,
 						name = L["X-Offset"],
 						type = "range",
 						min = -100, max = 100, step = 1,
 					},
 					yOffset = {
-						order = 6,
+						order = 7,
 						name = L["Y-Offset"],
 						type = "range",
 						min = -100, max = 100, step = 1,
@@ -3331,9 +3337,15 @@ local function GetUnitSettings(unit, name)
 					type = "range",
 					min = -100, max = 100, step = 1,
 				},
+				spacing = {
+					order = 6,
+					name = L["Spacing"],
+					type = "range",
+					min = 0, max = 10, step = 1,
+				},
 				classColor = {
 					type = "toggle",
-					order = 6,
+					order = 7,
 					name = L["Use Class Color"]
 				},
 			},
@@ -3455,6 +3467,14 @@ local function GetUnitSettings(unit, name)
 			order = 102,
 			name = L["Show Title"],
 			desc = L["Title will only appear if Name Only is enabled or triggered in a Style Filter."]
+		}
+	end
+
+	if unit == 'PLAYER' or unit == 'FRIENDLY_PLAYER' or unit == 'ENEMY_PLAYER' then
+		group.args.portraitGroup.args.classicon = {
+			order = 2,
+			name = L["Class Icon"],
+			type = "toggle"
 		}
 	end
 
@@ -4620,6 +4640,12 @@ E.Options.args.nameplate = {
 							name = L["Y-Offset"],
 							type = "range",
 							min = -100, max = 100, step = 1,
+						},
+						spacing = {
+							order = 5,
+							name = L["Spacing"],
+							type = "range",
+							min = 0, max = 10, step = 1,
 						},
 						classColor = {
 							type = "toggle",
