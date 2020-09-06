@@ -1,5 +1,8 @@
-### Version 1.29 [ETA: 🍨]
+### Version 1.30 [ETA: 🍨]
+___
+### Version 1.29 [ETA: 09/07/2020]
 **ActionBars:** Fixed an issue with action paging  
+**DataBars:** DataBars options have been upgraded  
 **Minimap:** Fixed the pixel offset on the minimap DataBar  
 **Minimap:** Fixed an issue with the "Zoom Reset" option  
 **UnitFrames:** Fixed an issue with custom texts  
