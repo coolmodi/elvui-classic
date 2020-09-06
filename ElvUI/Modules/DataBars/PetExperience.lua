@@ -74,6 +74,7 @@ function DB:PetExperienceBar_OnClick() end
 function DB:PetExperienceBar_Toggle()
 	if E.myclass ~= 'HUNTER' then return end
 	local bar = DB.StatusBars.PetExperience
+	bar.db = DB.db.petExperience
 
 	if bar.db.enable and HasPetUI() and not (bar.db.hideAtMaxLevel and UnitLevel('pet') == MAX_PLAYER_LEVEL_TABLE[GetExpansionLevel()]) then
 		DB:PetExperienceBar_Update()
@@ -88,7 +89,6 @@ function DB:PetExperienceBar()
 	if E.myclass ~= 'HUNTER' then return end
 
 	DB.StatusBars.PetExperience = DB:CreateBar('ElvUI_PetExperienceBar', DB.ExperienceBar_OnEnter, DB.ExperienceBar_OnClick, 'LEFT', _G.LeftChatPanel, 'RIGHT', -E.Border + E.Spacing*3, 0)
-	DB.StatusBars.PetExperience.db = DB.db.petExperience
 
 	DB:RegisterEvent('PET_BAR_UPDATE', 'PetExperienceBar_Toggle')
 	DB:RegisterEvent('UNIT_PET_EXPERIENCE', 'PetExperienceBar_Update')
