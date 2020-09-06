@@ -45,7 +45,6 @@ local DataTexts = E:GetModule('DataTexts')
 local Layout = E:GetModule('Layout')
 local Minimap = E:GetModule('Minimap')
 local NamePlates = E:GetModule('NamePlates')
-local Threat = E:GetModule('Threat')
 local Tooltip = E:GetModule('Tooltip')
 local Totems = E:GetModule('Totems')
 local UnitFrames = E:GetModule('UnitFrames')
@@ -924,7 +923,6 @@ function E:UpdateDB()
 	NamePlates.db = E.db.nameplates
 	Tooltip.db = E.db.tooltip
 	UnitFrames.db = E.db.unitframe
-	Threat.db = E.db.general.threat
 	Totems.db = E.db.general.totems
 
 	--Not part of staggered update
@@ -1016,10 +1014,11 @@ function E:UpdateChat(skipCallback)
 end
 
 function E:UpdateDataBars(skipCallback)
-	DataBars:EnableDisable_ExperienceBar()
-	DataBars:EnableDisable_PetExperienceBar()
-	DataBars:EnableDisable_ReputationBar()
-	DataBars:UpdateDataBarDimensions()
+	DataBars:ExperienceBar_Toggle()
+	DataBars:PetExperienceBar_Toggle()
+	DataBars:ReputationBar_Toggle()
+	DataBars:ThreatBar_Toggle()
+	DataBars:UpdateAll()
 
 	if not skipCallback then
 		E.callbacks:Fire('StaggeredUpdate')
