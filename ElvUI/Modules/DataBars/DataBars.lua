@@ -35,19 +35,26 @@ function DB:UpdateAll()
 		bar:SetWidth(bar.db.width)
 		bar:SetHeight(bar.db.height)
 		bar:SetReverseFill(bar.db.reverseFill)
-		bar:SetOrientation(bar.db.orientation)
-		bar:SetRotatesTexture(bar.db.orientation ~= 'HORIZONTAL')
 		bar:SetStatusBarTexture(DB.db.customTexture and E.LSM:Fetch('statusbar', DB.db.statusbar) or E.media.normTex)
 		bar.backdrop:SetTemplate(DB.db.transparent and 'Transparent')
 		bar.text:FontTemplate(E.Libs.LSM:Fetch('font', bar.db.font), bar.db.fontSize, bar.db.fontOutline)
+
 		if bar.db.enable then
 			bar:SetAlpha(bar.db.mouseover and 0 or 1)
 		end
 
+		if bar.db.orientation == 'AUTOMATIC' then
+			bar:SetOrientation(bar.db.height > bar.db.width and 'VERTICAL' or 'HORIZONTAL')
+			bar:SetRotatesTexture(bar.db.height > bar.db.width)
+		else
+			bar:SetOrientation(bar.db.orientation)
+			bar:SetRotatesTexture(bar.db.orientation ~= 'HORIZONTAL')
+		end
+
 		if bar.Rested then
-			bar.Rested:SetOrientation(bar.db.orientation)
-			bar.Rested:SetReverseFill(bar.db.reverseFill)
-			bar.Rested:SetRotatesTexture(bar.db.orientation ~= 'HORIZONTAL')
+			bar.Rested:SetOrientation(bar:GetOrientation())
+			bar.Rested:SetRotatesTexture(bar:GetRotatesTexture())
+			bar.Rested:SetReverseFill(bar:GetReverseFill())
 		end
 	end
 end
