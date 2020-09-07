@@ -14,7 +14,9 @@ local REPUTATION, STANDING = REPUTATION, STANDING
 
 local function OnEvent(self, event, eventType)
 	local name, reaction, min, max, value = GetWatchedFactionInfo()
-	if not name then return end
+	if not name then
+		return 	self.text:SetText(NOT_APPLICABLE)
+	end
 
 	local standingLabel
 	local isCapped
@@ -36,7 +38,7 @@ local function OnEvent(self, event, eventType)
 	end
 
 	if isCapped then
-		text = format('%s: [%s]', name, isFriend and friendText or standingLabel)
+		text = format('%s: [%s]', name, standingLabel)
 	else
 		if textFormat == 'PERCENT' then
 			text = format('%s: %d%% [%s]', name, ((value - min) / (maxMinDiff) * 100), standingLabel)

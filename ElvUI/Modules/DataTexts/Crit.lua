@@ -2,22 +2,17 @@ local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, Private
 local DT = E:GetModule('DataTexts')
 
 local min = min
-local format, strjoin = format, strjoin
+local strjoin = strjoin
 
-local BreakUpLargeNumbers = BreakUpLargeNumbers
-local GetCombatRating = GetCombatRating
-local GetCombatRatingBonus = GetCombatRatingBonus
 local GetCritChance = GetCritChance
 local GetRangedCritChance = GetRangedCritChance
 local GetSpellCritChance = GetSpellCritChance
 local CRIT_ABBR = CRIT_ABBR
-local RANGED_CRIT_CHANCE = RANGED_CRIT_CHANCE
-local SPELL_CRIT_CHANCE = SPELL_CRIT_CHANCE
 local STAT_CATEGORY_ENHANCEMENTS = STAT_CATEGORY_ENHANCEMENTS
 
 local displayString, lastPanel = ''
 local spellCrit, rangedCrit, meleeCrit = 0, 0, 0
-local critChance, rating, extraCritChance, extraCritRating = 0, 0, 0, 0
+local critChance = 0
 
 local function OnEvent(self)
 	local minCrit = GetSpellCritChance(2)
@@ -31,16 +26,11 @@ local function OnEvent(self)
 
 	if (spellCrit >= rangedCrit and spellCrit >= meleeCrit) then
 		critChance = spellCrit;
-		rating = CR_CRIT_SPELL;
 	elseif (rangedCrit >= meleeCrit) then
 		critChance = rangedCrit;
-		rating = CR_CRIT_RANGED;
 	else
 		critChance = meleeCrit;
-		rating = CR_CRIT_MELEE;
 	end
-
-	extraCritChance, extraCritRating = GetCombatRatingBonus(rating), GetCombatRating(rating)
 
 	if E.global.datatexts.settings.Crit.NoLabel then
 		self.text:SetFormattedText(displayString, critChance)
@@ -60,4 +50,4 @@ local function ValueColorUpdate(hex)
 end
 E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
-DT:RegisterDatatext('Crit', STAT_CATEGORY_ENHANCEMENTS, {'UNIT_STATS', 'UNIT_AURA', 'PLAYER_TALENT_UPDATE', 'PLAYER_DAMAGE_DONE_MODS'}, OnEvent, nil, nil, OnEnter, nil, _G.STAT_CRITICAL_STRIKE, nil, ValueColorUpdate)
+DT:RegisterDatatext('Crit', STAT_CATEGORY_ENHANCEMENTS, {'UNIT_STATS', 'UNIT_AURA', 'PLAYER_TALENT_UPDATE', 'PLAYER_DAMAGE_DONE_MODS'}, OnEvent, nil, nil, nil, nil, _G.STAT_CRITICAL_STRIKE, nil, ValueColorUpdate)
