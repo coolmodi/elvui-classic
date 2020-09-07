@@ -50,9 +50,7 @@ local function OnClick()
 	ToggleAllBags()
 end
 
-local function OnEnter(self)
-	DT:SetupTooltip(self)
-
+local function OnEnter()
 	for i = 0, NUM_BAG_SLOTS do
 		local bagName = GetBagName(i)
 		if bagName then

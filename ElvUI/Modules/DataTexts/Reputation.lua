@@ -58,9 +58,7 @@ local function OnEvent(self, event, eventType)
 	self.text:SetText(text)
 end
 
-local function OnEnter(self)
-	DT:SetupTooltip(self)
-
+local function OnEnter()
 	local name, reaction, min, max, value = GetWatchedFactionInfo()
 
 	if name then
