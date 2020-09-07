@@ -93,8 +93,9 @@ function DB:ExperienceBar_OnClick() end
 
 function DB:ExperienceBar_Toggle()
 	local bar = DB.StatusBars.Experience
+	bar.db = DB.db.experience
 
-	if bar.db.enable and (not bar.db.hideAtMaxLevel and DB:ExperienceBar_ShouldBeVisable()) then
+	if bar.db.enable and not (bar.db.hideAtMaxLevel and not DB:ExperienceBar_ShouldBeVisable()) then
 		bar:Show()
 		E:EnableMover(bar.mover:GetName())
 
@@ -119,7 +120,6 @@ end
 
 function DB:ExperienceBar()
 	DB.StatusBars.Experience = DB:CreateBar('ElvUI_ExperienceBar', DB.ExperienceBar_OnEnter, DB.ExperienceBar_OnClick, 'BOTTOM', E.UIParent, 'BOTTOM', 0, 43)
-	DB.StatusBars.Experience.db = DB.db.experience
 
 	DB.StatusBars.Experience.Rested = CreateFrame('StatusBar', '$parent_Rested', DB.StatusBars.Experience)
 	DB.StatusBars.Experience.Rested:SetInside()

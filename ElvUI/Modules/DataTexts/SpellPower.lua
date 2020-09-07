@@ -7,7 +7,6 @@ local min = min
 local GetSpellBonusDamage = GetSpellBonusDamage
 local GetSpellBonusHealing = GetSpellBonusHealing
 local STAT_CATEGORY_ENHANCEMENTS = STAT_CATEGORY_ENHANCEMENTS
-local MAX_SPELL_SCHOOLS = MAX_SPELL_SCHOOLS
 
 local displayString, lastPanel = ''
 
@@ -15,7 +14,7 @@ local function OnEvent(self)
 	local minSpellPower = GetSpellBonusDamage(2)
 	local HealingPower = GetSpellBonusHealing()
 
-	for i = 3, MAX_SPELL_SCHOOLS do
+	for i = 3, 7 do
 		local spellPower = GetSpellBonusDamage(i);
 		minSpellPower = min(minSpellPower, spellPower);
 	end

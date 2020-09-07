@@ -91,9 +91,7 @@ local function OnEvent(self, event, ...)
 end
 
 local itemCount = {}
-local function OnEnter(self)
-	DT:SetupTooltip(self)
-
+local function OnEnter()
 	if E.myclass == 'HUNTER' or E.myclass == 'ROGUE' or E.myclass == 'WARRIOR' then
 		wipe(itemCount)
 		DT.tooltip:AddLine(INVTYPE_AMMO)

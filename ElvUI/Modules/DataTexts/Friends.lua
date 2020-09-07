@@ -398,8 +398,7 @@ local function TooltipAddXLine(X, header, ...)
 	DT.tooltip[X](DT.tooltip, ...)
 end
 
-local function OnEnter(self)
-	DT:SetupTooltip(self)
+local function OnEnter()
 	lastTooltipXLineHeader = nil
 
 	local onlineFriends = C_FriendList_GetNumOnlineFriends()

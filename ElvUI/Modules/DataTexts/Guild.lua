@@ -215,10 +215,8 @@ local function Click(self, btn)
 	end
 end
 
-local function OnEnter(self, _, noUpdate)
+local function OnEnter()
 	if not IsInGuild() then return end
-
-	DT:SetupTooltip(self)
 
 	local total, _, online = GetNumGuildMembers()
 	if #guildTable == 0 or #guildTable < online then BuildGuildTable() end

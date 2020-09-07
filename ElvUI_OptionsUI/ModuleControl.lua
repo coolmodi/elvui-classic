@@ -90,9 +90,11 @@ local function CreateDatatbarsConfig()
 
 	MC:AddConfigOptions(P.databars, config)
 
-	config.args.experience.name = L["XPBAR_LABEL"]
+	config.args.experience.name = L["Experience"]
 	config.args.petExperience.name = L["Pet Experience"]
-	config.args.reputation.name = L["REPUTATION"]
+	config.args.reputation.name = L["Reputation"]
+	config.args.threat.name = L["Threat"]
+	config.args.colors.name = L["Colors"]
 
 	return config
 end
