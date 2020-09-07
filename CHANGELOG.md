@@ -1,8 +1,14 @@
-### Version 1.30 [ETA: 🍨]
+### Version 1.32 [ETA: 🍨]
+**Filters:** Updated default filter list (Free Action Potion)  
+___
+### Version 1.31 [09/07/2020]
+**UnitFrames:** Added back missing width/height options  
+___
+### Version 1.30 [09/07/2020]
 **DataBars:** Fixed some issues and a lua error  
 **DataTexts:** Fixed an error with the heal power / spell power DataText  
 ___
-### Version 1.29 [ETA: 09/07/2020]
+### Version 1.29 [09/07/2020]
 **ActionBars:** Fixed an issue with action paging  
 **DataBars:** DataBars options have been upgraded  
 **Minimap:** Fixed the pixel offset on the minimap DataBar  
@@ -10,7 +16,7 @@ ___
 **UnitFrames:** Fixed an issue with custom texts  
 **Tags:** Added back shortvalue Tags  
 ___
-### Version 1.28 [ETA: 09/04/2020]
+### Version 1.28 [09/04/2020]
 **Hotfix:** Added an option (off by default) to allow in game profile sharing under profiles section.  
 ___
 ### Version 1.25-1.27 [07/12/2020]
