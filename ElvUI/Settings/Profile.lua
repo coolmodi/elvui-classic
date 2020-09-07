@@ -146,7 +146,7 @@ for _, databar in pairs({'experience', 'reputation', 'petExperience', 'threat'})
 		font = "PT Sans Narrow",
 		fontOutline = "NONE",
 		mouseover = false,
-		orientation = 'HORIZONTAL',
+		orientation = 'AUTOMATIC',
 		reverseFill = false,
 	}
 end
