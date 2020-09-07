@@ -1,5 +1,6 @@
 ### Version 1.30 [ETA: 🍨]
 **DataBars:** Fixed some issues and a lua error  
+**DataTexts:** Fixed an error with the heal power / spell power DataText  
 ___
 ### Version 1.29 [ETA: 09/07/2020]
 **ActionBars:** Fixed an issue with action paging  
