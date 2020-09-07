@@ -21,7 +21,7 @@ local critChance, rating, extraCritChance, extraCritRating = 0, 0, 0, 0
 
 local function OnEvent(self)
 	local minCrit = GetSpellCritChance(2)
-	for i = 3, MAX_SPELL_SCHOOLS do
+	for i = 3, 7 do
 		spellCrit = GetSpellCritChance(i);
 		minCrit = min(minCrit, spellCrit);
 	end
