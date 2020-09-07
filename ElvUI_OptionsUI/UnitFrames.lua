@@ -2700,46 +2700,7 @@ local function GetOptionsTable_GeneralGroup(updateFunc, groupName, numUnits)
 		}
 	end
 
-	if groupName == 'tank' or groupName == 'assist' then
-		config.args.positionsGroup = {
-			order = 100,
-			name = L["Size and Positions"],
-			type = 'group',
-			inline = true,
-			set = function(info, value) E.db.unitframe.units[groupName][info[#info]] = value; updateFunc(UF, groupName, numUnits) end,
-			args = {
-				width = {
-					order = 1,
-					name = L["Width"],
-					type = 'range',
-					min = 50, max = 1000, step = 1,
-					set = function(info, value)
-						if E.db.unitframe.units[groupName].castbar and E.db.unitframe.units[groupName].castbar.width == E.db.unitframe.units[groupName][info[#info]] then
-							E.db.unitframe.units[groupName].castbar.width = value;
-						end
-
-						E.db.unitframe.units[groupName][info[#info]] = value;
-						updateFunc(UF, groupName, numUnits)
-					end,
-				},
-				height = {
-					order = 2,
-					name = L["Height"],
-					type = 'range',
-					min = 5, max = 500, step = 1,
-				},
-			},
-		}
-
-		if groupName == 'tank' or groupName == 'assist' then
-			config.args.positionsGroup.args.verticalSpacing = {
-				order = 3,
-				type = 'range',
-				name = L["Vertical Spacing"],
-				min = 0, max = 100, step = 1,
-			}
-		end
-	elseif groupName == 'party' or groupName == 'raid' or groupName == 'raid40' or groupName == 'raidpet' then
+	if groupName == 'party' or groupName == 'raid' or groupName == 'raid40' or groupName == 'raidpet' then
 		config.args.positionsGroup = {
 			order = 100,
 			name = L["Size and Positions"],
@@ -2906,6 +2867,45 @@ local function GetOptionsTable_GeneralGroup(updateFunc, groupName, numUnits)
 				},
 			},
 		}
+	else
+		config.args.positionsGroup = {
+			order = 100,
+			name = L["Size and Positions"],
+			type = 'group',
+			inline = true,
+			set = function(info, value) E.db.unitframe.units[groupName][info[#info]] = value; updateFunc(UF, groupName, numUnits) end,
+			args = {
+				width = {
+					order = 1,
+					name = L["Width"],
+					type = 'range',
+					min = 50, max = 1000, step = 1,
+					set = function(info, value)
+						if E.db.unitframe.units[groupName].castbar and E.db.unitframe.units[groupName].castbar.width == E.db.unitframe.units[groupName][info[#info]] then
+							E.db.unitframe.units[groupName].castbar.width = value;
+						end
+
+						E.db.unitframe.units[groupName][info[#info]] = value;
+						updateFunc(UF, groupName, numUnits)
+					end,
+				},
+				height = {
+					order = 2,
+					name = L["Height"],
+					type = 'range',
+					min = 5, max = 500, step = 1,
+				},
+			},
+		}
+
+		if groupName == 'tank' or groupName == 'assist' then
+			config.args.positionsGroup.args.verticalSpacing = {
+				order = 3,
+				type = 'range',
+				name = L["Vertical Spacing"],
+				min = 0, max = 100, step = 1,
+			}
+		end
 	end
 
 	if groupName == 'party' then
