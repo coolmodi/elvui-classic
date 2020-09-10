@@ -82,7 +82,7 @@ P.general = {
 				scale = 1,
 				position = 'BOTTOMRIGHT',
 				xOffset = -2,
-				yOffset = -2,
+				yOffset = 2,
 			},
 			ticket = {
 				scale = 1,
