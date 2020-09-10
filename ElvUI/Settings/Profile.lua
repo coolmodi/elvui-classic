@@ -81,8 +81,8 @@ P.general = {
 			tracking = {
 				scale = 1,
 				position = 'BOTTOMRIGHT',
-				xOffset = 2,
-				yOffset = 2,
+				xOffset = -2,
+				yOffset = -2,
 			},
 			ticket = {
 				scale = 1,
