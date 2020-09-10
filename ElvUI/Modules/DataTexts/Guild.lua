@@ -110,7 +110,6 @@ end
 
 local resendRequest = false
 local eventHandlers = {
-	["PLAYER_GUILD_UPDATE"] = C_GuildInfo_GuildRoster,
 	["CHAT_MSG_SYSTEM"] = function(_, arg1)
 		if FRIEND_ONLINE ~= nil and arg1 and strfind(arg1, FRIEND_ONLINE) then
 			resendRequest = true
@@ -217,6 +216,7 @@ end
 
 local function OnEnter()
 	if not IsInGuild() then return end
+	DT.tooltip:ClearLines()
 
 	local total, _, online = GetNumGuildMembers()
 	if #guildTable == 0 or #guildTable < online then BuildGuildTable() end

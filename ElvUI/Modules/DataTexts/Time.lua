@@ -61,8 +61,8 @@ local function OnLeave()
 	enteredFrame = false
 end
 
-local function OnEnter(self)
-	DT:SetupTooltip(self)
+local function OnEnter()
+	DT.tooltip:ClearLines()
 
 	if(not enteredFrame) then
 		enteredFrame = true

@@ -91,6 +91,7 @@ local function OnEvent(self)
 end
 
 local function OnEnter()
+	DT.tooltip:ClearLines()
 	if targetlv > 1 then
 		DT.tooltip:AddDoubleLine(L["Avoidance Breakdown"], strjoin('', ' (', L["lvl"], ' ', targetlv, ')'))
 	elseif targetlv == -1 then
@@ -98,7 +99,7 @@ local function OnEnter()
 	else
 		DT.tooltip:AddDoubleLine(L["Avoidance Breakdown"], strjoin('', ' (', L["lvl"], ' ', playerlv, ')'))
 	end
-	DT.tooltip:AddLine' '
+	DT.tooltip:AddLine(' ')
 	DT.tooltip:AddDoubleLine(DODGE_CHANCE, format(chanceString, dodge),1,1,1)
 	DT.tooltip:AddDoubleLine(PARRY_CHANCE, format(chanceString, parry),1,1,1)
 	DT.tooltip:AddDoubleLine(BLOCK_CHANCE, format(chanceString, block),1,1,1)

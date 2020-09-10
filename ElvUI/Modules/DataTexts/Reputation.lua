@@ -64,6 +64,7 @@ local function OnEnter()
 	local name, reaction, min, max, value = GetWatchedFactionInfo()
 
 	if name then
+		DT.tooltip:ClearLines()
 		DT.tooltip:AddLine(name)
 		DT.tooltip:AddLine(' ')
 
@@ -71,9 +72,8 @@ local function OnEnter()
 		if reaction ~= _G.MAX_REPUTATION_REACTION then
 			DT.tooltip:AddDoubleLine(REPUTATION..':', format('%d / %d (%d%%)', value - min, max - min, (value - min) / ((max - min == 0) and max or (max - min)) * 100), 1, 1, 1)
 		end
+		DT.tooltip:Show()
 	end
-
-	DT.tooltip:Show()
 end
 
 local function OnClick()

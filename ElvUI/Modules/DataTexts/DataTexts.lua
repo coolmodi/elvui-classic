@@ -520,6 +520,7 @@ function DT:UpdatePanelInfo(panelName, panel, ...)
 		dt.text:FontTemplate(font, fontSize, fontOutline)
 		dt.text:SetJustifyH(db.textJustify or 'CENTER')
 		dt.text:SetWordWrap(DT.db.wordWrap)
+		dt.text:SetText('')
 		RerenderFont(dt.text) -- SetJustifyH wont update without a rerender?
 
 		if battlePanel then

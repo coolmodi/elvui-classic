@@ -399,6 +399,7 @@ local function TooltipAddXLine(X, header, ...)
 end
 
 local function OnEnter()
+	DT.tooltip:ClearLines()
 	lastTooltipXLineHeader = nil
 
 	local onlineFriends = C_FriendList_GetNumOnlineFriends()
