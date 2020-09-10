@@ -80,7 +80,7 @@ P.general = {
 			},
 			tracking = {
 				scale = 1,
-				position = 'BOTTOMLEFT',
+				position = 'BOTTOMRIGHT',
 				xOffset = 2,
 				yOffset = 2,
 			},
