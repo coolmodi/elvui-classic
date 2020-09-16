@@ -218,10 +218,12 @@ local function OnEnter()
 	if not IsInGuild() then return end
 	DT.tooltip:ClearLines()
 
+	local shiftDown = IsShiftKeyDown()
+
 	local total, _, online = GetNumGuildMembers()
 	if #guildTable == 0 or #guildTable < online then BuildGuildTable() end
 
-	SortGuildTable(IsShiftKeyDown())
+	SortGuildTable(shiftDown)
 
 	local guildName, guildRank = GetGuildInfo('player')
 
@@ -251,7 +253,7 @@ local function OnEnter()
 
 		if (UnitInParty(info[1]) or UnitInRaid(info[1])) then grouped = 1 else grouped = 2 end
 
-		if IsShiftKeyDown() then
+		if shiftDown then
 			DT.tooltip:AddDoubleLine(format(nameRankString, info[1], info[2]), info[4], classc.r, classc.g, classc.b, zonec.r, zonec.g, zonec.b)
 			if info[5] ~= "" then DT.tooltip:AddLine(format(noteString, info[5]), ttsubh.r, ttsubh.g, ttsubh.b, 1) end
 			if info[6] ~= "" then DT.tooltip:AddLine(format(officerNoteString, info[6]), ttoff.r, ttoff.g, ttoff.b, 1) end
