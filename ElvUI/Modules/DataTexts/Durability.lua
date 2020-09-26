@@ -31,6 +31,7 @@ local slots = {
 	[10] = _G.INVTYPE_HAND,
 	[16] = _G.INVTYPE_WEAPONMAINHAND,
 	[17] = _G.INVTYPE_WEAPONOFFHAND,
+	[18] = _G.INVTYPE_RANGED,
 }
 
 local function OnEvent(self)
