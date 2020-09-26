@@ -89,6 +89,7 @@ function DB:PetExperienceBar()
 	if E.myclass ~= 'HUNTER' then return end
 
 	DB.StatusBars.PetExperience = DB:CreateBar('ElvUI_PetExperienceBar', DB.ExperienceBar_OnEnter, DB.ExperienceBar_OnClick, 'LEFT', _G.LeftChatPanel, 'RIGHT', -E.Border + E.Spacing*3, 0)
+	DB.StatusBars.PetExperience.Update = DB.PetExperienceBar_Update
 
 	DB:RegisterEvent('PET_BAR_UPDATE', 'PetExperienceBar_Toggle')
 	DB:RegisterEvent('UNIT_PET_EXPERIENCE', 'PetExperienceBar_Update')
