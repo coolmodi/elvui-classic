@@ -1,5 +1,7 @@
 ### Version 1.32 [ETA: 🍨]
+**DataBars:** Fixed some reputation and experience DataBar issues  
 **Filters:** Updated default filter list (Free Action Potion)  
+**Map:** Fixed the broken world map toggle  
 ___
 ### Version 1.31 [09/07/2020]
 **UnitFrames:** Added back missing width/height options  
