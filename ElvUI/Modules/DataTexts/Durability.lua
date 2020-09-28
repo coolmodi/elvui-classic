@@ -54,8 +54,7 @@ local function OnEvent(self)
 		end
 	end
 
-	local r, g, b = E:ColorGradient(totalDurability * .01, 1, .1, .1, 1, 1, .1, .1, 1, .1)
-	local hex = E:RGBToHex(r, g, b)
+	local hex = E:RGBToHex(E:ColorGradient(totalDurability * .01, 1, .1, .1, 1, 1, .1, .1, 1, .1))
 	self.text:SetFormattedText(displayString, hex, totalDurability)
 
 	if totalDurability <= E.global.datatexts.settings.Durability.percThreshold then
@@ -74,11 +73,11 @@ local function OnEnter()
 	DT.tooltip:ClearLines()
 
 	for slot, durability in pairs(invDurability) do
-		DT.tooltip:AddDoubleLine(format('|T%s:14:14:0:0:64:64:4:60:4:60|t  %s', GetInventoryItemTexture("player", slot), GetInventoryItemLink("player", slot)), format(tooltipString, durability), 1, 1, 1, E:ColorGradient(durability * 0.01, 1, .1, .1, 1, 1, .1, .1, 1, .1))
+		DT.tooltip:AddDoubleLine(format('|T%s:14:14:0:0:64:64:4:60:4:60|t %s', GetInventoryItemTexture('player', slot), GetInventoryItemLink('player', slot)), format(tooltipString, durability), 1, 1, 1, E:ColorGradient(durability * 0.01, 1, .1, .1, 1, 1, .1, .1, 1, .1))
 	end
 
 	if totalRepairCost > 0 then
-		DT.tooltip:AddLine(" ")
+		DT.tooltip:AddLine(' ')
 		DT.tooltip:AddDoubleLine(REPAIR_COST, GetMoneyString(totalRepairCost), .6, .8, 1, 1, 1, 1)
 	end
 
