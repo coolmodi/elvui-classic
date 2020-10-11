@@ -76,7 +76,7 @@ local function SetFilterList()
 	filterList['Buff Indicator (Pet)'] = 'Buff Indicator (Pet)'
 	filterList['Buff Indicator (Profile)'] = 'Buff Indicator (Profile)'
 	filterList['AuraBar Colors'] = 'AuraBar Colors'
-	filterList['Debuff Highlight'] = 'Debuff Highlight'
+	filterList['Aura Highlight'] = 'Aura Highlight'
 
 	local list = E.global.unitframe.aurafilters
 	if list then
@@ -95,7 +95,7 @@ local function DeleteFilterList()
 	filterList['Buff Indicator (Pet)'] = 'Buff Indicator (Pet)'
 	filterList['Buff Indicator (Profile)'] = 'Buff Indicator (Profile)'
 	filterList['AuraBar Colors'] = 'AuraBar Colors'
-	filterList['Debuff Highlight'] = 'Debuff Highlight'
+	filterList['Aura Highlight'] = 'Aura Highlight'
 
 	local list = G.unitframe.aurafilters
 	if list then
@@ -109,8 +109,8 @@ end
 
 local function SetSpellList()
 	local list
-	if selectedFilter == 'Debuff Highlight' then
-		list = E.global.unitframe.DebuffHighlightColors
+	if selectedFilter == 'Aura Highlight' then
+		list = E.global.unitframe.AuraHighlightColors
 	elseif selectedFilter == 'AuraBar Colors' then
 		list = E.global.unitframe.AuraBarColors
 	elseif selectedFilter == 'Buff Indicator (Pet)' or selectedFilter == 'Buff Indicator (Profile)' or selectedFilter == 'Buff Indicator' then
