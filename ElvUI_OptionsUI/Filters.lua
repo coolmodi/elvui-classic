@@ -19,10 +19,10 @@ local quickSearchText, selectedSpell, selectedFilter, filterList, spellList = ''
 local auraBarDefaults = { enable = true, color = { r = 1, g = 1, b = 1 } }
 
 local function GetSelectedFilters()
-	local biPet = selectedFilter == 'Buff Indicator (Pet)'
-	local biProfile = selectedFilter == 'Buff Indicator (Profile)'
-	local selected = (biProfile and E.db.unitframe.filters.buffwatch) or (biPet and (E.global.unitframe.buffwatch.PET or {})) or (E.global.unitframe.buffwatch[E.myclass] or {})
-	local default = (biProfile and P.unitframe.filters.buffwatch) or (biPet and G.unitframe.buffwatch.PET) or G.unitframe.buffwatch[E.myclass]
+	local biPet = selectedFilter == 'Aura Indicator (Pet)'
+	local biProfile = selectedFilter == 'Aura Indicator (Profile)'
+	local selected = (biProfile and E.db.unitframe.filters.aurawatch) or (biPet and (E.global.unitframe.aurawatch.PET or {})) or (E.global.unitframe.aurawatch[E.myclass] or {})
+	local default = (biProfile and P.unitframe.filters.aurawatch) or (biPet and G.unitframe.aurawatch.PET) or G.unitframe.aurawatch[E.myclass]
 	return selected, default
 end
 
@@ -113,7 +113,7 @@ local function SetSpellList()
 		list = E.global.unitframe.AuraHighlightColors
 	elseif selectedFilter == 'AuraBar Colors' then
 		list = E.global.unitframe.AuraBarColors
-	elseif selectedFilter == 'Buff Indicator (Pet)' or selectedFilter == 'Buff Indicator (Profile)' or selectedFilter == 'Buff Indicator' then
+	elseif selectedFilter == 'Aura Indicator (Pet)' or selectedFilter == 'Aura Indicator (Profile)' or selectedFilter == 'Aura Indicator' then
 		list = GetSelectedFilters()
 	else
 		list = E.global.unitframe.aurafilters[selectedFilter].spells
@@ -124,7 +124,7 @@ local function SetSpellList()
 
 	local searchText = quickSearchText:lower()
 	for filter, spell in pairs(list) do
-		if spell.id and (selectedFilter == 'Buff Indicator (Pet)' or selectedFilter == 'Buff Indicator (Profile)' or selectedFilter == 'Buff Indicator') then
+		if spell.id and (selectedFilter == 'Aura Indicator (Pet)' or selectedFilter == 'Aura Indicator (Profile)' or selectedFilter == 'Aura Indicator') then
 			filter = spell.id
 		end
 
