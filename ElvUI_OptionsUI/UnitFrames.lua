@@ -769,7 +769,7 @@ end
 
 local function BuffIndicator_ApplyToAll(info, value, profileSpecific)
 	if profileSpecific then
-		for _, spell in pairs(E.db.unitframe.filters.buffwatch) do
+		for _, spell in pairs(E.db.unitframe.filters.aurawatch) do
 			if value ~= nil then
 				spell[info[#info]] = value
 			else
@@ -777,7 +777,7 @@ local function BuffIndicator_ApplyToAll(info, value, profileSpecific)
 			end
 		end
 	else
-		local spells = E.global.unitframe.buffwatch[E.myclass]
+		local spells = E.global.unitframe.aurawatch[E.myclass]
 		if spells then
 			for _, spell in pairs(spells) do
 				if value ~= nil then

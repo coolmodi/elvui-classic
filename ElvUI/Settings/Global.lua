@@ -116,7 +116,7 @@ G.nameplate = {
 
 G.unitframe = {
 	aurafilters = {},
-	buffwatch = {},
+	aurawatch = {},
 	effectiveHealth = false,
 	effectivePower = false,
 	effectiveAura = false,
