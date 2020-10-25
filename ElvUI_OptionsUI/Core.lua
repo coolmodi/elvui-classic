@@ -9,9 +9,26 @@ local C, L = Engine[1], Engine[2]
 local _G, format, sort, tinsert = _G, format, sort, tinsert
 
 C.Values = {
-	FontFlags = { NONE = L["NONE"], OUTLINE = "OUTLINE", MONOCHROMEOUTLINE = "MONOCROMEOUTLINE", THICKOUTLINE = "THICKOUTLINE" },
+	FontFlags = {
+		NONE = L["NONE"],
+		OUTLINE = 'Outline',
+		THICKOUTLINE = 'Thick',
+		MONOCHROME = '|cffaaaaaaMono|r',
+		MONOCHROMEOUTLINE = '|cffaaaaaaMono|r Outline',
+		MONOCHROMETHICKOUTLINE = '|cffaaaaaaMono|r Thick',
+	},
 	FontSize = { min = 8, max = 64, step = 1 },
-	Strata = { BACKGROUND = "BACKGROUND", LOW = "LOW", MEDIUM = "MEDIUM", HIGH = "HIGH", DIALOG = "DIALOG", TOOLTIP = "TOOLTIP" }
+	Strata = { BACKGROUND = 'BACKGROUND', LOW = 'LOW', MEDIUM = 'MEDIUM', HIGH = 'HIGH', DIALOG = 'DIALOG', TOOLTIP = 'TOOLTIP' },
+	GrowthDirection = {
+		DOWN_RIGHT = format(L["%s and then %s"], L["Down"], L["Right"]),
+		DOWN_LEFT = format(L["%s and then %s"], L["Down"], L["Left"]),
+		UP_RIGHT = format(L["%s and then %s"], L["Up"], L["Right"]),
+		UP_LEFT = format(L["%s and then %s"], L["Up"], L["Left"]),
+		RIGHT_DOWN = format(L["%s and then %s"], L["Right"], L["Down"]),
+		RIGHT_UP = format(L["%s and then %s"], L["Right"], L["Up"]),
+		LEFT_DOWN = format(L["%s and then %s"], L["Left"], L["Down"]),
+		LEFT_UP = format(L["%s and then %s"], L["Left"], L["Up"]),
+	}
 }
 
 E:AddLib('AceGUI', 'AceGUI-3.0')

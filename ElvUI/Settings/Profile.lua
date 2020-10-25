@@ -121,6 +121,7 @@ P.databars = {
 	colors = {
 		experience = { r = 0, g = .4, b = 1, a = .8 },
 		rested = { r = 1, g = 0, b = 1, a = .2},
+		quest = { r = 0, g = 1, b = 0, a = .4},
 		petExperience = { r = 1, g = 1, b = .41, a = .8 },
 		useCustomFactionColors = false,
 		factionColors = {
