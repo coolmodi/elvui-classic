@@ -798,6 +798,7 @@ P.auras = {
 --Chat
 P.chat = {
 	url = true,
+	panelSnapping = true,
 	shortChannels = true,
 	hyperlinkHover = true,
 	throttleInterval = 45,
