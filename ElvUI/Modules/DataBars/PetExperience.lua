@@ -76,20 +76,26 @@ function DB:PetExperienceBar_Toggle()
 	local bar = DB.StatusBars.PetExperience
 	bar.db = DB.db.petExperience
 
-	if bar.db.enable and HasPetUI() and not (bar.db.hideAtMaxLevel and UnitLevel('pet') == MAX_PLAYER_LEVEL_TABLE[GetExpansionLevel()]) then
-		DB:PetExperienceBar_Update()
+	if bar.db.enable then
 		E:EnableMover(bar.mover:GetName())
 	else
 		bar:Hide()
 		E:DisableMover(bar.mover:GetName())
+	end
+
+	if bar.db.enable and HasPetUI() and not (bar.db.hideAtMaxLevel and UnitLevel('pet') == MAX_PLAYER_LEVEL_TABLE[GetExpansionLevel()]) then
+		DB:PetExperienceBar_Update()
 	end
 end
 
 function DB:PetExperienceBar()
 	if E.myclass ~= 'HUNTER' then return end
 
-	DB.StatusBars.PetExperience = DB:CreateBar('ElvUI_PetExperienceBar', DB.ExperienceBar_OnEnter, DB.ExperienceBar_OnClick, 'LEFT', _G.LeftChatPanel, 'RIGHT', -E.Border + E.Spacing*3, 0)
-	DB.StatusBars.PetExperience.Update = DB.PetExperienceBar_Update
+	local PetExperience = DB:CreateBar('ElvUI_PetExperienceBar', 'PetExperience', DB.PetExperienceBar_Update, DB.ExperienceBar_OnEnter, DB.ExperienceBar_OnClick, {'LEFT', _G.LeftChatPanel, 'RIGHT', -E.Border + E.Spacing*3, 0})
+
+	PetExperience.ShouldHide = function()
+		return DB.db.experience.hideAtMaxLevel and not DB:ExperienceBar_ShouldBeVisible()
+	end
 
 	DB:RegisterEvent('PET_BAR_UPDATE', 'PetExperienceBar_Toggle')
 	DB:RegisterEvent('UNIT_PET_EXPERIENCE', 'PetExperienceBar_Update')
