@@ -5,14 +5,20 @@ local ACH = E.Libs.ACH
 
 local SharedOptions = {
 	enable = ACH:Toggle(L["Enable"], nil, 1),
-	mouseover = ACH:Toggle(L["Mouseover"], nil, 2),
-	reverseFill = ACH:Toggle(L["Reverse Fill Direction"], nil, 3),
-	orientation = ACH:Select(L["Statusbar Fill Orientation"], L["Direction the bar moves on gains/losses"], 4, { AUTOMATIC = L["Automatic"], HORIZONTAL = L["Horizontal"], VERTICAL = L["Vertical"] }),
-	width = ACH:Range(L["Width"], nil, 5, { min = 5, max = ceil(GetScreenWidth() or 800), step = 1 }),
-	height = ACH:Range(L["Height"], nil, 6, { min = 5, max = ceil(GetScreenWidth() or 800), step = 1 }),
-	textFormat = ACH:Select(L["Text Format"], nil, 7, { NONE = L["NONE"], CUR = L["Current"], REM = L["Remaining"], PERCENT = L["Percent"], CURMAX = L["Current - Max"], CURPERC = L["Current - Percent"], CURREM = L["Current - Remaining"], CURPERCREM = L["Current - Percent (Remaining)"] }),
+	textFormat = ACH:Select(L["Text Format"], nil, 2, { NONE = L["NONE"], CUR = L["Current"], REM = L["Remaining"], PERCENT = L["Percent"], CURMAX = L["Current - Max"], CURPERC = L["Current - Percent"], CURREM = L["Current - Remaining"], CURPERCREM = L["Current - Percent (Remaining)"] }),
+	mouseover = ACH:Toggle(L["Mouseover"], nil, 3),
+	clickThrough = ACH:Toggle(L["Click Through"], nil, 4),
+	showBubbles = ACH:Toggle(L["Show Bubbles"], nil, 5),
+	sizeGroup = ACH:Group(L["Size"], nil, -3),
+	conditionGroup = ACH:MultiSelect(L["Conditions"], nil, -2),
 	fontGroup = ACH:Group(L["Fonts"], nil, -1),
 }
+
+SharedOptions.sizeGroup.inline = true
+SharedOptions.sizeGroup.args.width = ACH:Range(L["Width"], nil, 1, { min = 5, max = ceil(GetScreenWidth() or 800), step = 1 })
+SharedOptions.sizeGroup.args.height = ACH:Range(L["Height"], nil, 2, { min = 5, max = ceil(GetScreenWidth() or 800), step = 1 })
+SharedOptions.sizeGroup.args.orientation = ACH:Select(L["Statusbar Fill Orientation"], L["Direction the bar moves on gains/losses"], 3, { AUTOMATIC = L["Automatic"], HORIZONTAL = L["Horizontal"], VERTICAL = L["Vertical"] })
+SharedOptions.sizeGroup.args.reverseFill = ACH:Toggle(L["Reverse Fill Direction"], nil, 4)
 
 SharedOptions.fontGroup.inline = true
 SharedOptions.fontGroup.args.font = ACH:SharedMediaFont(L["Font"], nil, 1)
@@ -47,23 +53,37 @@ E.Options.args.databars.args.experience = ACH:Group(L["Experience"], nil, nil, n
 E.Options.args.databars.args.experience.args = CopyTable(SharedOptions)
 E.Options.args.databars.args.experience.args.enable.set = function(info, value) DB.db.experience[info[#info]] = value DB:ExperienceBar_Toggle() DB:UpdateAll() end
 E.Options.args.databars.args.experience.args.textFormat.set = function(info, value) DB.db.experience[info[#info]] = value DB:ExperienceBar_Update() end
-E.Options.args.databars.args.experience.args.hideAtMaxLevel = ACH:Toggle(L["Hide At Max Level"], nil, 8)
-E.Options.args.databars.args.experience.args.hideInCombat = ACH:Toggle(L["Hide In Combat"], nil, 10)
+E.Options.args.databars.args.experience.args.conditionGroup.get = function(_, key) return DB.db.experience[key] end
+E.Options.args.databars.args.experience.args.conditionGroup.set = function(_, key, value) DB.db.experience[key] = value DB:ExperienceBar_Update() DB:ExperienceBar_QuestXP() DB:UpdateAll() end
+E.Options.args.databars.args.experience.args.conditionGroup.values = {
+	questCurrentZoneOnly = L["Quests in Current Zone Only"],
+	questCompletedOnly = L["Completed Quests Only"],
+	hideAtMaxLevel = L["Hide At Max Level"],
+	hideInCombat = L["Hide In Combat"],
+}
 
 E.Options.args.databars.args.petExperience = ACH:Group(L["Pet Experience"], nil, nil, nil, function(info) return DB.db.petExperience[info[#info]] end, function(info, value) DB.db.petExperience[info[#info]] = value DB:PetExperienceBar_Update() DB:UpdateAll() end)
 E.Options.args.databars.args.petExperience.args = CopyTable(SharedOptions)
 E.Options.args.databars.args.petExperience.args.enable.set = function(info, value) DB.db.petExperience[info[#info]] = value DB:PetExperienceBar_Toggle() DB:UpdateAll() end
 E.Options.args.databars.args.petExperience.args.textFormat.set = function(info, value) DB.db.petExperience[info[#info]] = value DB:PetExperienceBar_Update() end
-E.Options.args.databars.args.petExperience.args.hideAtMaxLevel = ACH:Toggle(L["Hide At Max Level"], nil, 8)
-E.Options.args.databars.args.petExperience.args.hideInCombat = ACH:Toggle(L["Hide In Combat"], nil, 9)
+E.Options.args.databars.args.petExperience.args.conditionGroup.get = function(_, key) return DB.db.petExperience[key] end
+E.Options.args.databars.args.petExperience.args.conditionGroup.set = function(_, key, value) DB.db.petExperience[key] = value DB:PetExperienceBar_Update() DB:UpdateAll() end
+E.Options.args.databars.args.petExperience.args.conditionGroup.values = {
+	hideAtMaxLevel = L["Hide At Max Level"],
+	hideInCombat = L["Hide In Combat"],
+}
 
 E.Options.args.databars.args.reputation = ACH:Group(L["Reputation"], nil, nil, nil, function(info) return DB.db.reputation[info[#info]] end, function(info, value) DB.db.reputation[info[#info]] = value DB:ReputationBar_Update() DB:UpdateAll() end)
 E.Options.args.databars.args.reputation.args = CopyTable(SharedOptions)
 E.Options.args.databars.args.reputation.args.enable.set = function(info, value) DB.db.reputation[info[#info]] = value DB:ReputationBar_Toggle() DB:UpdateAll() end
 E.Options.args.databars.args.reputation.args.textFormat.set = function(info, value) DB.db.reputation[info[#info]] = value DB:ReputationBar_Update() end
-E.Options.args.databars.args.reputation.args.hideInCombat = ACH:Toggle(L["Hide In Combat"], nil, 9)
+E.Options.args.databars.args.reputation.args.conditionGroup.get = function(_, key) return DB.db.reputation[key] end
+E.Options.args.databars.args.reputation.args.conditionGroup.set = function(_, key, value) DB.db.reputation[key] = value DB:ReputationBar_Update() DB:UpdateAll() end
+E.Options.args.databars.args.reputation.args.conditionGroup.values = { hideInCombat = L["Hide In Combat"] }
 
 E.Options.args.databars.args.threat = ACH:Group(L["Threat"], nil, nil, nil, function(info) return DB.db.threat[info[#info]] end, function(info, value) DB.db.threat[info[#info]] = value DB:ThreatBar_Update() DB:UpdateAll() end)
 E.Options.args.databars.args.threat.args = CopyTable(SharedOptions)
 E.Options.args.databars.args.threat.args.enable.set = function(info, value) DB.db.threat[info[#info]] = value DB:ThreatBar_Toggle() DB:UpdateAll() end
 E.Options.args.databars.args.threat.args.textFormat = nil
+E.Options.args.databars.args.threat.args.conditionGroup = nil
+E.Options.args.databars.args.threat.args.showBubbles = nil
