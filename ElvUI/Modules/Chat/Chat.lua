@@ -48,7 +48,6 @@ local PlaySoundFile = PlaySoundFile
 local RemoveExtraSpaces = RemoveExtraSpaces
 local RemoveNewlines = RemoveNewlines
 local ToggleFrame = ToggleFrame
-local ToggleQuickJoinPanel = ToggleQuickJoinPanel
 local UnitExists, UnitIsUnit = UnitExists, UnitIsUnit
 local UnitName = UnitName
 
@@ -1121,19 +1120,6 @@ local function HyperLinkedCPL(data)
 	end
 end
 
-local function HyperLinkedSQU(data)
-	if strsub(data, 1, 3) == 'squ' then
-		if not _G.QuickJoinFrame:IsShown() then
-			ToggleQuickJoinPanel()
-		end
-		local guid = strsub(data, 5)
-		if guid and guid ~= '' then
-			_G.QuickJoinFrame:SelectGroup(guid)
-			_G.QuickJoinFrame:ScrollToGroup(guid)
-		end
-	end
-end
-
 local function HyperLinkedURL(data)
 	if strsub(data, 1, 3) == 'url' then
 		local currentLink = strsub(data, 5)
@@ -1147,8 +1133,6 @@ local SetHyperlink = _G.ItemRefTooltip.SetHyperlink
 function _G.ItemRefTooltip:SetHyperlink(data, ...)
 	if strsub(data, 1, 3) == 'cpl' then
 		HyperLinkedCPL(data)
-	elseif strsub(data, 1, 3) == 'squ' then
-		HyperLinkedSQU(data)
 	elseif strsub(data, 1, 3) == 'url' then
 		HyperLinkedURL(data)
 	else
@@ -2668,7 +2652,6 @@ function CH:Initialize()
 	if _G.WIM then
 		_G.WIM.RegisterWidgetTrigger('chat_display', 'whisper,chat,w2w,demo', 'OnHyperlinkClick', function(frame) CH.clickedframe = frame end)
 		_G.WIM.RegisterItemRefHandler('url', HyperLinkedURL)
-		_G.WIM.RegisterItemRefHandler('squ', HyperLinkedSQU)
 		_G.WIM.RegisterItemRefHandler('cpl', HyperLinkedCPL)
 	end
 
