@@ -43,12 +43,10 @@ local InCombatLockdown = InCombatLockdown
 local IsAltKeyDown = IsAltKeyDown
 local IsInRaid, IsInGroup = IsInRaid, IsInGroup
 local IsShiftKeyDown = IsShiftKeyDown
-local PlaySound = PlaySound
 local PlaySoundFile = PlaySoundFile
 local RemoveExtraSpaces = RemoveExtraSpaces
 local RemoveNewlines = RemoveNewlines
 local ToggleFrame = ToggleFrame
-local UnitExists, UnitIsUnit = UnitExists, UnitIsUnit
 local UnitName = UnitName
 
 local C_Club_GetInfoFromLastCommunityChatLine = C_Club.GetInfoFromLastCommunityChatLine
@@ -58,7 +56,6 @@ local ChatFrame_ResolvePrefixedChannelName = ChatFrame_ResolvePrefixedChannelNam
 local BNet_GetValidatedCharacterName = BNet_GetValidatedCharacterName
 local BNet_GetClientEmbeddedTexture = BNet_GetClientEmbeddedTexture
 local BNET_CLIENT_WOW = BNET_CLIENT_WOW
-local UNKNOWN = UNKNOWN
 -- GLOBALS: ElvCharacterDB
 
 CH.GuidCache = {}
