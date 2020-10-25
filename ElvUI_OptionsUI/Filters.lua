@@ -16,13 +16,15 @@ local GetSpellInfo = GetSpellInfo
 -- GLOBALS: MAX_PLAYER_LEVEL
 
 local quickSearchText, selectedSpell, selectedFilter, filterList, spellList = '', nil, nil, {}, {}
+local defaultFilterList = {	['Aura Indicator (Global)'] = 'Aura Indicator (Global)', ['Aura Indicator (Class)'] = 'Aura Indicator (Class)', ['Aura Indicator (Pet)'] = 'Aura Indicator (Pet)',  ['Aura Indicator (Profile)'] = 'Aura Indicator (Profile)', ['AuraBar Colors'] = 'AuraBar Colors', ['Aura Highlight'] = 'Aura Highlight' }
 local auraBarDefaults = { enable = true, color = { r = 1, g = 1, b = 1 } }
 
 local function GetSelectedFilters()
-	local biPet = selectedFilter == 'Aura Indicator (Pet)'
-	local biProfile = selectedFilter == 'Aura Indicator (Profile)'
-	local selected = (biProfile and E.db.unitframe.filters.aurawatch) or (biPet and (E.global.unitframe.aurawatch.PET or {})) or (E.global.unitframe.aurawatch[E.myclass] or {})
-	local default = (biProfile and P.unitframe.filters.aurawatch) or (biPet and G.unitframe.aurawatch.PET) or G.unitframe.aurawatch[E.myclass]
+	local class = selectedFilter == 'Aura Indicator (Class)'
+	local pet = selectedFilter == 'Aura Indicator (Pet)'
+	local profile = selectedFilter == 'Aura Indicator (Profile)'
+	local selected = (profile and E.db.unitframe.filters.aurawatch) or (pet and (E.global.unitframe.aurawatch.PET or {})) or class and (E.global.unitframe.aurawatch[E.myclass] or {}) or E.global.unitframe.aurawatch.GLOBAL
+	local default = (profile and P.unitframe.filters.aurawatch) or (pet and G.unitframe.aurawatch.PET) or class and G.unitframe.aurawatch[E.myclass] or G.unitframe.aurawatch.GLOBAL
 	return selected, default
 end
 
@@ -71,14 +73,24 @@ end
 
 local function SetFilterList()
 	wipe(filterList)
-
-	filterList['Buff Indicator'] = 'Buff Indicator'
-	filterList['Buff Indicator (Pet)'] = 'Buff Indicator (Pet)'
-	filterList['Buff Indicator (Profile)'] = 'Buff Indicator (Profile)'
-	filterList['AuraBar Colors'] = 'AuraBar Colors'
-	filterList['Aura Highlight'] = 'Aura Highlight'
+	E:CopyTable(filterList, defaultFilterList)
 
 	local list = E.global.unitframe.aurafilters
+	if list then
+		for filter in pairs(list) do
+			filterList[filter] = filter
+		end
+	end
+
+	return filterList
+end
+
+local function ResetFilterList()
+	wipe(filterList)
+
+	E:CopyTable(filterList, defaultFilterList)
+
+	local list = G.unitframe.aurafilters
 	if list then
 		for filter in pairs(list) do
 			filterList[filter] = filter
@@ -91,20 +103,33 @@ end
 local function DeleteFilterList()
 	wipe(filterList)
 
-	filterList['Buff Indicator'] = 'Buff Indicator'
-	filterList['Buff Indicator (Pet)'] = 'Buff Indicator (Pet)'
-	filterList['Buff Indicator (Profile)'] = 'Buff Indicator (Profile)'
-	filterList['AuraBar Colors'] = 'AuraBar Colors'
-	filterList['Aura Highlight'] = 'Aura Highlight'
-
-	local list = G.unitframe.aurafilters
+	local list = E.global.unitframe.aurafilters
+	local defaultList = G.unitframe.aurafilters
 	if list then
 		for filter in pairs(list) do
-			filterList[filter] = filter
+			if not defaultList[filter] then
+				filterList[filter] = filter
+			end
 		end
 	end
 
 	return filterList
+end
+
+local function DeleteFilterListDisable()
+	wipe(filterList)
+
+	local list = E.global.unitframe.aurafilters
+	local defaultList = G.unitframe.aurafilters
+	if list then
+		for filter in pairs(list) do
+			if not defaultList[filter] then
+				return false
+			end
+		end
+	end
+
+	return true
 end
 
 local function SetSpellList()
@@ -113,7 +138,7 @@ local function SetSpellList()
 		list = E.global.unitframe.AuraHighlightColors
 	elseif selectedFilter == 'AuraBar Colors' then
 		list = E.global.unitframe.AuraBarColors
-	elseif selectedFilter == 'Aura Indicator (Pet)' or selectedFilter == 'Aura Indicator (Profile)' or selectedFilter == 'Aura Indicator' then
+	elseif selectedFilter == 'Aura Indicator (Pet)' or selectedFilter == 'Aura Indicator (Profile)' or selectedFilter == 'Aura Indicator (Class)' or selectedFilter == 'Aura Indicator (Global)' then
 		list = GetSelectedFilters()
 	else
 		list = E.global.unitframe.aurafilters[selectedFilter].spells
@@ -124,7 +149,7 @@ local function SetSpellList()
 
 	local searchText = quickSearchText:lower()
 	for filter, spell in pairs(list) do
-		if spell.id and (selectedFilter == 'Aura Indicator (Pet)' or selectedFilter == 'Aura Indicator (Profile)' or selectedFilter == 'Aura Indicator') then
+		if spell.id and (selectedFilter == 'Aura Indicator (Pet)' or selectedFilter == 'Aura Indicator (Profile)' or selectedFilter == 'Aura Indicator (Class)' or selectedFilter == 'Aura Indicator (Global)') then
 			filter = spell.id
 		end
 

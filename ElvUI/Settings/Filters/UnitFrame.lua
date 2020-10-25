@@ -562,6 +562,7 @@ function UF:AuraWatch_AddSpell(id, point, color, anyUnit, onlyShowMissing, displ
 end
 
 G.unitframe.aurawatch = {
+	GLOBAL = {},
 	PRIEST = {
 		[1243] = UF:AuraWatch_AddSpell(1243, "TOPLEFT", {1, 1, 0.66}, true), --Power Word: Fortitude(Rank 1)
 		[1244] = UF:AuraWatch_AddSpell(1244, "TOPLEFT", {1, 1, 0.66}, true), --Power Word: Fortitude(Rank 2)
