@@ -179,8 +179,7 @@ function A:UpdateIcon(button)
 	local isOnRight = pos == 'RIGHT' and true or false
 
 	button.statusBar:ClearAllPoints()
-	button.statusBar:Width((isOnTop or isOnBottom) and iconSize or (A.db.barWidth + (E.PixelMode and 0 or 2)))
-	button.statusBar:Height((isOnLeft or isOnRight) and iconSize or (A.db.barHeight + (E.PixelMode and 0 or 2)))
+	button.statusBar:Size((isOnTop or isOnBottom) and iconSize or (A.db.barWidth + (E.PixelMode and 0 or 2)), (isOnLeft or isOnRight) and iconSize or (A.db.barHeight + (E.PixelMode and 0 or 2)))
 	button.statusBar:Point(E.InversePoints[pos], button, pos, (isOnTop or isOnBottom) and 0 or ((isOnLeft and -((E.PixelMode and 1 or 3) + spacing)) or ((E.PixelMode and 1 or 3) + spacing)), (isOnLeft or isOnRight) and 0 or ((isOnTop and ((E.PixelMode and 1 or 3) + spacing) or -((E.PixelMode and 1 or 3) + spacing))))
 
 	button.statusBar:SetStatusBarTexture(LSM:Fetch('statusbar', A.db.barTexture))
@@ -239,11 +238,9 @@ function A:UpdateAura(button, index)
 			A:ClearAuraTime(button)
 		end
 
-		local r, g, b
+		local r, g, b = A.db.barColor.r, A.db.barColor.g, A.db.barColor.b
 		if button.timeLeft and A.db.barColorGradient then
 			r, g, b = E.oUF:ColorGradient(button.timeLeft, duration or 0, .8, 0, 0, .8, .8, 0, 0, .8, 0)
-		else
-			r, g, b = A.db.barColor.r, A.db.barColor.g, A.db.barColor.b
 		end
 
 		button.statusBar:SetStatusBarColor(r, g, b)
@@ -305,11 +302,9 @@ function A:UpdateTempEnchant(button, index)
 	button.text:SetShown(A.db.showDuration)
 	button.statusBar:SetShown((A.db.barShow and remaining > 0) or (A.db.barShow and A.db.barNoDuration and not expiration))
 
-	local r, g, b
+	local r, g, b = A.db.barColor.r, A.db.barColor.g, A.db.barColor.b
 	if expiration and A.db.barColorGradient then
 		r, g, b = E.oUF:ColorGradient(remaining, duration, .8, 0, 0, .8, .8, 0, 0, .8, 0)
-	else
-		r, g, b = A.db.barColor.r, A.db.barColor.g, A.db.barColor.b
 	end
 
 	button.statusBar:SetStatusBarColor(r, g, b)
@@ -399,8 +394,6 @@ function A:CreateAuraHeader(filter)
 	header:SetClampedToScreen(true)
 	header:SetAttribute('unit', 'player')
 	header:SetAttribute('filter', filter)
-	RegisterStateDriver(header, 'visibility', 'show')
-	RegisterAttributeDriver(header, 'unit', 'player')
 
 	if filter == 'HELPFUL' then
 		header:SetAttribute('consolidateDuration', -1)
