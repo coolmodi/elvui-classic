@@ -684,7 +684,7 @@ function DT:Initialize()
 	end
 
 	if E.private.skins.blizzard.enable and E.private.skins.blizzard.tooltip then
-		TT:SetStyle(DT.tooltip)
+		TT:HookScript(DT.tooltip, 'OnShow', 'SetStyle')
 	end
 
 	-- Ignore header font size on DatatextTooltip
