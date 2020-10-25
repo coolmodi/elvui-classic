@@ -1,7 +1,9 @@
-### Version 1.32 [ETA: 🍨]
+### Version 1.32-1.33 [ETA: 🍨]
+**Chat:** Bnet whispers have class color again  
 **DataBars:** Fixed some reputation and experience DataBar issues  
-**Filters:** Updated default filter list (Free Action Potion)  
+**Filters:** Updated default filter list  
 **Map:** Fixed the broken world map toggle  
+**Misc:** Fixed an issue when trying to inspect on Russian clients  
 ___
 ### Version 1.31 [09/07/2020]
 **UnitFrames:** Added back missing width/height options  
