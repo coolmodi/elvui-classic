@@ -99,12 +99,6 @@ function DB:UpdateAll()
 			bar.holder:SetAlpha(bar.db.mouseover and 0 or 1)
 		end
 
-		if bar.db.hideInVehicle then
-			E:RegisterObjectForVehicleLock(bar.holder, E.UIParent)
-		else
-			E:UnregisterObjectForVehicleLock(bar.holder)
-		end
-
 		if bar.db.orientation == 'AUTOMATIC' then
 			bar:SetOrientation(bar.db.height > bar.db.width and 'VERTICAL' or 'HORIZONTAL')
 			bar:SetRotatesTexture(bar.db.height > bar.db.width)
