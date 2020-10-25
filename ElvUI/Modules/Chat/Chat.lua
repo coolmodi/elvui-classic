@@ -153,8 +153,21 @@ do --this can save some main file locals
 	local x, y = ':16:16',':13:25'
 
 	local ElvBlue		= E:TextureString(E.Media.ChatLogos.ElvBlue,y)
-	local ElvSorbet		= E:TextureString(E.Media.ChatLogos.ElvSorbet,y)
+	local ElvGreen		= E:TextureString(E.Media.ChatLogos.ElvGreen,y)
+	local ElvOrange		= E:TextureString(E.Media.ChatLogos.ElvOrange,y)
+	--local ElvPink		= E:TextureString(E.Media.ChatLogos.ElvPink,y)
+	local ElvPurple		= E:TextureString(E.Media.ChatLogos.ElvPurple,y)
+	local ElvRed		= E:TextureString(E.Media.ChatLogos.ElvRed,y)
+	local ElvYellow		= E:TextureString(E.Media.ChatLogos.ElvYellow,y)
+	local ElvSimpy		= E:TextureString(E.Media.ChatLogos.ElvSimpy,y)
+	local Bathrobe		= E:TextureString(E.Media.ChatLogos.Bathrobe,x)
+	local MrHankey		= E:TextureString(E.Media.ChatLogos.MrHankey,x)
+	local Rainbow		= E:TextureString(E.Media.ChatLogos.Rainbow,x)
+	local Hibiscus		= E:TextureString(E.Media.ChatLogos.Hibiscus,x)
 	local Clover		= E:TextureString(E.Media.ChatLogos.Clover,x)
+	local GoldShield	= E:TextureString(E.Media.ChatLogos.GoldShield,x)
+	local DeathlyH		= E:TextureString(E.Media.ChatLogos.DeathlyHallows,x)
+	local Gem			= E:TextureString(E.Media.ChatLogos.Gem,x)
 
 	--[[ Simpys Thing: new icon color every message, in order then reversed back, repeating of course
 		local a, b, c = 0, false, {ElvRed, ElvOrange, ElvYellow, ElvGreen, ElvBlue, ElvPurple, ElvPink}
@@ -170,9 +183,10 @@ do --this can save some main file locals
 			if next(g) then if #g > 1 then sort(g) end for n in gmatch(t, '\24') do local _, v = next(g) t = gsub(t, n, f[v], 1) tremove(g, 1) f[v] = nil end end return t
 		end
 
-		--Rainbow Sorbet: ff9966 (Light Salmon), ff6699 (Hot Pink), 9966ff (Light Violet), 6699ff (Cornflower Blue), 66ff99 (Pale Green)
-		local SimpyColors = function(t) return specialText(t, 1.0,0.6,0.4, 1.0,0.4,0.6, 0.6,0.4,1.0, 0.4,0.6,1.0, 0.4,1.0,0.6) end
-		itsSimpy = function() return ElvSorbet, SimpyColors end
+		--Simpys Ghoulish: A366CC, 88E032, 33BDBE, 88E032, A366CC
+		local SimpyColors = function(t) return specialText(t, 0.63,0.40,0.80, 0.63,0.40,0.80, 0.53,0.87,0.19, 0.53,0.87,0.19, 0.20,0.74,0.74, 0.20,0.74,0.74, 0.53,0.87,0.19, 0.53,0.87,0.19, 0.63,0.40,0.80, 0.63,0.40,0.80) end
+
+		itsSimpy = function() return ElvSimpy, SimpyColors end
 	end
 
 	specialChatIcons = {
