@@ -9,8 +9,7 @@ E.Media = {
 	Textures = {}
 }
 
-local format = format
-local ipairs, type = ipairs, type
+local format, ipairs, type, pcall = format, ipairs, type, pcall
 local westAndRU = LSM.LOCALE_BIT_ruRU + LSM.LOCALE_BIT_western
 
 do
@@ -63,7 +62,6 @@ AddMedia('font','ActionMan.ttf',			'Action Man')
 AddMedia('font','ContinuumMedium.ttf',		'Continuum Medium')
 AddMedia('font','DieDieDie.ttf',			'Die Die Die!')
 AddMedia('font','PTSansNarrow.ttf',			'PT Sans Narrow', nil, westAndRU)
-AddMedia('font','IIBMPlexMonoRegular.ttf',	'IBM Plex Mono', nil, westAndRU)
 AddMedia('font','Expressway.ttf',			true, nil, westAndRU)
 AddMedia('font','Homespun.ttf',				true, nil, westAndRU)
 AddMedia('font','Invisible.ttf')
@@ -89,6 +87,8 @@ AddMedia('texture','Melli',			true, 'statusbar')
 AddMedia('texture','Arrow')
 AddMedia('texture','ArrowRight')
 AddMedia('texture','ArrowUp')
+AddMedia('texture','Arrow1')
+AddMedia('texture','Arrow2')
 AddMedia('texture','BagNewItemGlow')
 AddMedia('texture','BagQuestIcon')
 AddMedia('texture','BagUpgradeIcon')
@@ -105,8 +105,9 @@ AddMedia('texture','ExitVehicle')
 AddMedia('texture','Healer')
 AddMedia('texture','HelloKitty')
 AddMedia('texture','HelloKittyChat')
+AddMedia('texture','Help')
 AddMedia('texture','Highlight')
-AddMedia('texture','Leader')
+AddMedia('texture','LeaderHQ')
 AddMedia('texture','LogoTop')
 AddMedia('texture','LogoTopSmall')
 AddMedia('texture','LogoBottom')
@@ -115,13 +116,15 @@ AddMedia('texture','Mail')
 AddMedia('texture','Minus')
 AddMedia('texture','MinusButton')
 AddMedia('texture','Pause')
-AddMedia('texture','PhaseIcons')
+AddMedia('texture','PhaseBorder')
+AddMedia('texture','PhaseCenter')
 AddMedia('texture','Play')
 AddMedia('texture','Plus')
 AddMedia('texture','PlusButton')
 AddMedia('texture','Reset')
 AddMedia('texture','Resting')
 AddMedia('texture','Resting1')
+AddMedia('texture','RolesHQ')
 AddMedia('texture','RoleIcons')
 AddMedia('texture','SkullIcon')
 AddMedia('texture','Smooth')
@@ -164,7 +167,7 @@ AddMedia('emoji','Wink')
 AddMedia('emoji','ZZZ')
 
 AddMedia('logo','ElvRainbow')
-AddMedia('logo','ElvSorbet')
+AddMedia('logo','ElvSimpy')
 AddMedia('logo','ElvBlue')
 AddMedia('logo','ElvGreen')
 AddMedia('logo','ElvOrange')
@@ -199,3 +202,37 @@ AddMedia('logo','FoxWarlock')
 AddMedia('logo','FoxWarrior')
 AddMedia('logo','DeathlyHallows')
 AddMedia('logo','GoldShield')
+AddMedia('logo','Gem')
+
+do -- LSM Font Preloader ~Simpy
+	local preloader = CreateFrame('Frame')
+	preloader:SetPoint('TOP', UIParent, 'BOTTOM', 0, -500)
+	preloader:SetSize(100, 100)
+
+	local cacheFont = function(key, data)
+		local loadFont = preloader:CreateFontString()
+		loadFont:SetAllPoints()
+
+		if pcall(loadFont.SetFont, loadFont, data, 14) then
+			pcall(loadFont.SetText, loadFont, 'cache')
+		end
+	end
+
+	-- Preload ElvUI Invisible
+	cacheFont('Invisible', E.Media.Fonts.Invisible)
+
+	-- Lets load all the fonts in LSM to prevent fonts not being ready
+	local sharedFonts = LSM:HashTable('font')
+	for key, data in next, sharedFonts do
+		cacheFont(key, data)
+	end
+
+	-- Now lets hook it so we can preload any other AddOns add to LSM
+	hooksecurefunc(LSM, 'Register', function(_, mediatype, key, data)
+		if not mediatype or type(mediatype) ~= 'string' then return end
+
+		if mediatype:lower() == 'font' then
+			cacheFont(key, data)
+		end
+	end)
+end

@@ -51,6 +51,8 @@ local function OnClick()
 end
 
 local function OnEnter()
+	DT.tooltip:ClearLines()
+
 	for i = 0, NUM_BAG_SLOTS do
 		local bagName = GetBagName(i)
 		if bagName then

@@ -80,8 +80,8 @@ P.general = {
 			},
 			tracking = {
 				scale = 1,
-				position = 'BOTTOMLEFT',
-				xOffset = 2,
+				position = 'BOTTOMRIGHT',
+				xOffset = -2,
 				yOffset = 2,
 			},
 			ticket = {
@@ -798,6 +798,7 @@ P.auras = {
 --Chat
 P.chat = {
 	url = true,
+	panelSnapping = true,
 	shortChannels = true,
 	hyperlinkHover = true,
 	throttleInterval = 45,

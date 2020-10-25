@@ -27,7 +27,7 @@ function DB:ReputationBar_Update()
 
 	bar:SetMinMaxValues(Min, Max)
 	bar:SetValue(value)
-	local color = _G.FACTION_BAR_COLORS[reaction]
+	local color = DB.db.colors.useCustomFactionColors and DB.db.colors.factionColors[reaction] or _G.FACTION_BAR_COLORS[reaction]
 	bar:SetStatusBarColor(color.r, color.g, color.b)
 
 	standingLabel = _G['FACTION_STANDING_LABEL'..reaction]
@@ -107,6 +107,7 @@ end
 
 function DB:ReputationBar()
 	DB.StatusBars.Reputation = DB:CreateBar('ElvUI_ReputationBar', DB.ReputationBar_OnEnter, DB.ReputationBar_OnClick, 'TOPRIGHT', E.UIParent, 'TOPRIGHT', -3, -264)
+	DB.StatusBars.Reputation.Update = DB.ReputationBar_Update
 
 	E:CreateMover(DB.StatusBars.Reputation, 'ReputationBarMover', L["Reputation Bar"], nil, nil, nil, nil, nil, 'databars,reputation')
 	DB:ReputationBar_Toggle()

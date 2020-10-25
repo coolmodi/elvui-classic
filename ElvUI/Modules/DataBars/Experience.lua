@@ -6,6 +6,7 @@ local min, format = min, format
 local UnitXP, UnitXPMax = UnitXP, UnitXPMax
 local GetXPExhaustion = GetXPExhaustion
 local CreateFrame = CreateFrame
+local CurrentXP, XPToLevel, RestedXP = 0, 0, 0
 
 function DB:ExperienceBar_ShouldBeVisable()
 	return E.mylevel ~= MAX_PLAYER_LEVEL_TABLE[GetExpansionLevel()]
@@ -20,51 +21,51 @@ function DB:ExperienceBar_Update()
 		bar:Show()
 	end
 
-	local cur, max, rested = UnitXP('player'), UnitXPMax('player'), GetXPExhaustion()
-	if max <= 0 then max = 1 end
+	CurrentXP, XPToLevel, RestedXP = UnitXP('player'), UnitXPMax('player'), GetXPExhaustion()
+	if XPToLevel <= 0 then XPToLevel = 1 end
 
-	bar:SetMinMaxValues(0, max)
-	bar:SetValue(cur)
+	bar:SetMinMaxValues(0, XPToLevel)
+	bar:SetValue(CurrentXP)
 
 	local expColor, restedColor = DB.db.colors.experience, DB.db.colors.rested
 	bar:SetStatusBarColor(expColor.r, expColor.g, expColor.b, expColor.a)
 	bar.Rested:SetStatusBarColor(restedColor.r, restedColor.g, restedColor.b, restedColor.a)
 
-	local text, textFormat = '', bar.db.textFormat
+	local text, textFormat = '', DB.db.experience.textFormat
 
 	if not DB:ExperienceBar_ShouldBeVisable() then
 		text = L['Max Level']
 	else
 		if textFormat == 'PERCENT' then
-			text = format('%d%%', cur / max * 100)
+			text = format('%d%%', CurrentXP / XPToLevel * 100)
 		elseif textFormat == 'CURMAX' then
-			text = format('%s - %s', E:ShortValue(cur), E:ShortValue(max))
+			text = format('%s - %s', E:ShortValue(CurrentXP), E:ShortValue(XPToLevel))
 		elseif textFormat == 'CURPERC' then
-			text = format('%s - %d%%', E:ShortValue(cur), cur / max * 100)
+			text = format('%s - %d%%', E:ShortValue(CurrentXP), CurrentXP / XPToLevel * 100)
 		elseif textFormat == 'CUR' then
-			text = format('%s', E:ShortValue(cur))
+			text = format('%s', E:ShortValue(CurrentXP))
 		elseif textFormat == 'REM' then
-			text = format('%s', E:ShortValue(max - cur))
+			text = format('%s', E:ShortValue(XPToLevel - CurrentXP))
 		elseif textFormat == 'CURREM' then
-			text = format('%s - %s', E:ShortValue(cur), E:ShortValue(max - cur))
+			text = format('%s - %s', E:ShortValue(CurrentXP), E:ShortValue(XPToLevel - CurrentXP))
 		elseif textFormat == 'CURPERCREM' then
-			text = format('%s - %d%% (%s)', E:ShortValue(cur), cur / max * 100, E:ShortValue(max - cur))
+			text = format('%s - %d%% (%s)', E:ShortValue(CurrentXP), CurrentXP / XPToLevel * 100, E:ShortValue(XPToLevel - CurrentXP))
 		end
 
-		if rested and rested > 0 then
-			bar.Rested:SetMinMaxValues(0, max)
-			bar.Rested:SetValue(min(cur + rested, max))
+		if RestedXP and RestedXP > 0 then
+			bar.Rested:SetMinMaxValues(0, XPToLevel)
+			bar.Rested:SetValue(min(CurrentXP + RestedXP, XPToLevel))
+			bar.Rested:Show()
 
 			if textFormat == 'PERCENT' then
-				text = text..format(' R:%d%%', rested / max * 100)
+				text = text..format(' R:%d%%', RestedXP / XPToLevel * 100)
 			elseif textFormat == 'CURPERC' then
-				text = text..format(' R:%s [%d%%]', E:ShortValue(rested), rested / max * 100)
+				text = text..format(' R:%s [%d%%]', E:ShortValue(RestedXP), RestedXP / XPToLevel * 100)
 			elseif textFormat ~= 'NONE' then
-				text = text..format(' R:%s', E:ShortValue(rested))
+				text = text..format(' R:%s', E:ShortValue(RestedXP))
 			end
 		else
-			bar.Rested:SetMinMaxValues(0, 1)
-			bar.Rested:SetValue(0)
+			bar.Rested:Hide()
 		end
 	end
 
@@ -79,15 +80,14 @@ function DB:ExperienceBar_OnEnter()
 	_G.GameTooltip:ClearLines()
 	_G.GameTooltip:SetOwner(self, 'ANCHOR_CURSOR', 0, -4)
 
-	local cur, max, rested = UnitXP('player'), UnitXPMax('player'), GetXPExhaustion()
 	_G.GameTooltip:AddLine(L["Experience"])
 	_G.GameTooltip:AddLine(' ')
 
-	_G.GameTooltip:AddDoubleLine(L["XP:"], format(' %d / %d (%.2f%%)', cur, max, cur/max * 100), 1, 1, 1)
-	_G.GameTooltip:AddDoubleLine(L["Remaining:"], format(' %d (%.2f%% - %.2f '..L["Bars"]..')', max - cur, (max - cur) / max * 100, 20 * (max - cur) / max), 1, 1, 1)
+	_G.GameTooltip:AddDoubleLine(L["XP:"], format(' %d / %d (%.2f%%)', CurrentXP, XPToLevel, CurrentXP/XPToLevel * 100), 1, 1, 1)
+	_G.GameTooltip:AddDoubleLine(L["Remaining:"], format(' %d (%.2f%% - %.2f '..L["Bars"]..')', XPToLevel - CurrentXP, (XPToLevel - CurrentXP) / XPToLevel * 100, 20 * (XPToLevel - CurrentXP) / XPToLevel), 1, 1, 1)
 
-	if rested then
-		_G.GameTooltip:AddDoubleLine(L["Rested:"], format('+%d (%.2f%%)', rested, rested / max * 100), 1, 1, 1)
+	if RestedXP and RestedXP > 0 then
+		_G.GameTooltip:AddDoubleLine(L["Rested:"], format('+%d (%.2f%%)', RestedXP, RestedXP / XPToLevel * 100), 1, 1, 1)
 	end
 
 	_G.GameTooltip:Show()
@@ -124,9 +124,12 @@ end
 
 function DB:ExperienceBar()
 	DB.StatusBars.Experience = DB:CreateBar('ElvUI_ExperienceBar', DB.ExperienceBar_OnEnter, DB.ExperienceBar_OnClick, 'BOTTOM', E.UIParent, 'BOTTOM', 0, 43)
+	DB.StatusBars.Experience.Update = DB.ExperienceBar_Update
 
 	DB.StatusBars.Experience.Rested = CreateFrame('StatusBar', '$parent_Rested', DB.StatusBars.Experience)
-	DB.StatusBars.Experience.Rested:SetInside()
+	DB.StatusBars.Experience.Rested:Hide()
+	DB.StatusBars.Experience.Rested:SetStatusBarTexture(DB.db.customTexture and E.LSM:Fetch('statusbar', DB.db.statusbar) or E.media.normTex)
+	DB.StatusBars.Experience.Rested:SetAllPoints()
 
 	E:CreateMover(DB.StatusBars.Experience, 'ExperienceBarMover', L["Experience Bar"], nil, nil, nil, nil, nil, 'databars,experience')
 	DB:ExperienceBar_Toggle()

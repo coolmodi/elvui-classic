@@ -122,6 +122,7 @@ end
 function DB:ThreatBar()
 	DB.StatusBars.Threat = DB:CreateBar('ElvUI_ThreatBar', nil, nil, 'TOPRIGHT', E.UIParent, 'TOPRIGHT', -3, -245)
 	DB.StatusBars.Threat:SetMinMaxValues(0, 100)
+	DB.StatusBars.Threat.Update = DB.ThreatBar_Update
 	DB.StatusBars.Threat.list = {}
 
 	E:CreateMover(DB.StatusBars.Threat, 'ThreatBarMover', L["Threat Bar"], nil, nil, nil, nil, nil, 'databars,threat')

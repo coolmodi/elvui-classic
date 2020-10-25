@@ -3,6 +3,9 @@ local DB = E:GetModule('DataBars')
 
 local _G = _G
 local CreateFrame = CreateFrame
+local UnitLevel = UnitLevel
+local MAX_PLAYER_LEVEL_TABLE = MAX_PLAYER_LEVEL_TABLE
+local GetExpansionLevel = GetExpansionLevel
 
 function DB:OnLeave()
 	if self.db.mouseover then
@@ -31,11 +34,13 @@ function DB:CreateBar(name, onEnter, onClick, ...)
 end
 
 function DB:UpdateAll()
+	local barTexture = DB.db.customTexture and E.LSM:Fetch('statusbar', DB.db.statusbar) or E.media.normTex
+
 	for _, bar in pairs(DB.StatusBars) do
-		bar:SetWidth(bar.db.width)
-		bar:SetHeight(bar.db.height)
+		bar:SetSize(bar.db.width, bar.db.height)
 		bar:SetReverseFill(bar.db.reverseFill)
-		bar:SetStatusBarTexture(DB.db.customTexture and E.LSM:Fetch('statusbar', DB.db.statusbar) or E.media.normTex)
+		bar:SetStatusBarTexture(barTexture, 'ARTWORK', 7)
+		bar:EnableMouse(not bar.db.clickThrough)
 		bar.backdrop:SetTemplate(DB.db.transparent and 'Transparent')
 		bar.text:FontTemplate(E.Libs.LSM:Fetch('font', bar.db.font), bar.db.fontSize, bar.db.fontOutline)
 
@@ -51,10 +56,20 @@ function DB:UpdateAll()
 			bar:SetRotatesTexture(bar.db.orientation ~= 'HORIZONTAL')
 		end
 
-		if bar.Rested then
-			bar.Rested:SetOrientation(bar:GetOrientation())
-			bar.Rested:SetRotatesTexture(bar:GetRotatesTexture())
-			bar.Rested:SetReverseFill(bar:GetReverseFill())
+		local frameLevel = bar:GetFrameLevel()
+		local orientation = bar:GetOrientation()
+		local rotatesTexture = bar:GetRotatesTexture()
+		local reverseFill = bar:GetReverseFill()
+
+		for i = 1, bar:GetNumChildren() do
+			local child = select(i, bar:GetChildren())
+			if child:IsObjectType('StatusBar') then
+				child:SetStatusBarTexture(barTexture, 'ARTWORK', -i)
+				child:SetFrameLevel(frameLevel)
+				child:SetOrientation(orientation)
+				child:SetRotatesTexture(rotatesTexture)
+				child:SetReverseFill(reverseFill)
+			end
 		end
 	end
 end
@@ -70,9 +85,13 @@ function DB:PLAYER_LEVEL_UP()
 end
 
 function DB:CombatCheck(event)
+	local notInCombat = event == 'PLAYER_REGEN_ENABLED'
 	for _, bar in pairs(DB.StatusBars) do
 		if bar.db.enable and bar.db.hideInCombat then
-			bar:SetShown(event == 'PLAYER_REGEN_ENABLED')
+			bar:SetShown(notInCombat)
+			if notInCombat and bar.Update then
+				bar:Update()
+			end
 		end
 	end
 end

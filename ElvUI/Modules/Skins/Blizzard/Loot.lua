@@ -14,6 +14,7 @@ local UnitIsFriend = UnitIsFriend
 local UnitName = UnitName
 local IsFishingLoot = IsFishingLoot
 local C_LootHistory_GetNumItems = C_LootHistory.GetNumItems
+local C_LootHistory_GetItem = C_LootHistory.GetItem
 local ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS
 local LOOT, ITEMS = LOOT, ITEMS
 
@@ -31,6 +32,17 @@ local function UpdateLoots()
 			frame:CreateBackdrop()
 			frame.backdrop:SetOutside(frame.Icon)
 			frame.Icon:SetParent(frame.backdrop)
+
+			local _, itemLink = C_LootHistory_GetItem(frame.itemIdx)
+			local _, _, itemRarity = GetItemInfo(itemLink)
+
+			if (itemRarity) then
+				local color = ITEM_QUALITY_COLORS[itemRarity]
+				
+				if (color) then
+					frame.backdrop:SetBackdropBorderColor(color.r, color.g, color.b)
+				end
+			end
 
 			frame.isSkinned = true
 		end

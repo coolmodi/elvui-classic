@@ -92,6 +92,7 @@ end
 
 local itemCount = {}
 local function OnEnter()
+	DT.tooltip:ClearLines()
 	if E.myclass == 'HUNTER' or E.myclass == 'ROGUE' or E.myclass == 'WARRIOR' then
 		wipe(itemCount)
 		DT.tooltip:AddLine(INVTYPE_AMMO)

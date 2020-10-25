@@ -188,6 +188,7 @@ G.unitframe.aurafilters.TurtleBuffs = {
 	--Warrior
 	--Consumables
 		[3169] = Defaults(2), --Limited Invulnerability Potion
+		[6615] = Defaults(2), --Free Action Potion
 	--Racial
 		[7744] = Defaults(2), --Will of the Forsaken
 		[6346] = Defaults(2), --Fear Ward
