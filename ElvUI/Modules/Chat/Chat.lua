@@ -43,13 +43,10 @@ local InCombatLockdown = InCombatLockdown
 local IsAltKeyDown = IsAltKeyDown
 local IsInRaid, IsInGroup = IsInRaid, IsInGroup
 local IsShiftKeyDown = IsShiftKeyDown
-local PlaySound = PlaySound
 local PlaySoundFile = PlaySoundFile
 local RemoveExtraSpaces = RemoveExtraSpaces
 local RemoveNewlines = RemoveNewlines
 local ToggleFrame = ToggleFrame
-local ToggleQuickJoinPanel = ToggleQuickJoinPanel
-local UnitExists, UnitIsUnit = UnitExists, UnitIsUnit
 local UnitName = UnitName
 
 local C_Club_GetInfoFromLastCommunityChatLine = C_Club.GetInfoFromLastCommunityChatLine
@@ -59,7 +56,6 @@ local ChatFrame_ResolvePrefixedChannelName = ChatFrame_ResolvePrefixedChannelNam
 local BNet_GetValidatedCharacterName = BNet_GetValidatedCharacterName
 local BNet_GetClientEmbeddedTexture = BNet_GetClientEmbeddedTexture
 local BNET_CLIENT_WOW = BNET_CLIENT_WOW
-local UNKNOWN = UNKNOWN
 -- GLOBALS: ElvCharacterDB
 
 CH.GuidCache = {}
@@ -1121,19 +1117,6 @@ local function HyperLinkedCPL(data)
 	end
 end
 
-local function HyperLinkedSQU(data)
-	if strsub(data, 1, 3) == 'squ' then
-		if not _G.QuickJoinFrame:IsShown() then
-			ToggleQuickJoinPanel()
-		end
-		local guid = strsub(data, 5)
-		if guid and guid ~= '' then
-			_G.QuickJoinFrame:SelectGroup(guid)
-			_G.QuickJoinFrame:ScrollToGroup(guid)
-		end
-	end
-end
-
 local function HyperLinkedURL(data)
 	if strsub(data, 1, 3) == 'url' then
 		local currentLink = strsub(data, 5)
@@ -1147,8 +1130,6 @@ local SetHyperlink = _G.ItemRefTooltip.SetHyperlink
 function _G.ItemRefTooltip:SetHyperlink(data, ...)
 	if strsub(data, 1, 3) == 'cpl' then
 		HyperLinkedCPL(data)
-	elseif strsub(data, 1, 3) == 'squ' then
-		HyperLinkedSQU(data)
 	elseif strsub(data, 1, 3) == 'url' then
 		HyperLinkedURL(data)
 	else
@@ -2409,49 +2390,6 @@ function CH:CreateChatVoicePanel()
 
 	_G.ChatAlertFrame:ClearAllPoints()
 	_G.ChatAlertFrame:Point('BOTTOM', _G.ChatFrameChannelButton, 'TOP', 1, 3)
-
-	-- Skin the QuickJoinToastButton
-	local Button = _G.QuickJoinToastButton
-	Button:CreateBackdrop()
-	Button:SetParent(Holder)
-	Button:ClearAllPoints()
-	Button:Point('BOTTOM', Holder, 'TOP', -E.Border, 2*E.Border)
-	Button:Size(30, 32)
-	-- Button:Hide() -- DONT KILL IT! If we use hide we also hide the Toasts, which are used in other Plugins.
-
-	-- Change the QuickJoin Textures. Looks better =)
-	local friendTex = [[Interface\HELPFRAME\ReportLagIcon-Chat]]
-	local queueTex = [[Interface\HELPFRAME\HelpIcon-ItemRestoration]]
-
-	Button.FriendsButton:SetTexture(friendTex)
-	Button.QueueButton:SetTexture(queueTex)
-
-	hooksecurefunc(Button, 'ToastToFriendFinished', function(t)
-		t.FriendsButton:SetShown(not t.displayedToast)
-		t.FriendCount:SetShown(not t.displayedToast)
-	end)
-
-	hooksecurefunc(Button, 'UpdateQueueIcon', function(t)
-		if not t.displayedToast then return end
-		t.FriendsButton:SetTexture(friendTex)
-		t.QueueButton:SetTexture(queueTex)
-		t.FlashingLayer:SetTexture(queueTex)
-		t.FriendsButton:SetShown(false)
-		t.FriendCount:SetShown(false)
-	end)
-
-	Button:HookScript('OnMouseDown', function(t) t.FriendsButton:SetTexture(friendTex) end)
-	Button:HookScript('OnMouseUp', function(t) t.FriendsButton:SetTexture(friendTex) end)
-
-	-- Skin the `QuickJoinToastButton.Toast`
-	Button.Toast:ClearAllPoints()
-	Button.Toast:Point('LEFT', Button, 'RIGHT', -6, 0)
-	Button.Toast.Background:SetTexture('')
-	Button.Toast:CreateBackdrop('Transparent')
-	Button.Toast.backdrop:Hide()
-
-	hooksecurefunc(Button, 'ShowToast', function() Button.Toast.backdrop:Show() end)
-	hooksecurefunc(Button, 'HideToast', function() Button.Toast.backdrop:Hide() end)
 end
 
 function CH:BuildCopyChatFrame()
@@ -2711,7 +2649,6 @@ function CH:Initialize()
 	if _G.WIM then
 		_G.WIM.RegisterWidgetTrigger('chat_display', 'whisper,chat,w2w,demo', 'OnHyperlinkClick', function(frame) CH.clickedframe = frame end)
 		_G.WIM.RegisterItemRefHandler('url', HyperLinkedURL)
-		_G.WIM.RegisterItemRefHandler('squ', HyperLinkedSQU)
 		_G.WIM.RegisterItemRefHandler('cpl', HyperLinkedCPL)
 	end
 

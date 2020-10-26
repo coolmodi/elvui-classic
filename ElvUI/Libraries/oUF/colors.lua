@@ -41,7 +41,10 @@ local function customClassColors()
 		end
 
 		updateColors()
-		CUSTOM_CLASS_COLORS:RegisterCallback(updateColors)
+
+		if CUSTOM_CLASS_COLORS.RegisterCallback then
+			CUSTOM_CLASS_COLORS:RegisterCallback(updateColors)
+		end
 
 		return true
 	end

@@ -22,7 +22,7 @@ function DB:ExperienceBar_CheckQuests(zoneOnly, completedOnly)
 	for i = 1, numEntries do
 		local questLogTitleText, _, _, isHeader, _, isComplete, _, questID = GetQuestLogTitle(i)
 		if (not isHeader) then
-			if (zoneOnly and currentZone == zoneName) or (isComplete and completedOnly) or not (zoneOnly and completedOnly) then
+			if (zoneOnly and currentZone == zoneName or not zoneOnly) and (isComplete and completedOnly or not completedOnly) then
 				QuestLogXP = QuestLogXP + GetQuestLogRewardXP(questID)
 			end
 		else

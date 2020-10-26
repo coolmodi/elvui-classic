@@ -925,31 +925,44 @@ ElvUF.Tags.Methods['target:translit'] = function(unit)
 	end
 end
 
-ElvUF.Tags.Events['npctitle'] = 'UNIT_NAME_UPDATE'
-ElvUF.Tags.Methods['npctitle'] = function(unit)
-	if UnitIsPlayer(unit) then return end
 
-	E.ScanTooltip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-	E.ScanTooltip:SetUnit(unit)
-	E.ScanTooltip:Show()
-
-	local Title = _G[format('ElvUI_ScanTooltipTextLeft%d', GetCVarBool('colorblindmode') and 3 or 2)]:GetText()
-	if Title and not Title:find('^'..LEVEL) then
-		return Title
+ElvUF.Tags.Events['name:title'] = 'UNIT_NAME_UPDATE INSTANCE_ENCOUNTER_ENGAGE_UNIT'
+ElvUF.Tags.Methods['name:title'] = function(unit)
+	if UnitIsPlayer(unit) then
+		return UnitPVPName(unit) or UnitName(unit)
 	end
 end
 
-ElvUF.Tags.Events['npctitle:brackets'] = 'UNIT_NAME_UPDATE'
-ElvUF.Tags.Methods['npctitle:brackets'] = function(unit)
-	if UnitIsPlayer(unit) then return end
+ElvUF.Tags.Events['title'] = 'UNIT_NAME_UPDATE INSTANCE_ENCOUNTER_ENGAGE_UNIT'
+ElvUF.Tags.Methods['title'] = function(unit)
+	if UnitIsPlayer(unit) then
+		return GetTitleName(GetCurrentTitle())
+	end
+end
 
-	E.ScanTooltip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-	E.ScanTooltip:SetUnit(unit)
-	E.ScanTooltip:Show()
+do
+	local function GetTitleNPC(unit, custom)
+		if UnitIsPlayer(unit) then return end
 
-	local Title = _G[format('ElvUI_ScanTooltipTextLeft%d', GetCVarBool('colorblindmode') and 3 or 2)]:GetText()
-	if Title and not Title:find('^'..LEVEL) then
-		return format("<%s>", Title)
+		E.ScanTooltip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
+		E.ScanTooltip:SetUnit(unit)
+		E.ScanTooltip:Show()
+
+		local Title = _G[format('ElvUI_ScanTooltipTextLeft%d', GetCVarBool('colorblindmode') and 3 or 2)]:GetText()
+		if Title and not strfind(Title, '^'..LEVEL) then
+			return custom and format(custom, Title) or Title
+		end
+	end
+	E.TagFunctions.GetTitleNPC = GetTitleNPC
+
+	ElvUF.Tags.Events['npctitle'] = 'UNIT_NAME_UPDATE'
+	ElvUF.Tags.Methods['npctitle'] = function(unit)
+		return GetTitleNPC(unit)
+	end
+
+	ElvUF.Tags.Events['npctitle:brackets'] = 'UNIT_NAME_UPDATE'
+	ElvUF.Tags.Methods['npctitle:brackets'] = function(unit)
+		return GetTitleNPC(unit, '<%s>')
 	end
 end
 
