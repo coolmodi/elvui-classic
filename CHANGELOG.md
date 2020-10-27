@@ -1,4 +1,12 @@
-### Version 1.32-1.33 [ETA: 🍨]
+### Version 1.35 [ETA: 🍨]
+**DataTexts:** Hit label fixes  
+___
+### Version 1.34 [10/26/2020]
+**Chat:** Removed some uneeded retail code  
+**DataBars:** Quest Experience Fixes  
+**DataTexts:** Hit now has options  
+___
+### Version 1.32-1.33 [10/24/2020]
 **Chat:** Bnet whispers have class color again  
 **DataBars:** Fixed some reputation and experience DataBar issues  
 **Filters:** Updated default filter list  
