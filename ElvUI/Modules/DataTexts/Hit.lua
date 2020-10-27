@@ -18,7 +18,7 @@ local function OnEvent(self)
 	if E.global.datatexts.settings.Hit.NoLabel then
 		self.text:SetFormattedText(displayString, hitChance)
 	else
-		self.text:SetFormattedText(displayString, E.global.datatexts.settings.Crit.Label ~= '' and E.global.datatexts.settings.Crit.Label or STAT_HIT_CHANCE..': ', hitChance)
+		self.text:SetFormattedText(displayString, E.global.datatexts.settings.Hit.Label ~= '' and E.global.datatexts.settings.Hit.Label or STAT_HIT_CHANCE..': ', hitChance)
 	end
 end
 
