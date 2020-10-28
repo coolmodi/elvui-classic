@@ -101,13 +101,10 @@ end
 
 function A:CreateIcon(button)
 	local header = button:GetParent()
-	local auraType = header:GetAttribute('filter')
+	local auraType = header.filter
 
-	button.auraType = 'debuffs' -- used to update cooldown text
+	button.auraType = auraType == 'HELPFUL' and 'debuffs' or 'buffs' -- used to update cooldown text
 	button.filter = auraType
-	if auraType == 'HELPFUL' then
-		button.auraType = 'buffs'
-	end
 
 	button.texture = button:CreateTexture(nil, 'ARTWORK')
 	button.texture:SetInside()
@@ -159,7 +156,6 @@ end
 
 function A:UpdateIcon(button)
 	local font = LSM:Fetch('font', A.db.font)
-
 	local db = A.db[button.auraType]
 
 	button.count:ClearAllPoints()
@@ -171,24 +167,15 @@ function A:UpdateIcon(button)
 	button.text:FontTemplate(font, db.durationFontSize, A.db.fontOutline)
 
 	local pos, spacing, iconSize = A.db.barPosition, A.db.barSpacing, db.size - (E.Border * 2)
-	local isOnTop = pos == 'TOP' and true or false
-	local isOnBottom = pos == 'BOTTOM' and true or false
-	local isOnLeft = pos == 'LEFT' and true or false
-	local isOnRight = pos == 'RIGHT' and true or false
+	local isOnTop, isOnBottom, isOnLeft = pos == 'TOP', pos == 'BOTTOM', pos == 'LEFT'
+	local isHorizontal = isOnTop or isOnBottom
 
 	button.statusBar:ClearAllPoints()
-	button.statusBar:Size((isOnTop or isOnBottom) and iconSize or (A.db.barWidth + (E.PixelMode and 0 or 2)), (isOnLeft or isOnRight) and iconSize or (A.db.barHeight + (E.PixelMode and 0 or 2)))
-	button.statusBar:Point(E.InversePoints[pos], button, pos, (isOnTop or isOnBottom) and 0 or ((isOnLeft and -((E.PixelMode and 1 or 3) + spacing)) or ((E.PixelMode and 1 or 3) + spacing)), (isOnLeft or isOnRight) and 0 or ((isOnTop and ((E.PixelMode and 1 or 3) + spacing) or -((E.PixelMode and 1 or 3) + spacing))))
-
+	button.statusBar:Size(isHorizontal and iconSize or (A.db.barWidth + (E.PixelMode and 0 or 2)), isHorizontal and (A.db.barHeight + (E.PixelMode and 0 or 2)) or iconSize)
+	button.statusBar:Point(E.InversePoints[pos], button, pos, isHorizontal and 0 or ((isOnLeft and -((E.PixelMode and 1 or 3) + spacing)) or ((E.PixelMode and 1 or 3) + spacing)), not isHorizontal and 0 or ((isOnTop and ((E.PixelMode and 1 or 3) + spacing) or -((E.PixelMode and 1 or 3) + spacing))))
 	button.statusBar:SetStatusBarTexture(LSM:Fetch('statusbar', A.db.barTexture))
-
-	if isOnLeft or isOnRight then
-		button.statusBar:SetOrientation('VERTICAL')
-		button.statusBar:SetRotatesTexture(true)
-	else
-		button.statusBar:SetOrientation('HORIZONTAL')
-		button.statusBar:SetRotatesTexture(false)
-	end
+	button.statusBar:SetOrientation(isHorizontal and 'HORIZONTAL' or 'VERTICAL')
+	button.statusBar:SetRotatesTexture(not isHorizontal)
 end
 
 function A:SetAuraTime(button, expiration, duration)
@@ -241,30 +228,17 @@ function A:UpdateAura(button, index)
 			r, g, b = E.oUF:ColorGradient(button.timeLeft, duration or 0, .8, 0, 0, .8, .8, 0, 0, .8, 0)
 		end
 
-		button.statusBar:SetStatusBarColor(r, g, b)
-
-		if count and count > 1 then
-			button.count:SetText(count)
-		else
-			button.count:SetText('')
-		end
-
+		button.count:SetText(count > 1 and count)
 		button.text:SetShown(A.db.showDuration)
 		button.statusBar:SetShown((A.db.barShow and duration > 0) or (A.db.barShow and A.db.barNoDuration and duration == 0))
+		button.statusBar:SetStatusBarColor(r, g, b)
+		button.texture:SetTexture(texture)
 
 		if button.debuffType ~= DebuffType then
-			if button.filter == 'HARMFUL' then
-				local color = _G.DebuffTypeColor[DebuffType]
-				button:SetBackdropBorderColor(color.r, color.g, color.b)
-				button.statusBar.backdrop:SetBackdropBorderColor(color.r, color.g, color.b)
-			else
-				local cr, cg, cb = unpack(E.media.bordercolor)
-				button:SetBackdropBorderColor(cr, cg, cb)
-				button.statusBar.backdrop:SetBackdropBorderColor(cr, cg, cb)
-			end
+			local color = button.filter == 'HARMFUL' and _G.DebuffTypeColor[DebuffType] or E.media.bordercolor
+			button:SetBackdropBorderColor(color.r, color.g, color.b)
+			button.statusBar.backdrop:SetBackdropBorderColor(color.r, color.g, color.b)
 		end
-
-		button.texture:SetTexture(texture)
 	end
 
 	button.debuffType = DebuffType
@@ -297,14 +271,13 @@ function A:UpdateTempEnchant(button, index)
 		A:ClearAuraTime(button)
 	end
 
-	button.text:SetShown(A.db.showDuration)
-	button.statusBar:SetShown((A.db.barShow and remaining > 0) or (A.db.barShow and A.db.barNoDuration and not expiration))
-
 	local r, g, b = A.db.barColor.r, A.db.barColor.g, A.db.barColor.b
 	if expiration and A.db.barColorGradient then
 		r, g, b = E.oUF:ColorGradient(remaining, duration, .8, 0, 0, .8, .8, 0, 0, .8, 0)
 	end
 
+	button.text:SetShown(A.db.showDuration)
+	button.statusBar:SetShown((A.db.barShow and remaining > 0) or (A.db.barShow and A.db.barNoDuration and not expiration))
 	button.statusBar:SetStatusBarColor(r, g, b)
 end
 
@@ -325,21 +298,20 @@ end
 function A:UpdateHeader(header)
 	if not E.private.auras.enable then return end
 
-	local auraType = 'debuffs'
-	local db = A.db.debuffs
-	if header:GetAttribute('filter') == 'HELPFUL' then
-		auraType = 'buffs'
-		db = A.db.buffs
+	local db = A.db[header.auraType]
+	local template = format('ElvUIAuraTemplate%d', db.size)
+
+	if header.filter == 'HELPFUL' then
 		header:SetAttribute('consolidateTo', 0)
-		header:SetAttribute('weaponTemplate', format('ElvUIAuraTemplate%d',db.size))
+		header:SetAttribute('weaponTemplate', template)
 	end
 
+	header:SetAttribute('template', template)
 	header:SetAttribute('separateOwn', db.seperateOwn)
 	header:SetAttribute('sortMethod', db.sortMethod)
 	header:SetAttribute('sortDirection', db.sortDir)
 	header:SetAttribute('maxWraps', db.maxWraps)
 	header:SetAttribute('wrapAfter', db.wrapAfter)
-
 	header:SetAttribute('point', DIRECTION_TO_POINT[db.growthDirection])
 
 	if IS_HORIZONTAL_GROWTH[db.growthDirection] then
@@ -358,14 +330,11 @@ function A:UpdateHeader(header)
 		header:SetAttribute('wrapYOffset', 0)
 	end
 
-	header:SetAttribute('template', format('ElvUIAuraTemplate%d',db.size))
-
 	local index = 1
 	local child = select(index, header:GetChildren())
 	while child do
 		child:Size(db.size, db.size)
-
-		child.auraType = auraType -- used to update cooldown text
+		child.auraType = header.auraType -- used to update cooldown text
 
 		A:UpdateIcon(child)
 
@@ -383,15 +352,16 @@ function A:UpdateHeader(header)
 end
 
 function A:CreateAuraHeader(filter)
-	local name = 'ElvUIPlayerDebuffs'
-	if filter == 'HELPFUL' then
-		name = 'ElvUIPlayerBuffs'
-	end
+	local name, auraType = filter == 'HELPFUL' and 'ElvUIPlayerBuffs' or 'ElvUIPlayerDebuffs', filter == 'HELPFUL' and 'buffs' or 'debuffs'
 
 	local header = CreateFrame('Frame', name, E.UIParent, 'SecureAuraHeaderTemplate')
 	header:SetClampedToScreen(true)
 	header:SetAttribute('unit', 'player')
 	header:SetAttribute('filter', filter)
+	header.filter = filter
+	header.auraType = auraType
+
+	RegisterStateDriver(header, 'visibility', 'show')
 
 	if filter == 'HELPFUL' then
 		header:SetAttribute('consolidateDuration', -1)
@@ -418,9 +388,7 @@ function A:Initialize()
 	local colors = A.db.barColor
 	if E:CheckClassColor(colors.r, colors.g, colors.b) then
 		local classColor = E:ClassColor(E.myclass, true)
-		colors.r = classColor.r
-		colors.g = classColor.g
-		colors.b = classColor.b
+		colors.r, colors.g, colors.b = classColor.r, classColor.g, classColor.b
 	end
 
 	if E.private.auras.buffsHeader then
