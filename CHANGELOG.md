@@ -1,4 +1,9 @@
-### Version 1.35 [ETA: 🍨]
+### Version 1.37 [ETA: 🍨]
+___
+### Version 1.36 [10/27/2020]
+**Auras:** Update  
+___
+### Version 1.35 [10/26/2020]
 **DataTexts:** Hit label fixes  
 ___
 ### Version 1.34 [10/26/2020]
