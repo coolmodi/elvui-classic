@@ -1,4 +1,5 @@
 ### Version 1.37 [ETA: 🍨]
+**Tags:** power:current works on NPCs again  
 ___
 ### Version 1.36 [10/27/2020]
 **Auras:** Update  
