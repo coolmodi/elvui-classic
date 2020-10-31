@@ -110,9 +110,11 @@ function A:CreateIcon(button)
 	button.texture:SetInside()
 	button.texture:SetTexCoord(unpack(E.TexCoords))
 
-	button.count = button:CreateFontString(nil, 'OVERLAY')
+	button.count = button:CreateFontString(nil, 'OVERLAY', nil, 'NumberFontNormalSmall')
+	button.count:SetText('\10')
 
-	button.text = button:CreateFontString(nil, 'OVERLAY')
+	button.text = button:CreateFontString(nil, 'OVERLAY', nil, 'NumberFontNormalSmall')
+	button.text:SetText('\10')
 
 	button.highlight = button:CreateTexture(nil, 'HIGHLIGHT')
 	button.highlight:SetColorTexture(1, 1, 1, .45)
