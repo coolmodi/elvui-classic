@@ -18,7 +18,7 @@ function DB:PetExperienceBar_Update()
 	local bar = DB.StatusBars.PetExperience
 	DB:SetVisibility(bar)
 
-	if not bar.db.enable or bar:ShouldHide() then return end
+	if not bar:IsShown() then return end
 
 	local color = DB.db.colors.petExperience
 	bar:SetStatusBarColor(color.r, color.g, color.b, color.a)
