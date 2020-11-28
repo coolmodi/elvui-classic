@@ -76,34 +76,39 @@ UF.instanceMapIDs = {
 }
 
 UF.headerGroupBy = {
-	['CLASS'] = function(header)
+	CLASS = function(header)
 		header:SetAttribute("groupingOrder", "DRUID,HUNTER,MAGE,PALADIN,PRIEST,ROGUE,SHAMAN,WARLOCK,WARRIOR")
 		header:SetAttribute('sortMethod', 'NAME')
 		header:SetAttribute("groupBy", 'CLASS')
 	end,
-	['ROLE'] = function(header) UF.headerGroupBy['CLASS'](header) end,
-	['ROLE2'] = function(header) UF.headerGroupBy['CLASS'](header) end,
-	['CLASSROLE'] = function(header) UF.headerGroupBy['CLASS'](header) end,
-	['MTMA'] = function(header)
+	ROLE = function(header) UF.headerGroupBy['CLASS'](header) end,
+	ROLE2 = function(header) UF.headerGroupBy['CLASS'](header) end,
+	CLASSROLE = function(header) UF.headerGroupBy['CLASS'](header) end,
+	MTMA = function(header)
 		header:SetAttribute("groupingOrder", "MAINTANK,MAINASSIST,NONE")
 		header:SetAttribute("sortMethod", "NAME")
 		header:SetAttribute("groupBy", "ROLE")
 	end,
-	['NAME'] = function(header)
+	NAME = function(header)
 		header:SetAttribute("groupingOrder", "1,2,3,4,5,6,7,8")
 		header:SetAttribute("sortMethod", "NAME")
 		header:SetAttribute("groupBy", nil)
 	end,
-	["GROUP"] = function(header)
+	GROUP = function(header)
 		header:SetAttribute("groupingOrder", "1,2,3,4,5,6,7,8")
 		header:SetAttribute("sortMethod", "INDEX")
 		header:SetAttribute("groupBy", "GROUP")
 	end,
-	['PETNAME'] = function(header)
+	PETNAME = function(header)
 		header:SetAttribute("groupingOrder", "1,2,3,4,5,6,7,8")
 		header:SetAttribute("sortMethod", "NAME")
 		header:SetAttribute("groupBy", nil)
 		header:SetAttribute("filterOnPet", true) --This is the line that matters. Without this, it sorts based on the owners name
+	end,
+	INDEX = function(header)
+		header:SetAttribute('groupingOrder', '1,2,3,4,5,6,7,8')
+		header:SetAttribute('sortMethod', 'INDEX')
+		header:SetAttribute('groupBy', nil)
 	end,
 }
 
