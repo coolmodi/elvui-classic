@@ -36,6 +36,7 @@ function S:TooltipFrames()
 		_G.ElvUIConfigTooltip,
 		-- already have locals
 		GameTooltip,
+		_G.ElvUISpellBookTooltip
 	}
 
 	for _, tt in ipairs(tooltips) do
