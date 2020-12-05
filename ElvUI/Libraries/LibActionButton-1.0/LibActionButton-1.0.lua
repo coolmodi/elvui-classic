@@ -1123,7 +1123,7 @@ function Update(self, fromUpdateConfig)
 	local texture = self:GetTexture()
 
 	-- Cooldown desaturate can control saturation, we don't want to override it here
-	local allowSaturation = not self.saturationLocked and not self.LevelLinkLockIcon:IsShown()
+	local allowSaturation = self.LevelLinkLockIcon and not self.saturationLocked and not self.LevelLinkLockIcon:IsShown()
 
 	-- Zone ability button handling
 	self.zoneAbilityDisabled = false
