@@ -470,7 +470,6 @@ function AB:ReassignBindings(event)
 	if event == 'UPDATE_BINDINGS' then
 		AB:UpdatePetBindings()
 		AB:UpdateStanceBindings()
-		AB:UpdateExtraBindings()
 	end
 
 	AB:UnregisterEvent('PLAYER_REGEN_DISABLED')
@@ -483,7 +482,7 @@ function AB:ReassignBindings(event)
 
 			for _, button in ipairs(bar.buttons) do
 				if button.keyBoundTarget then
-					for k=1, select('#', GetBindingKey(button.keyBoundTarget)) do
+					for k = 1, select('#', GetBindingKey(button.keyBoundTarget)) do
 						local key = select(k, GetBindingKey(button.keyBoundTarget))
 						if key and key ~= '' then
 							SetOverrideBindingClick(bar, false, key, button:GetName())
@@ -536,12 +535,6 @@ function AB:UpdateButtonSettings()
 		end
 	end
 
-	for button in pairs(AB.handledbuttons) do
-		if not button then
-			AB.handledbuttons[button] = nil
-		end
-	end
-
 	AB:AdjustMaxStanceButtons()
 	AB:PositionAndSizeBarPet()
 	AB:PositionAndSizeBarShapeShift()
@@ -555,7 +548,7 @@ function AB:GetPage(bar, defaultPage, condition)
 	if not condition then condition = '' end
 	if not page then
 		page = ''
-	elseif page:match('[\n\r]') then
+	else
 		page = page:gsub('[\n\r]','')
 	end
 
