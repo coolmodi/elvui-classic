@@ -26,8 +26,6 @@ function S:GossipFrame()
 		_G['GossipTitleButton'..i..'GossipIcon']:SetPoint('TOPLEFT', 3, 1)
 	end
 
-	_G.GossipGreetingText:SetTextColor(1, 1, 1)
-
 	S:HandleButton(_G.GossipFrameGreetingGoodbyeButton)
 	_G.GossipFrameGreetingGoodbyeButton:Point('BOTTOMRIGHT', -38, 72)
 
@@ -56,6 +54,8 @@ function S:GossipFrame()
 	GossipGreetingScrollFrame:CreateBackdrop()
 
 	if E.private.skins.parchmentRemoverEnable then
+		_G.GossipGreetingText:SetTextColor(1, 1, 1)
+
 		hooksecurefunc('GossipFrameUpdate', function()
 			for i = 1, _G.NUMGOSSIPBUTTONS do
 				local button = _G['GossipTitleButton'..i]
