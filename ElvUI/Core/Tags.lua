@@ -401,7 +401,7 @@ ElvUF.Tags.Methods['health:deficit-percent:name'] = function(unit)
 	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
 	local deficit = max - cur
 
-	if deficit > 0 and currentHealth > 0 then
+	if deficit > 0 and cur > 0 then
 		return _TAGS["health:percent-nostatus"](unit)
 	else
 		return _TAGS.name(unit)
