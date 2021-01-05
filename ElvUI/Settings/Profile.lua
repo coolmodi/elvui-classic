@@ -1850,47 +1850,32 @@ P.cooldown = {
 
 --Actionbar
 P.actionbar = {
-	font = 'Homespun',
-	fontSize = 10,
-	fontOutline = 'MONOCHROMEOUTLINE',
-	fontColor = { r = 1, g = 1, b = 1 },
-
-	macrotext = false,
-	hotkeytext = true,
-
-	hotkeyTextPosition = 'TOPRIGHT',
-	hotkeyTextXOffset = 0,
-	hotkeyTextYOffset = -3,
-
+	colorSwipeLOC = { r = 0.25, g = 0, b = 0, a = 0.8 },
+	colorSwipeNormal = { r = 0, g = 0, b = 0, a = 0.8 },
 	countTextPosition = 'BOTTOMRIGHT',
 	countTextXOffset = 0,
 	countTextYOffset = 2,
-
+	desaturateOnCooldown = false,
 	equippedItem = false,
 	equippedItemColor = { r = 0.4, g = 1.0, b = 0.4 },
-
-	useRangeColorText = false,
-	noRangeColor = { r = 0.8, g = 0.1, b = 0.1 },
-	noPowerColor = { r = 0.5, g = 0.5, b = 1 },
-	usableColor = { r = 1, g = 1, b = 1 },
-	notUsableColor = { r = 0.4, g = 0.4, b = 0.4 },
-
 	flashAnimation = false,
-
-	keyDown = true,
-	movementModifier = 'SHIFT',
-	transparent = false,
-
+	font = 'Homespun',
+	fontColor = { r = 1, g = 1, b = 1 },
+	fontOutline = 'MONOCHROMEOUTLINE',
+	fontSize = 10,
 	globalFadeAlpha = 0,
-	lockActionBars = true,
+	handleOverlay = true,
 	hideCooldownBling = false,
-	colorSwipeLOC = { r = 0.25, g = 0, b = 0, a = 0.8 },
-	colorSwipeNormal = { r = 0, g = 0, b = 0, a = 0.8 },
-	useDrawSwipeOnCharges = false,
-	addNewSpells = false,
+	keyDown = true,
+	lockActionBars = true,
+	movementModifier = 'SHIFT',
+	noPowerColor = { r = 0.5, g = 0.5, b = 1 },
+	noRangeColor = { r = 0.8, g = 0.1, b = 0.1 },
+	notUsableColor = { r = 0.4, g = 0.4, b = 0.4 },
 	rightClickSelfCast = false,
-	desaturateOnCooldown = false,
-	chargeCooldown = false,
+	transparent = false,
+	usableColor = { r = 1, g = 1, b = 1 },
+	useRangeColorText = false,
 	barPet = {
 		enabled = true,
 		mouseover = false,
@@ -1902,14 +1887,13 @@ P.actionbar = {
 		heightMult = 1,
 		widthMult = 1,
 		keepSizeRatio = true,
-		buttonsize = 32,
+		buttonSize = 32,
 		buttonHeight = 32,
-		buttonspacing = 2,
+		buttonSpacing = 2,
 		backdropSpacing = 2,
 		alpha = 1,
 		inheritGlobalFade = false,
-		visibility = '[pet] show; hide',
-		hideHotkey = false
+		visibility = '[petbattle] hide;[pet,novehicleui,nooverridebar,nopossessbar] show;hide',
 	},
 	stanceBar = {
 		enabled = true,
@@ -1923,26 +1907,25 @@ P.actionbar = {
 		heightMult = 1,
 		widthMult = 1,
 		keepSizeRatio = true,
-		buttonsize = 32,
+		buttonSize = 32,
 		buttonHeight = 32,
-		buttonspacing = 2,
+		buttonSpacing = 2,
 		backdropSpacing = 2,
 		alpha = 1,
 		inheritGlobalFade = false,
-		visibility = 'show',
-		hideHotkey = false
+		visibility = '[vehicleui] hide; [petbattle] hide;show',
 	},
 	microbar = {
 		enabled = false,
 		mouseover = false,
 		buttonsPerRow = 11,
 		buttonSize = 20,
-		keepSizeRatio = true,
+		keepSizeRatio = false,
 		point = 'TOPLEFT',
-		buttonHeight = 32,
+		buttonHeight = 28,
 		buttonSpacing = 2,
 		alpha = 1,
-		visibility = 'show',
+		visibility = '[petbattle] hide; show',
 		backdrop = false,
 		backdropSpacing = 2,
 		heightMult = 1,
@@ -1952,7 +1935,7 @@ P.actionbar = {
 		enable = true,
 		size = 32,
 		level = 1,
-		strata = 'MEDIUM'
+		strata = 'MEDIUM',
 	}
 };
 
@@ -1961,51 +1944,82 @@ for i = 1, 10 do
 		enabled = false,
 		mouseover = false,
 		clickThrough = false,
+		keepSizeRatio = true,
 		buttons = 12,
 		buttonsPerRow = 12,
 		point = 'BOTTOMLEFT',
 		backdrop = false,
 		heightMult = 1,
 		widthMult = 1,
-		buttonsize = 32,
-		buttonspacing = 2,
+		buttonSize = 32,
+		buttonHeight = 32,
+		buttonSpacing = 2,
 		backdropSpacing = 2,
 		alpha = 1,
 		inheritGlobalFade = false,
 		showGrid = true,
+		flyoutDirection = 'AUTOMATIC',
 		paging = {},
-		visibility = 'show',
+		visibility = '[vehicleui] hide; [overridebar] hide; [petbattle] hide; show',
+		countColor = { r = 1, g = 1, b = 1 },
 		countFont = 'Homespun',
 		countFontOutline = 'MONOCHROMEOUTLINE',
 		countFontSize = 10,
 		countFontXOffset = 0,
 		countFontYOffset = 2,
+		counttext = true,
 		countTextPosition = 'BOTTOMRIGHT',
-		customCountFont = false,
-		customHotkeyFont = false,
+		hotkeyColor = { r = 1, g = 1, b = 1 },
 		hotkeyFont = 'Homespun',
 		hotkeyFontOutline = 'MONOCHROMEOUTLINE',
 		hotkeyFontSize = 10,
+		hotkeytext = true,
 		hotkeyTextPosition = 'TOPRIGHT',
 		hotkeyTextXOffset = 0,
 		hotkeyTextYOffset = -3,
-		hideHotkey = false,
-		useHotkeyColor = false,
-		hotkeyColor = { r = 1, g = 1, b = 1 },
-		useCountColor = false,
-		countColor = { r = 1, g = 1, b = 1 },
-		useMacroColor = false,
 		macroColor = { r = 1, g = 1, b = 1 },
+		macrotext = false,
+		macroFont = 'Homespun',
+		macroFontOutline = 'MONOCHROMEOUTLINE',
+		macroFontSize = 10,
+		macroTextPosition = 'TOPRIGHT',
+		macroTextXOffset = 0,
+		macroTextYOffset = -3,
+		useCountColor = false,
+		useHotkeyColor = false,
+		useMacroColor = false,
 	}
 end
 
+for _, bar in pairs({ 'barPet', 'stanceBar', 'vehicleExitButton' }) do
+	if bar == 'barPet' then
+		P.actionbar[bar].countColor = { r = 1, g = 1, b = 1 }
+		P.actionbar[bar].countFont = 'Homespun'
+		P.actionbar[bar].countFontOutline = 'MONOCHROMEOUTLINE'
+		P.actionbar[bar].countFontSize = 10
+		P.actionbar[bar].countFontXOffset = 0
+		P.actionbar[bar].countFontYOffset = 2
+		P.actionbar[bar].counttext = true
+		P.actionbar[bar].countTextPosition = 'BOTTOMRIGHT'
+		P.actionbar[bar].useCountColor = false
+	end
+
+	P.actionbar[bar].hotkeyColor = { r = 1, g = 1, b = 1 }
+	P.actionbar[bar].hotkeyFont = 'Homespun'
+	P.actionbar[bar].hotkeyFontOutline = 'MONOCHROMEOUTLINE'
+	P.actionbar[bar].hotkeyFontSize = 10
+	P.actionbar[bar].hotkeytext = true
+	P.actionbar[bar].hotkeyTextPosition = 'TOPRIGHT'
+	P.actionbar[bar].hotkeyTextXOffset = 0
+	P.actionbar[bar].hotkeyTextYOffset = -3
+	P.actionbar[bar].useHotkeyColor = false
+end
+
 P.actionbar.bar1.enabled = true
+P.actionbar.bar1.visibility = '[petbattle] hide; show'
 P.actionbar.bar1.paging = {
 	DRUID = '[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:2] 8; [bonusbar:3] 9; [bonusbar:4] 10;',
-	PRIEST = '[bonusbar:1] 7;',
-	ROGUE = '[stance:1] 7;  [stance:2] 7; [stance:3] 7;', -- set to '[stance:1] 7; [stance:3] 10;' if you want a shadow dance bar
-	MONK = '[bonusbar:1] 7; [bonusbar:2] 8; [bonusbar:3] 9;',
-	WARRIOR = '[bonusbar:1] 7; [bonusbar:2] 8; [bonusbar:3]9;'
+	ROGUE = '[bonusbar:1] 7;',
 }
 
 P.actionbar.bar3.enabled = true
