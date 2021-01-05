@@ -128,6 +128,8 @@ function AB:UpdateMicroPositionDimensions()
 	microBar.backdrop:SetShown(db.backdrop)
 	microBar.backdrop:ClearAllPoints()
 
+	db.buttons = #MICRO_BUTTONS
+
 	AB:MoverMagic(microBar)
 
 	local backdropSpacing = db.backdropSpacing
