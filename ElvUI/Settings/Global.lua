@@ -3,7 +3,7 @@ local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateD
 --Global Settings
 G.general = {
 	UIScale = 0.64,
-	version = 1.36,
+	version = 1.37,
 	locale = E:GetLocale(),
 	eyefinity = false,
 	smallerWorldMap = true,
@@ -47,7 +47,7 @@ G.datatexts = {
 		CallToArms = { Label = '', NoLabel = false },
 		Crit = { Label = '', NoLabel = false, decimalLength = 1 },
 		Currencies = { goldFormat = 'BLIZZARD', goldCoins = true, displayedCurrency = 'BACKPACK', displayStyle = 'ICON', tooltipData = {} },
-		Durability = { Label = '', NoLabel = false, percThreshold = 30 },
+		Durability = { percThreshold = 30 },
 		Experience = { textFormat = 'CUR' },
 		Friends = {
 			Label = '', NoLabel = false,
@@ -116,7 +116,7 @@ G.nameplate = {
 
 G.unitframe = {
 	aurafilters = {},
-	buffwatch = {},
+	aurawatch = {},
 	effectiveHealth = false,
 	effectivePower = false,
 	effectiveAura = false,

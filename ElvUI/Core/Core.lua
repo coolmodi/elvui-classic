@@ -1567,13 +1567,17 @@ function E:DBConversions()
 	end
 
 	-- removed override stuff from aurawatch
-	for _, spells in pairs(E.global.unitframe.buffwatch) do
-		for _, spell in pairs(spells) do
-			buffwatchConvert(spell)
+	if E.global.unitframe.buffwatch then
+		for _, spells in pairs(E.global.unitframe.buffwatch) do
+			for _, spell in pairs(spells) do
+				buffwatchConvert(spell)
+			end
 		end
 	end
-	for _, spell in pairs(E.db.unitframe.filters.buffwatch) do
-		buffwatchConvert(spell)
+	if E.db.unitframe.filters.buffwatch then
+		for _, spell in pairs(E.db.unitframe.filters.buffwatch) do
+			buffwatchConvert(spell)
+		end
 	end
 
 	-- fix aurabars colors
@@ -1631,6 +1635,21 @@ function E:DBConversions()
 				E.db.tooltip.visibility.combatOverride = 'HIDE'
 			end
 		end
+	end
+
+	if E.global.unitframe.DebuffHighlightColors then
+		E.global.unitframe.AuraHighlightColors = E:CopyTable(E.global.unitframe.AuraHighlightColors, E.global.unitframe.DebuffHighlightColors)
+		E.global.unitframe.DebuffHighlightColors = nil
+	end
+
+	if E.db.unitframe.filters.buffwatch then
+		E.db.unitframe.filters.aurawatch = E:CopyTable({}, E.db.unitframe.filters.buffwatch)
+		E.db.unitframe.filters.buffwatch = nil
+	end
+
+	if E.global.unitframe.buffwatch then
+		E:CopyTable(E.global.unitframe.aurawatch, E.global.unitframe.buffwatch)
+		E.global.unitframe.buffwatch = nil
 	end
 end
 

@@ -28,9 +28,16 @@ function UF:Configure_AuraWatch(frame, isPet)
 		frame.AuraWatch.size = db.size
 
 		if frame.unit == 'pet' or isPet then
-			frame.AuraWatch:SetNewTable(E.global.unitframe.buffwatch.PET)
+			frame.AuraWatch:SetNewTable(E.global.unitframe.aurawatch.PET)
 		else
-			frame.AuraWatch:SetNewTable(db.profileSpecific and E.db.unitframe.filters.buffwatch or E.global.unitframe.buffwatch[E.myclass])
+			local auraTable
+			if db.profileSpecific then
+				auraTable = E.db.unitframe.filters.aurawatch
+			else
+				auraTable = E:CopyTable({}, E.global.unitframe.aurawatch[E.myclass])
+				E:CopyTable(auraTable, E.global.unitframe.aurawatch.GLOBAL)
+			end
+			frame.AuraWatch:SetNewTable(auraTable)
 		end
 	elseif frame:IsElementEnabled('AuraWatch') then
 		frame:DisableElement('AuraWatch')

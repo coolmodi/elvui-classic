@@ -195,12 +195,10 @@ for textFormat in pairs(E.GetFormattedTextStyles) do
 
 	ElvUF.Tags.Events[format('power:%s', tagTextFormat)] = 'UNIT_DISPLAYPOWER UNIT_POWER_FREQUENT UNIT_MAXPOWER'
 	ElvUF.Tags.Methods[format('power:%s', tagTextFormat)] = function(unit)
-		if UnitIsPlayer(unit) then
-			local pType = UnitPowerType(unit)
-			local min = UnitPower(unit, pType)
-			if min ~= 0 and tagTextFormat ~= 'deficit' then
-				return E:GetFormattedText(textFormat, min, UnitPowerMax(unit, pType))
-			end
+		local pType = UnitPowerType(unit)
+		local min = UnitPower(unit, pType)
+		if min ~= 0 and tagTextFormat ~= 'deficit' then
+			return E:GetFormattedText(textFormat, min, UnitPowerMax(unit, pType))
 		end
 	end
 
@@ -403,7 +401,7 @@ ElvUF.Tags.Methods['health:deficit-percent:name'] = function(unit)
 	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
 	local deficit = max - cur
 
-	if deficit > 0 and currentHealth > 0 then
+	if deficit > 0 and cur > 0 then
 		return _TAGS["health:percent-nostatus"](unit)
 	else
 		return _TAGS.name(unit)

@@ -6,7 +6,6 @@ local _G = _G
 local min, format = min, format
 local CreateFrame = CreateFrame
 local GetXPExhaustion = GetXPExhaustion
-local IsXPUserDisabled = IsXPUserDisabled
 local GetQuestLogRewardXP = GetQuestLogRewardXP
 local UnitXP, UnitXPMax = UnitXP, UnitXPMax
 
@@ -60,7 +59,7 @@ function DB:ExperienceBar_Update()
 		bar:SetValue(1)
 
 		if textFormat ~= 'NONE' then
-			displayString = IsXPUserDisabled() and L["Disabled"] or L["Max Level"]
+			displayString = L["Max Level"]
 		end
 	else
 		bar:SetMinMaxValues(0, XPToLevel)

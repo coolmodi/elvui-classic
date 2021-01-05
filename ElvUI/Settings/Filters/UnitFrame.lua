@@ -534,7 +534,7 @@ G.unitframe.aurafilters.RaidBuffsElvUI = {
 -- Spells that we want to show the duration backwards
 E.ReverseTimer = {}
 
--- BuffWatch: List of personal spells to show on unitframes as icon
+-- AuraWatch: List of personal spells to show on unitframes as icon
 function UF:AuraWatch_AddSpell(id, point, color, anyUnit, onlyShowMissing, displayText, textThreshold, xOffset, yOffset)
 
 	local r, g, b = 1, 1, 1
@@ -561,7 +561,8 @@ function UF:AuraWatch_AddSpell(id, point, color, anyUnit, onlyShowMissing, displ
 	}
 end
 
-G.unitframe.buffwatch = {
+G.unitframe.aurawatch = {
+	GLOBAL = {},
 	PRIEST = {
 		[1243] = UF:AuraWatch_AddSpell(1243, "TOPLEFT", {1, 1, 0.66}, true), --Power Word: Fortitude(Rank 1)
 		[1244] = UF:AuraWatch_AddSpell(1244, "TOPLEFT", {1, 1, 0.66}, true), --Power Word: Fortitude(Rank 2)
@@ -769,7 +770,7 @@ G.unitframe.buffwatch = {
 
 -- Profile specific BuffIndicator
 P.unitframe.filters = {
-	buffwatch = {},
+	aurawatch = {},
 }
 
 -- List of spells to display ticks
@@ -887,7 +888,7 @@ G.unitframe.AuraBarColors = {
 	[90355] = {r = 0.98, g = 0.57, b = 0.10}, -- Ancient Hysteria
 }
 
-G.unitframe.DebuffHighlightColors = {
+G.unitframe.AuraHighlightColors = {
 	[25771] = {enable = false, style = "FILL", color = {r = 0.85, g = 0, b = 0, a = 0.85}},
 }
 
