@@ -26,7 +26,6 @@ local UnregisterStateDriver = UnregisterStateDriver
 local SPELLS_PER_PAGE = SPELLS_PER_PAGE
 local TOOLTIP_UPDATE_TIME = TOOLTIP_UPDATE_TIME
 local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
-local COOLDOWN_TYPE_LOSS_OF_CONTROL = COOLDOWN_TYPE_LOSS_OF_CONTROL
 
 local LAB = E.Libs.LAB
 local LSM = E.Libs.LSM
@@ -660,13 +659,13 @@ end
 function AB:ColorSwipeTexture(cooldown)
 	if not cooldown then return end
 
-	local color = (cooldown.currentCooldownType == COOLDOWN_TYPE_LOSS_OF_CONTROL and AB.db.colorSwipeLOC) or AB.db.colorSwipeNormal
+	local color = AB.db.colorSwipeNormal
 	cooldown:SetSwipeColor(color.r, color.g, color.b, color.a)
 end
 
 function AB:FadeBlingTexture(cooldown, alpha)
 	if not cooldown then return end
-	cooldown:SetBlingTexture(alpha > 0.5 and 131010 or [[Interface\AddOns\ElvUI\Media\Textures\Blank]])  -- interface/cooldown/star4.blp
+	cooldown:SetBlingTexture(alpha > 0.5 and [[interface/cooldown/star4]] or [[Interface\AddOns\ElvUI\Media\Textures\Blank]])
 end
 
 function AB:FadeBlings(alpha)
