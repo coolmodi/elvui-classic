@@ -39,7 +39,6 @@ local SetItemButtonDesaturated = SetItemButtonDesaturated
 local SetItemButtonTexture = SetItemButtonTexture
 local SetItemButtonTextureVertexColor = SetItemButtonTextureVertexColor
 local ToggleFrame = ToggleFrame
-local ToggleAllBags = ToggleAllBags
 local UseContainerItem = UseContainerItem
 local PutItemInBackpack = PutItemInBackpack
 local CursorHasItem = CursorHasItem
@@ -96,6 +95,10 @@ function B:Tooltip_Show()
 		else
 			GameTooltip:AddLine(self.ttText2)
 		end
+	end
+
+	if self.ttValue and self.ttValue() > 0 then
+		GameTooltip:AddLine(E:FormatMoney(self.ttValue(), E.db.bags.moneyFormat, not E.db.bags.moneyCoins), 1, 1, 1)
 	end
 
 	GameTooltip:Show()
@@ -335,7 +338,7 @@ function B:UpdateSlot(frame, bagID, slotID)
 	local texture, count, locked, rarity, readable, _, itemLink, _, noValue, itemID = GetContainerItemInfo(bagID, slotID)
 	slot.name, slot.rarity, slot.locked = nil, rarity, locked
 
-	local clink = GetContainerItemLink(bagID, slotID)
+	local link = GetContainerItemLink(bagID, slotID)
 
 	slot:Show()
 	if slot.questIcon then
@@ -372,23 +375,13 @@ function B:UpdateSlot(frame, bagID, slotID)
 	slot.bindType:SetText()
 
 	local professionColors = keyring and B.KeyRingColor or B.ProfessionColors[bagType]
-	local showItemLevel = B.db.itemLevel and clink and not professionColors
+	local showItemLevel = B.db.itemLevel and link and not professionColors
 	local showBindType = B.db.showBindType and (slot.rarity and slot.rarity > LE_ITEM_QUALITY_COMMON)
+	local forceColor, isQuestItem, r, g, b, a = true
 
-	if B.db.specialtyColors and professionColors then
-		local r, g, b = unpack(professionColors)
-		slot.newItemGlow:SetVertexColor(r, g, b)
-		slot:SetBackdropBorderColor(r, g, b)
-		slot:SetBackdropColor(unpack(E.db.bags.transparent and E.media.backdropfadecolor or E.media.backdropcolor))
-		if B.db.colors.profession.colorBackdrop then
-			slot:SetBackdropColor(r, g, b)
-		end
-		slot.ignoreBorderColors = true
-	elseif clink then
-		local name, _, itemRarity, _, _, _, _, _, itemEquipLoc, _, _, itemClassID, itemSubClassID, bindType = GetItemInfo(clink)
+	if link then
+		local name, _, itemRarity, _, _, _, _, _, itemEquipLoc, _, _, itemClassID, itemSubClassID, bindType = GetItemInfo(link)
 		slot.name = name
-
-		local r, g, b
 
 		if slot.rarity or itemRarity then
 			r, g, b = GetItemQualityColor(slot.rarity or itemRarity)
@@ -408,6 +401,7 @@ function B:UpdateSlot(frame, bagID, slotID)
 			end
 		end
 
+		isQuestItem = itemClassID == LE_ITEM_CLASS_QUESTITEM
 		if showBindType and (bindType == 2 or bindType == 3) then
 			local BoE, BoU
 
@@ -419,8 +413,7 @@ function B:UpdateSlot(frame, bagID, slotID)
 			end
 			E.ScanTooltip:Show()
 
-			local colorblind = GetCVarBool('colorblindmode')
-			local bindTypeLines = colorblind and 4 or 3
+			local bindTypeLines = (GetCVarBool('colorblindmode') and 4) or 3
 			for i = 2, bindTypeLines do
 				local line = _G['ElvUI_ScanTooltipTextLeft'..i]:GetText()
 				if not line or line == '' then break end
@@ -436,35 +429,29 @@ function B:UpdateSlot(frame, bagID, slotID)
 				slot.bindType:SetVertexColor(r, g, b)
 			end
 		end
-
-		-- color slot according to item quality
-		if itemClassID == LE_ITEM_CLASS_QUESTITEM then
-			slot.newItemGlow:SetVertexColor(unpack(B.QuestColors.questItem))
-			slot:SetBackdropBorderColor(unpack(B.QuestColors.questItem))
-			if slot.questIcon and B.db.questIcon then
-				slot.questIcon:Show()
-			end
-			slot.ignoreBorderColors = true
-		elseif B.db.qualityColors and slot.rarity and slot.rarity > LE_ITEM_QUALITY_COMMON then
-			slot.newItemGlow:SetVertexColor(r, g, b)
-			slot:SetBackdropBorderColor(r, g, b)
-			slot.ignoreBorderColors = true
-		else
-			local rr, gg, bb = unpack(E.media.bordercolor)
-			slot.newItemGlow:SetVertexColor(rr, gg, bb)
-			slot:SetBackdropBorderColor(rr, gg, bb)
-			slot:SetBackdropColor(unpack(E.db.bags.transparent and E.media.backdropfadecolor or E.media.backdropcolor))
-			slot.ignoreBorderColors = nil
-		end
-	else
-		local rr, gg, bb = unpack(E.media.bordercolor)
-		slot.newItemGlow:SetVertexColor(rr, gg, bb)
-		slot:SetBackdropBorderColor(rr, gg, bb)
-		slot:SetBackdropColor(unpack(E.db.bags.transparent and E.media.backdropfadecolor or E.media.backdropcolor))
-		slot.ignoreBorderColors = nil
 	end
 
+	if B.db.specialtyColors and professionColors then
+		r, g, b, a = unpack(professionColors)
+	--elseif questId and not isActiveQuest then
+	--	r, g, b, a = unpack(B.QuestColors.questStarter)
+	elseif isQuestItem then
+		r, g, b, a = unpack(B.QuestColors.questItem)
+	elseif not link or B.db.qualityColors and slot.rarity and slot.rarity <= LE_ITEM_QUALITY_COMMON then
+		r, g, b, a = unpack(E.media.bordercolor)
+		forceColor = nil
+	end
+
+	if forceColor and B.db.colorBackdrop then
+		slot:SetBackdropColor(r, g, b, a)
+	else
+		slot:SetBackdropColor(unpack(E.db.bags.transparent and E.media.backdropfadecolor or E.media.backdropcolor))
+	end
+
+	slot.ignoreBorderColors = forceColor
+
 	if E.db.bags.newItemGlow then
+		slot.newItemGlow:SetVertexColor(r, g, b, a or 1)
 		E:Delay(0.1, B.CheckSlotNewItem, B, slot, bagID, slotID)
 	end
 
@@ -707,27 +694,6 @@ end
 
 function B:UpdateGoldText()
 	B.BagFrame.goldText:SetText(E:FormatMoney(GetMoney(), E.db.bags.moneyFormat, not E.db.bags.moneyCoins))
-end
-
-function B:FormatMoney(amount)
-	local str, coppername, silvername, goldname = '', '|cffeda55fc|r', '|cffc7c7cfs|r', '|cffffd700g|r'
-
-	local value = abs(amount)
-	local gold = floor(value / 10000)
-	local silver = floor((value / 100) % 100)
-	local copper = floor(value % 100)
-
-	if gold > 0 then
-		str = format('%d%s%s', gold, goldname, (silver > 0 or copper > 0) and ' ' or '')
-	end
-	if silver > 0 then
-		str = format('%s%d%s%s', str, silver, silvername, copper > 0 and ' ' or '')
-	end
-	if copper > 0 or value == 0 then
-		str = format('%s%d%s', str, copper, coppername)
-	end
-
-	return str
 end
 
 function B:GetGraysValue()
@@ -1087,6 +1053,7 @@ function B:ConstructContainerFrame(name, isBank)
 		f.vendorGraysButton:GetPushedTexture():SetInside()
 		f.vendorGraysButton:StyleButton(nil, true)
 		f.vendorGraysButton.ttText = L["Vendor / Delete Grays"]
+		f.vendorGraysButton.ttValue = B.GetGraysValue
 		f.vendorGraysButton:SetScript('OnEnter', B.Tooltip_Show)
 		f.vendorGraysButton:SetScript('OnLeave', GameTooltip_Hide)
 		f.vendorGraysButton:SetScript('OnClick', B.VendorGrayCheck)
@@ -1503,7 +1470,7 @@ function B:ProgressQuickVendor()
 		local stackCount = select(2, GetContainerItemInfo(bag, slot)) or 1
 		stackPrice = (itemPrice or 0) * stackCount
 		if E.db.bags.vendorGrays.details and link then
-			E:Print(format('%s|cFF00DDDDx%d|r %s', link, stackCount, B:FormatMoney(stackPrice)))
+			E:Print(format('%s|cFF00DDDDx%d|r %s', link, stackCount, E:FormatMoney(stackPrice, E.db.bags.moneyFormat, not E.db.bags.moneyCoins)))
 		end
 		UseContainerItem(bag, slot)
 	end
@@ -1528,7 +1495,7 @@ function B:VendorGreys_OnUpdate(elapsed)
 	elseif lastItem then
 		B.SellFrame:Hide()
 		if B.SellFrame.Info.goldGained > 0 then
-			E:Print((L['Vendored gray items for: %s']):format(B:FormatMoney(B.SellFrame.Info.goldGained)))
+			E:Print((L["Vendored gray items for: %s"]):format(E:FormatMoney(B.SellFrame.Info.goldGained, E.db.bags.moneyFormat, not E.db.bags.moneyCoins)))
 		end
 	end
 end
@@ -1623,7 +1590,7 @@ function B:Initialize()
 
 	B.db = E.db.bags
 
-	B.KeyRingColor = { 1, 1, 0}
+	B.KeyRingColor = { 1, 1, 0 }
 
 	B.ProfessionColors = {
 		[0x0001]   = { B.db.colors.profession.quiver.r, B.db.colors.profession.quiver.g, B.db.colors.profession.quiver.b},
@@ -1662,12 +1629,12 @@ function B:Initialize()
 	E:CreateMover(BankFrameHolder, 'ElvUIBankMover', L["Bank Mover (Grow Up)"], nil, nil, B.PostBagMove, nil, nil, 'bags,general')
 
 	--Set some variables on movers
-	ElvUIBagMover.textGrowUp = L["Bag Mover (Grow Up)"]
-	ElvUIBagMover.textGrowDown = L["Bag Mover (Grow Down)"]
-	ElvUIBagMover.POINT = 'BOTTOM'
-	ElvUIBankMover.textGrowUp = L["Bank Mover (Grow Up)"]
-	ElvUIBankMover.textGrowDown = L["Bank Mover (Grow Down)"]
-	ElvUIBankMover.POINT = 'BOTTOM'
+	_G.ElvUIBagMover.textGrowUp = L["Bag Mover (Grow Up)"]
+	_G.ElvUIBagMover.textGrowDown = L["Bag Mover (Grow Down)"]
+	_G.ElvUIBagMover.POINT = 'BOTTOM'
+	_G.ElvUIBankMover.textGrowUp = L["Bank Mover (Grow Up)"]
+	_G.ElvUIBankMover.textGrowDown = L["Bank Mover (Grow Down)"]
+	_G.ElvUIBankMover.POINT = 'BOTTOM'
 
 	--Create Containers
 	B.BagFrame = B:ConstructContainerFrame('ElvUI_ContainerFrame')

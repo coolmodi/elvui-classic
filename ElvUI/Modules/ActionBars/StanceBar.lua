@@ -57,6 +57,7 @@ function AB:StyleShapeShift()
 			if not texture then texture = WispSplode end
 
 			button.icon:SetTexture(texture)
+			button.icon:SetInside()
 
 			if not button.useMasque then
 				cooldown:SetAlpha(1)
@@ -103,7 +104,7 @@ end
 function AB:PositionAndSizeBarShapeShift()
 	local db = AB.db.stanceBar
 
-	local buttonSpacing = db.buttonspacing
+	local buttonSpacing = db.buttonSpacing
 	local backdropSpacing = db.backdropSpacing
 	local buttonsPerRow = db.buttonsPerRow
 	local numButtons = db.buttons
@@ -240,14 +241,8 @@ function AB:UpdateStanceBindings()
 		local button = _G['ElvUI_StanceBarButton'..i]
 		if not button then break end
 
-		if AB.db.hotkeytext and not (button.db and button.db.hideHotkey) then
-			button.HotKey:Show()
-			button.HotKey:SetText(GetBindingKey('SHAPESHIFTBUTTON'..i))
-
-			AB:FixKeybindText(button)
-		else
-			button.HotKey:Hide()
-		end
+		button.HotKey:SetText(GetBindingKey('SHAPESHIFTBUTTON'..i))
+		AB:FixKeybindText(button)
 	end
 end
 

@@ -1,18 +1,16 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local AB = E:GetModule('ActionBars')
 
+--Lua functions
 local _G = _G
-local gsub = gsub
 local pairs = pairs
 local assert = assert
 local unpack = unpack
-local tinsert = tinsert
-local wipe = wipe
-
+--WoW API / Variables
 local CreateFrame = CreateFrame
-local UpdateMicroButtonsParent = UpdateMicroButtonsParent
 local RegisterStateDriver = RegisterStateDriver
 local InCombatLockdown = InCombatLockdown
+local MICRO_BUTTONS = MICRO_BUTTONS
 
 local microBar = CreateFrame('Frame', 'ElvUI_MicroBar', E.UIParent)
 microBar:SetSize(100, 100)
@@ -28,7 +26,7 @@ local function onUpdate(self, elapsed)
 	if watcher > 0.1 then
 		if not self:IsMouseOver() then
 			self.IsMouseOvered = nil
-			self:SetScript('OnUpdate', nil)
+			self:SetScript("OnUpdate", nil)
 			onLeaveBar()
 		end
 		watcher = 0
@@ -80,15 +78,15 @@ function AB:HandleMicroButton(button)
 		button.Flash:SetTexture()
 	end
 
-	pushed:SetTexCoord(0.22, 0.81, 0.26, 0.82)
-	pushed:SetInside(button.backdrop)
+	pushed:SetTexCoord(0.17, 0.87, 0.5, 0.908)
+	pushed:SetInside()
 
-	normal:SetTexCoord(0.22, 0.81, 0.21, 0.82)
-	normal:SetInside(button.backdrop)
+	normal:SetTexCoord(0.17, 0.87, 0.5, 0.908)
+	normal:SetInside()
 
 	if disabled then
-		disabled:SetTexCoord(0.22, 0.81, 0.21, 0.82)
-		disabled:SetInside(button.backdrop)
+		disabled:SetTexCoord(0.17, 0.87, 0.5, 0.908)
+		disabled:SetInside()
 	end
 end
 
@@ -109,17 +107,19 @@ end
 function AB:UpdateMicroBarVisibility()
 	if InCombatLockdown() then
 		AB.NeedsUpdateMicroBarVisibility = true
-		AB:RegisterEvent('PLAYER_REGEN_ENABLED')
+		self:RegisterEvent('PLAYER_REGEN_ENABLED')
 		return
 	end
 
-	local visibility = AB.db.microbar.visibility
-	visibility = gsub(visibility, '[\n\r]','')
+	local visibility = self.db.microbar.visibility
+	if visibility and visibility:match('[\n\r]') then
+		visibility = visibility:gsub('[\n\r]','')
+	end
 
-	RegisterStateDriver(microBar.visibility, 'visibility', (AB.db.microbar.enabled and visibility) or 'hide')
+	RegisterStateDriver(microBar.visibility, 'visibility', (self.db.microbar.enabled and visibility) or 'hide')
 end
 
-AB.VisibleMicroButtons = {}
+local VisibleMicroButtons = {}
 
 function AB:UpdateMicroPositionDimensions()
 	local db = AB.db.microbar
@@ -128,35 +128,31 @@ function AB:UpdateMicroPositionDimensions()
 	microBar.backdrop:SetShown(db.backdrop)
 	microBar.backdrop:ClearAllPoints()
 
+	db.buttons = #MICRO_BUTTONS
+
 	AB:MoverMagic(microBar)
 
-	db.buttons = #_G.MICRO_BUTTONS-1
-
-	wipe(AB.VisibleMicroButtons)
-
-	for i = 1, #_G.MICRO_BUTTONS do
-		local button = _G[_G.MICRO_BUTTONS[i]]
-		if button:IsShown() then
-			tinsert(AB.VisibleMicroButtons, button:GetName())
-		end
-	end
-
 	local backdropSpacing = db.backdropSpacing
-
 	local _, horizontal, anchorUp, anchorLeft = AB:GetGrowth(db.point)
 	local lastButton, anchorRowButton = microBar
 
-	for i = 1, #AB.VisibleMicroButtons do
-		local button = _G[AB.VisibleMicroButtons[i]]
-		local lastColumnButton = _G[AB.VisibleMicroButtons[i - self.db.microbar.buttonsPerRow]]
+	wipe(VisibleMicroButtons)
 
-		button.db = db
+	for i = 1, #MICRO_BUTTONS do
+		local button = _G[MICRO_BUTTONS[i]]
+		if button:IsShown() then
+			tinsert(VisibleMicroButtons, button:GetName())
+		end
+	end
+
+	for i = 1, #VisibleMicroButtons do
+		local button = _G[VisibleMicroButtons[i]]
+		local lastColumnButton = _G[VisibleMicroButtons[i - db.buttonsPerRow]]
 
 		if i == 1 or i == db.buttonsPerRow then
 			anchorRowButton = button
 		end
 
-		button.handleBackdrop = true -- keep over HandleButton
 		AB:HandleButton(microBar, button, i, lastButton, lastColumnButton)
 
 		lastButton = button
@@ -193,10 +189,11 @@ function AB:SetupMicroBar()
 
 	_G.MicroButtonPortrait:SetInside(_G.CharacterMicroButton.backdrop)
 
+	AB:SecureHook('MainMenuMicroButton_SetPushed')
+	AB:SecureHook('MainMenuMicroButton_SetNormal')
 	AB:SecureHook('UpdateMicroButtonsParent')
-	AB:SecureHook('MoveMicroButtons', 'UpdateMicroPositionDimensions')
---	AB:SecureHook('UpdateMicroButtons')
-	UpdateMicroButtonsParent(microBar)
+	AB:SecureHook('UpdateMicroButtons', 'UpdateMicroPositionDimensions')
+	_G.UpdateMicroButtonsParent(microBar)
 	AB:MainMenuMicroButton_SetNormal()
 	AB:UpdateMicroPositionDimensions()
 
