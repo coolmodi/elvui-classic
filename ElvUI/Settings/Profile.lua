@@ -1866,8 +1866,14 @@ P.actionbar = {
 	globalFadeAlpha = 0,
 	handleOverlay = true,
 	hideCooldownBling = false,
+	hotkeyTextPosition = 'TOPRIGHT',
+	hotkeyTextXOffset = 0,
+	hotkeyTextYOffset = -3,
 	keyDown = true,
 	lockActionBars = true,
+	macroTextPosition = 'TOPRIGHT',
+	macroTextXOffset = 0,
+	macroTextYOffset = -3,
 	movementModifier = 'SHIFT',
 	noPowerColor = { r = 0.5, g = 0.5, b = 1 },
 	noRangeColor = { r = 0.8, g = 0.1, b = 0.1 },
@@ -1965,8 +1971,8 @@ for i = 1, 10 do
 		countFont = 'Homespun',
 		countFontOutline = 'MONOCHROMEOUTLINE',
 		countFontSize = 10,
-		countFontXOffset = 0,
-		countFontYOffset = 2,
+		countTextXOffset = 0,
+		countTextYOffset = 2,
 		counttext = true,
 		countTextPosition = 'BOTTOMRIGHT',
 		hotkeyColor = { r = 1, g = 1, b = 1 },
@@ -1997,10 +2003,10 @@ for _, bar in pairs({ 'barPet', 'stanceBar', 'vehicleExitButton' }) do
 		P.actionbar[bar].countFont = 'Homespun'
 		P.actionbar[bar].countFontOutline = 'MONOCHROMEOUTLINE'
 		P.actionbar[bar].countFontSize = 10
-		P.actionbar[bar].countFontXOffset = 0
-		P.actionbar[bar].countFontYOffset = 2
 		P.actionbar[bar].counttext = true
 		P.actionbar[bar].countTextPosition = 'BOTTOMRIGHT'
+		P.actionbar[bar].countTextXOffset = 0
+		P.actionbar[bar].countTextYOffset = 2
 		P.actionbar[bar].useCountColor = false
 	end
 
@@ -2019,7 +2025,10 @@ P.actionbar.bar1.enabled = true
 P.actionbar.bar1.visibility = '[petbattle] hide; show'
 P.actionbar.bar1.paging = {
 	DRUID = '[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:2] 8; [bonusbar:3] 9; [bonusbar:4] 10;',
+	PRIEST = '[bonusbar:1] 7;',
 	ROGUE = '[bonusbar:1] 7;',
+	MONK = '[bonusbar:1] 7; [bonusbar:2] 8; [bonusbar:3] 9;',
+	WARRIOR = '[bonusbar:1] 7; [bonusbar:2] 8; [bonusbar:3]9;'
 }
 
 P.actionbar.bar3.enabled = true

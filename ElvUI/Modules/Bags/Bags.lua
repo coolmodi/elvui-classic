@@ -442,6 +442,8 @@ function B:UpdateSlot(frame, bagID, slotID)
 		forceColor = nil
 	end
 
+	slot:SetBackdropBorderColor(r, g, b, a)
+
 	if forceColor and B.db.colorBackdrop then
 		slot:SetBackdropColor(r, g, b, a)
 	else
