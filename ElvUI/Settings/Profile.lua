@@ -2019,7 +2019,10 @@ P.actionbar.bar1.enabled = true
 P.actionbar.bar1.visibility = '[petbattle] hide; show'
 P.actionbar.bar1.paging = {
 	DRUID = '[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:2] 8; [bonusbar:3] 9; [bonusbar:4] 10;',
+	PRIEST = '[bonusbar:1] 7;',
 	ROGUE = '[bonusbar:1] 7;',
+	MONK = '[bonusbar:1] 7; [bonusbar:2] 8; [bonusbar:3] 9;',
+	WARRIOR = '[bonusbar:1] 7; [bonusbar:2] 8; [bonusbar:3]9;'
 }
 
 P.actionbar.bar3.enabled = true
