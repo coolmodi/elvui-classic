@@ -627,8 +627,8 @@ function AB:StyleButton(button, noBackdrop, useMasque, ignoreNormal)
 		macroText:SetTextColor(c.r, c.g, c.b)
 	end
 
-	if not button.noBackdrop and not button.backdrop and not button.useMasque then
-		button:CreateBackdrop(AB.db.transparent and 'Transparent', true, nil, nil, nil, nil, true)
+	if not button.noBackdrop and not button.useMasque then
+		button:SetTemplate(AB.db.transparent and 'Transparent', true)
 	end
 
 	if flash then
@@ -880,13 +880,9 @@ function AB:DisableBlizzard()
 		_G.UIPARENT_MANAGED_FRAME_POSITIONS[name] = nil
 
 		local frame = _G[name]
-		if frame then
-			if i < 6 then frame:UnregisterAllEvents() end
-			frame:SetParent(hiddenParent)
-			AB:SetNoopsi(frame)
-		else
-			print(name)
-		end
+		if i < 3 then frame:UnregisterAllEvents() end
+		frame:SetParent(hiddenParent)
+		AB:SetNoopsi(frame)
 	end
 
 	-- let spell book buttons work without tainting by replacing this function
@@ -1112,10 +1108,8 @@ function AB:LAB_ButtonUpdate(button)
 
 	button.Count:SetTextColor(color.r, color.g, color.b)
 
-	if button.backdrop then
-		local border = (AB.db.equippedItem and button:IsEquipped() and AB.db.equippedItemColor) or E.db.general.bordercolor
-		button.backdrop:SetBackdropBorderColor(border.r, border.g, border.b)
-	end
+	local border = (AB.db.equippedItem and button:IsEquipped() and AB.db.equippedItemColor) or E.db.general.bordercolor
+	button:SetBackdropBorderColor(border.r, border.g, border.b)
 end
 
 function AB:LAB_UpdateRange(button)
