@@ -25,6 +25,7 @@ local UnregisterStateDriver = UnregisterStateDriver
 
 local SPELLS_PER_PAGE = SPELLS_PER_PAGE
 local TOOLTIP_UPDATE_TIME = TOOLTIP_UPDATE_TIME
+local COOLDOWN_TYPE_LOSS_OF_CONTROL = COOLDOWN_TYPE_LOSS_OF_CONTROL
 local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
 
 local LAB = E.Libs.LAB
@@ -691,7 +692,7 @@ end
 function AB:ColorSwipeTexture(cooldown)
 	if not cooldown then return end
 
-	local color = AB.db.colorSwipeNormal
+	local color = (cooldown.currentCooldownType == COOLDOWN_TYPE_LOSS_OF_CONTROL and AB.db.colorSwipeLOC) or AB.db.colorSwipeNormal
 	cooldown:SetSwipeColor(color.r, color.g, color.b, color.a)
 end
 
