@@ -211,6 +211,7 @@ end
 function E:SetupLayout(layout, noDataReset, noDisplayMsg)
 	if not noDataReset then
 		E.db.layoutSet = layout
+		E.db.convertPages = true
 		E.db.layoutSetting = layout
 
 		--Unitframes
