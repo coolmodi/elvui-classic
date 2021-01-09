@@ -25,6 +25,7 @@ local UnregisterStateDriver = UnregisterStateDriver
 
 local SPELLS_PER_PAGE = SPELLS_PER_PAGE
 local TOOLTIP_UPDATE_TIME = TOOLTIP_UPDATE_TIME
+local COOLDOWN_TYPE_LOSS_OF_CONTROL = COOLDOWN_TYPE_LOSS_OF_CONTROL
 local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
 
 local LAB = E.Libs.LAB
@@ -93,6 +94,23 @@ AB.barDefaults = {
 		position = 'BOTTOMRIGHT,ElvUIParent,BOTTOMRIGHT,-4,400',
 	},
 }
+
+function AB:FixBarSwap()
+	if not E.db.convertPages then
+		local bar2, bar3, bar5, bar6 = E.db.actionbar.bar2, E.db.actionbar.bar3, E.db.actionbar.bar5, E.db.actionbar.bar6
+		E.db.actionbar.bar2, E.db.actionbar.bar3, E.db.actionbar.bar5, E.db.actionbar.bar6 = E:CopyTable({}, bar6), E:CopyTable({}, bar5), E:CopyTable({}, bar2), E:CopyTable({}, bar3)
+
+		if E.db.movers then
+			local bar2mover, bar3mover, bar5mover, bar6mover = E.db.movers.ElvAB_2, E.db.movers.ElvAB_3, E.db.movers.ElvAB_5, E.db.movers.ElvAB_6
+			if bar6mover == 'BOTTOM,ElvUI_Bar2,TOP,0,2' then bar6mover = AB.barDefaults.bar2.position end
+			E.db.movers.ElvAB_2, E.db.movers.ElvAB_3, E.db.movers.ElvAB_5, E.db.movers.ElvAB_6 = bar6mover, bar5mover, bar2mover, bar3mover
+		end
+
+		E.db.convertPages = true
+
+		E:StaggeredUpdateAll()
+	end
+end
 
 function AB:HandleBackdropMultiplier(bar, backdropSpacing, buttonSpacing, widthMult, heightMult, anchorUp, anchorLeft, horizontal, lastShownButton, anchorRowButton)
 	if not bar.backdrop:IsShown() then return end
@@ -626,8 +644,8 @@ function AB:StyleButton(button, noBackdrop, useMasque, ignoreNormal)
 		macroText:SetTextColor(c.r, c.g, c.b)
 	end
 
-	if not button.noBackdrop and not button.backdrop and not button.useMasque then
-		button:CreateBackdrop(AB.db.transparent and 'Transparent', true, nil, nil, nil, nil, true)
+	if not button.noBackdrop and not button.useMasque then
+		button:SetTemplate(AB.db.transparent and 'Transparent', true)
 	end
 
 	if flash then
@@ -691,7 +709,7 @@ end
 function AB:ColorSwipeTexture(cooldown)
 	if not cooldown then return end
 
-	local color = AB.db.colorSwipeNormal
+	local color = (cooldown.currentCooldownType == COOLDOWN_TYPE_LOSS_OF_CONTROL and AB.db.colorSwipeLOC) or AB.db.colorSwipeNormal
 	cooldown:SetSwipeColor(color.r, color.g, color.b, color.a)
 end
 
@@ -879,13 +897,9 @@ function AB:DisableBlizzard()
 		_G.UIPARENT_MANAGED_FRAME_POSITIONS[name] = nil
 
 		local frame = _G[name]
-		if frame then
-			if i < 6 then frame:UnregisterAllEvents() end
-			frame:SetParent(hiddenParent)
-			AB:SetNoopsi(frame)
-		else
-			print(name)
-		end
+		if i < 3 then frame:UnregisterAllEvents() end
+		frame:SetParent(hiddenParent)
+		AB:SetNoopsi(frame)
 	end
 
 	-- let spell book buttons work without tainting by replacing this function
@@ -1111,10 +1125,8 @@ function AB:LAB_ButtonUpdate(button)
 
 	button.Count:SetTextColor(color.r, color.g, color.b)
 
-	if button.backdrop then
-		local border = (AB.db.equippedItem and button:IsEquipped() and AB.db.equippedItemColor) or E.db.general.bordercolor
-		button.backdrop:SetBackdropBorderColor(border.r, border.g, border.b)
-	end
+	local border = (AB.db.equippedItem and button:IsEquipped() and AB.db.equippedItemColor) or E.db.general.bordercolor
+	button:SetBackdropBorderColor(border.r, border.g, border.b)
 end
 
 function AB:LAB_UpdateRange(button)

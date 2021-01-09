@@ -263,5 +263,6 @@ function E:LoadCommands()
 
 	if E.private.actionbar.enable then
 		self:RegisterChatCommand('kb', AB.ActivateBindMode)
+		self:RegisterChatCommand('fixabswap', AB.FixBarSwap)
 	end
 end
