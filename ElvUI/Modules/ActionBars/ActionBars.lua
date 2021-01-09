@@ -107,6 +107,8 @@ function AB:FixBarSwap()
 		end
 
 		E.db.convertPages = true
+
+		E:StaggeredUpdateAll()
 	end
 end
 
