@@ -3138,7 +3138,7 @@ E.Options.args.unitframe = {
 									order = 5,
 									name = L["Health Speed"],
 									type = "range",
-									min = .1, max = .5, step = .05,
+									min = .01, max = .5, bigStep = .05, step = .01,
 									disabled = function() return not E.global.unitframe.effectiveHealth end,
 									get = function(info) return E.global.unitframe[info[#info]] end,
 									set = function(info, value) E.global.unitframe[info[#info]] = value; UF:Update_AllFrames() end
@@ -3147,7 +3147,7 @@ E.Options.args.unitframe = {
 									order = 6,
 									name = L["Power Speed"],
 									type = "range",
-									min = .1, max = .5, step = .05,
+									min = .01, max = .5, bigStep = .05, step = .01,
 									disabled = function() return not E.global.unitframe.effectivePower end,
 									get = function(info) return E.global.unitframe[info[#info]] end,
 									set = function(info, value) E.global.unitframe[info[#info]] = value; UF:Update_AllFrames() end
