@@ -437,6 +437,9 @@ function B:UpdateSlot(frame, bagID, slotID)
 	--	r, g, b, a = unpack(B.QuestColors.questStarter)
 	elseif isQuestItem then
 		r, g, b, a = unpack(B.QuestColors.questItem)
+		if slot.questIcon and B.db.questIcon then
+			slot.questIcon:Show()
+		end
 	elseif not link or B.db.qualityColors and slot.rarity and slot.rarity <= LE_ITEM_QUALITY_COMMON then
 		r, g, b, a = unpack(E.media.bordercolor)
 		forceColor = nil
