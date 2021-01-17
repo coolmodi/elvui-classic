@@ -514,14 +514,6 @@ function AB:RemoveBindings()
 	AB:RegisterEvent('PLAYER_REGEN_DISABLED', 'ReassignBindings')
 end
 
-function AB:UpdateBar1Paging()
-	if AB.db.bar2.enabled then
-		AB.barDefaults.bar1.conditions = '[bonusbar:5] 11; [shapeshift] 13; [form,noform] 0; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;'
-	else
-		AB.barDefaults.bar1.conditions = '[bonusbar:5] 11; [shapeshift] 13; [form,noform] 0; [bar:2] 2; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;'
-	end
-end
-
 function AB:ApplyFontToAll()
 	for i = 1, 10 do
 		for _, object in pairs({ 'hotkey', 'macro', 'count'}) do
@@ -1187,7 +1179,6 @@ function AB:Initialize()
 
 	AB:DisableBlizzard()
 	AB:SetupMicroBar()
-	AB:UpdateBar1Paging()
 
 	for i = 1, 10 do
 		AB:CreateBar(i)
