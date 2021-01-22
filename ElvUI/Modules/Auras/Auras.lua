@@ -106,18 +106,20 @@ function A:CreateIcon(button)
 	local header = button:GetParent()
 	local auraType = header.filter
 
-	button.auraType = auraType == 'HELPFUL' and 'buffs' or 'debuffs' -- used to update cooldown text
+	button.auraType = auraType == 'HARMFUL' and 'debuffs' or 'buffs' -- used to update cooldown text
 	button.filter = auraType
+
+	local db = A.db[button.auraType]
 
 	button.texture = button:CreateTexture(nil, 'ARTWORK')
 	button.texture:SetInside()
 	button.texture:SetTexCoord(unpack(E.TexCoords))
 
 	button.count = button:CreateFontString(nil, 'OVERLAY')
-	button.count:FontTemplate()
+	button.count:FontTemplate(LSM:Fetch('font', db.countFont), db.countFontSize, db.countFontOutline)
 
 	button.text = button:CreateFontString(nil, 'OVERLAY')
-	button.text:FontTemplate()
+	button.text:FontTemplate(LSM:Fetch('font', db.timeFont), db.timeFontSize, db.timeFontOutline)
 
 	button.highlight = button:CreateTexture(nil, 'HIGHLIGHT')
 	button.highlight:SetColorTexture(1, 1, 1, .45)
