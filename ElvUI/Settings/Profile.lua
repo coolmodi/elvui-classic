@@ -1084,6 +1084,7 @@ local UF_Health = {
 local UF_HealthPrediction = {
 	enable = true,
 	healType = 'ALL_HEALS',
+	predictionTime = 4,
 }
 
 local UF_InfoPanel = {

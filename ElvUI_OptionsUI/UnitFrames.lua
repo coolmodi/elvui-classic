@@ -1677,12 +1677,21 @@ local function GetOptionsTable_HealPrediction(updateFunc, groupName, numGroup)
 				name = L["Type"],
 				values = {
 					ALL_HEALS = 'All Heals',
-					CHANNEL_HEALS = 'Channel Heals',
+					--CHANNEL_HEALS = 'Channel Heals',
 					DIRECT_HEALS = 'Direct Heals',
-					HOT_HEALS = 'HoTs',
-					OVERTIME_HEALS = 'HoTs & Channel',
-					CASTED_HEALS = 'Direct & Channel Heals',
+					--HOT_HEALS = 'HoTs',
+					--OVERTIME_HEALS = 'HoTs & Channel',
+					--CASTED_HEALS = 'Direct & Channel Heals',
 				},
+			},
+			predictionTime = {
+				order = 3,
+				type = "range",
+				name = "Prediction timeframe.",
+				desc = L["How many seconds to look ahead for incoming heals. Important for HoTs, should be desired HoT ticks + 1."],
+				min = 3,
+				max = 20,
+				step = 1
 			},
 			colors = {
 				order = 4,

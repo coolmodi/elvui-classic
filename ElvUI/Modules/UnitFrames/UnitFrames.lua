@@ -1265,8 +1265,9 @@ function UF:UpdatePredictionStatusBar(prediction, parent, name)
 	if not (prediction and parent) then return end
 	local texture = (not parent.isTransparent and parent:GetStatusBarTexture():GetTexture()) or E.media.blankTex
 	if name == "Health" then
+		UF:Update_StatusBar(prediction.beforeBar, texture)
 		UF:Update_StatusBar(prediction.myBar, texture)
-		UF:Update_StatusBar(prediction.otherBar, texture)
+		UF:Update_StatusBar(prediction.afterBar, texture)
 		UF:Update_StatusBar(prediction.absorbBar, texture)
 		UF:Update_StatusBar(prediction.healAbsorbBar, texture)
 		UF:Update_StatusBar(prediction.overAbsorb, texture)
