@@ -172,7 +172,7 @@ function NP:Update_HealthPrediction(nameplate)
 		nameplate.HealthPrediction.myBar:SetStatusBarColor(NP.db.colors.healPrediction.personal.r, NP.db.colors.healPrediction.personal.g, NP.db.colors.healPrediction.personal.b)
 		nameplate.HealthPrediction.afterBar:SetStatusBarColor(NP.db.colors.healPrediction.others.r, NP.db.colors.healPrediction.others.g, NP.db.colors.healPrediction.others.b)
 
-		nameplate.HealthPrediction.predictionTime = db.health.healPrediction.predictionTime
+		nameplate.HealthPrediction.predictionTime = db.health.predictionTime
 	elseif nameplate:IsElementEnabled('HealthPrediction') then
 		nameplate:DisableElement('HealthPrediction')
 	end

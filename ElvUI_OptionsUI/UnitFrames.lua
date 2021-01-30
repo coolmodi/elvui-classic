@@ -1687,7 +1687,7 @@ local function GetOptionsTable_HealPrediction(updateFunc, groupName, numGroup)
 			predictionTime = {
 				order = 3,
 				type = "range",
-				name = "Prediction timeframe.",
+				name = L["Prediction timeframe."],
 				desc = L["How many seconds to look ahead for incoming heals. Important for HoTs, should be desired HoT ticks + 1."],
 				min = 3,
 				max = 20,

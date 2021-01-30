@@ -285,6 +285,7 @@ local NP_Auras = {
 local NP_Health = {
 	enable = true,
 	healPrediction = true,
+	predictionTime = 4,
 	height = 10,
 	useClassColor = true,
 	text = {

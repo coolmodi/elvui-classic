@@ -1916,6 +1916,15 @@ local function GetUnitSettings(unit, name)
 						name = L["Heal Prediction"],
 						type = "toggle",
 					},
+					predictionTime = {
+						order = 6,
+						type = "range",
+						name = L["Prediction timeframe."],
+						desc = L["How many seconds to look ahead for incoming heals. Important for HoTs, should be desired HoT ticks + 1."],
+						min = 3,
+						max = 20,
+						step = 1
+					},
 					textGroup = {
 						order = 200,
 						type = "group",
