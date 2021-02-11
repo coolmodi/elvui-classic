@@ -561,7 +561,7 @@ function B:Layout(isBank)
 	if not f then return end
 
 	local buttonSize = isBank and B.db.bankSize or B.db.bagSize
-	local buttonSpacing = E.Border * 2
+	local buttonSpacing = isBank and B.db.bankButtonSpacing or B.db.bagButtonSpacing
 	local containerWidth = ((isBank and B.db.bankWidth) or B.db.bagWidth)
 	local numContainerColumns = floor(containerWidth / (buttonSize + buttonSpacing))
 	local holderWidth = ((buttonSize + buttonSpacing) * numContainerColumns) - buttonSpacing
