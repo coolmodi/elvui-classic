@@ -29,7 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ]]
 local MAJOR_VERSION = "LibActionButton-1.0-ElvUI"
-local MINOR_VERSION = 23 -- the real minor version is 79
+local MINOR_VERSION = 25 -- the real minor version is 80
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
@@ -490,7 +490,7 @@ function Generic:AddToMasque(group)
 	if type(group) ~= "table" or type(group.AddButton) ~= "function" then
 		error("LibActionButton-1.0:AddToMasque: You need to supply a proper group to use!", 2)
 	end
-	group:AddButton(self)
+	group:AddButton(self, nil, "Action")
 	self.MasqueSkinned = true
 end
 
@@ -686,15 +686,10 @@ function InitializeEventHandler()
 	lib.eventFrame:RegisterEvent("ACTIONBAR_HIDEGRID")
 	lib.eventFrame:RegisterEvent("PET_BAR_SHOWGRID")
 	lib.eventFrame:RegisterEvent("PET_BAR_HIDEGRID")
-	--lib.eventFrame:RegisterEvent("ACTIONBAR_PAGE_CHANGED")
-	--lib.eventFrame:RegisterEvent("UPDATE_BONUS_ACTIONBAR")
 	lib.eventFrame:RegisterEvent("ACTIONBAR_SLOT_CHANGED")
 	lib.eventFrame:RegisterEvent("UPDATE_BINDINGS")
-	lib.eventFrame:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
+	lib.eventFrame:RegisterEvent("UPDATE_SHAPESHIFT_FORMS")
 	lib.eventFrame:RegisterEvent("PLAYER_MOUNT_DISPLAY_CHANGED")
-	if not WoWClassic then
-		lib.eventFrame:RegisterEvent("UPDATE_VEHICLE_ACTIONBAR")
-	end
 
 	lib.eventFrame:RegisterEvent("ACTIONBAR_UPDATE_STATE")
 	lib.eventFrame:RegisterEvent("ACTIONBAR_UPDATE_USABLE")
@@ -713,7 +708,9 @@ function InitializeEventHandler()
 	lib.eventFrame:RegisterEvent("PET_STABLE_SHOW")
 	lib.eventFrame:RegisterEvent("SPELL_UPDATE_CHARGES")
 	lib.eventFrame:RegisterEvent("SPELL_UPDATE_ICON")
+
 	if not WoWClassic then
+		lib.eventFrame:RegisterEvent("UPDATE_VEHICLE_ACTIONBAR")
 		lib.eventFrame:RegisterEvent("ARCHAEOLOGY_CLOSED")
 		lib.eventFrame:RegisterEvent("UNIT_ENTERED_VEHICLE")
 		lib.eventFrame:RegisterEvent("UNIT_EXITED_VEHICLE")
@@ -748,10 +745,8 @@ function OnEvent(frame, event, arg1, ...)
 				Update(button)
 			end
 		end
-	elseif event == "PLAYER_ENTERING_WORLD" or event == "UPDATE_SHAPESHIFT_FORM" or event == "UPDATE_VEHICLE_ACTIONBAR" then
+	elseif event == "PLAYER_ENTERING_WORLD" or event == "UPDATE_SHAPESHIFT_FORMS" or event == "UPDATE_VEHICLE_ACTIONBAR" then
 		ForAllButtons(Update)
-	elseif event == "ACTIONBAR_PAGE_CHANGED" or event == "UPDATE_BONUS_ACTIONBAR" then
-		-- TODO: Are these even needed?
 	elseif event == "ACTIONBAR_SHOWGRID" or event == "PET_BAR_SHOWGRID" then
 		ShowGrid(event)
 	elseif event == "ACTIONBAR_HIDEGRID" or event == "PET_BAR_HIDEGRID" then
