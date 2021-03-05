@@ -1084,7 +1084,7 @@ function AB:ToggleCooldownOptions()
 end
 
 function AB:SetButtonDesaturation(button, duration)
-	if AB.db.desaturateOnCooldown and (duration and duration > 1.5) then
+	if AB.db.desaturateOnCooldown and (duration and duration > 2) then
 		button.icon:SetDesaturated(true)
 		button.saturationLocked = true
 	else
