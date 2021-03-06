@@ -1751,6 +1751,12 @@ function E:DBConversions()
 	if E.db.unitframe.units.raidpet.groupBy == 'ROLE2' or E.db.unitframe.units.raidpet.groupBy == 'CLASSROLE' then
 		E.db.unitframe.units.raidpet.groupBy = 'ROLE'
 	end
+
+	for name, infoTable in pairs(G.unitframe.aurafilters) do -- cause people change things they aren't supposed to.
+		if E.global.unitframe.aurafilters[name] and E.global.unitframe.aurafilters[name].type ~= infoTable.type then
+			E.global.unitframe.aurafilters[name].type = infoTable.type
+		end
+	end
 end
 
 function E:RefreshModulesDB()

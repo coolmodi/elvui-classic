@@ -30,7 +30,7 @@ end
 
 local function GetSelectedSpell()
 	if selectedSpell and selectedSpell ~= '' then
-		local spell = strmatch(selectedSpell, " %((%d+)%)$") or selectedSpell
+		local spell = strmatch(selectedSpell, ' %((%d+)%)$') or selectedSpell
 		if spell then
 			return tonumber(spell) or spell
 		end
@@ -38,35 +38,35 @@ local function GetSelectedSpell()
 end
 
 local function filterMatch(s,v)
-	local m1, m2, m3, m4 = "^"..v.."$", "^"..v..",", ","..v.."$", ","..v..","
-	return (strmatch(s, m1) and m1) or (strmatch(s, m2) and m2) or (strmatch(s, m3) and m3) or (strmatch(s, m4) and v..",")
+	local m1, m2, m3, m4 = '^'..v..'$', '^'..v..',', ','..v..'$', ','..v..','
+	return (strmatch(s, m1) and m1) or (strmatch(s, m2) and m2) or (strmatch(s, m3) and m3) or (strmatch(s, m4) and v..',')
 end
 
 local function removePriority(value)
 	if not value then return end
 	local x,y,z=E.db.unitframe.units,E.db.nameplates.units;
 	for n, t in pairs(x) do
-		if t and t.buffs and t.buffs.priority and t.buffs.priority ~= "" then
+		if t and t.buffs and t.buffs.priority and t.buffs.priority ~= '' then
 			z = filterMatch(t.buffs.priority, E:EscapeString(value))
-			if z then E.db.unitframe.units[n].buffs.priority = gsub(t.buffs.priority, z, "") end
+			if z then E.db.unitframe.units[n].buffs.priority = gsub(t.buffs.priority, z, '') end
 		end
-		if t and t.debuffs and t.debuffs.priority and t.debuffs.priority ~= "" then
+		if t and t.debuffs and t.debuffs.priority and t.debuffs.priority ~= '' then
 			z = filterMatch(t.debuffs.priority, E:EscapeString(value))
-			if z then E.db.unitframe.units[n].debuffs.priority = gsub(t.debuffs.priority, z, "") end
+			if z then E.db.unitframe.units[n].debuffs.priority = gsub(t.debuffs.priority, z, '') end
 		end
-		if t and t.aurabar and t.aurabar.priority and t.aurabar.priority ~= "" then
+		if t and t.aurabar and t.aurabar.priority and t.aurabar.priority ~= '' then
 			z = filterMatch(t.aurabar.priority, E:EscapeString(value))
-			if z then E.db.unitframe.units[n].aurabar.priority = gsub(t.aurabar.priority, z, "") end
+			if z then E.db.unitframe.units[n].aurabar.priority = gsub(t.aurabar.priority, z, '') end
 		end
 	end
 	for n, t in pairs(y) do
-		if t and t.buffs and t.buffs.priority and t.buffs.priority ~= "" then
+		if t and t.buffs and t.buffs.priority and t.buffs.priority ~= '' then
 			z = filterMatch(t.buffs.priority, E:EscapeString(value))
-			if z then E.db.nameplates.units[n].buffs.priority = gsub(t.buffs.priority, z, "") end
+			if z then E.db.nameplates.units[n].buffs.priority = gsub(t.buffs.priority, z, '') end
 		end
-		if t and t.debuffs and t.debuffs.priority and t.debuffs.priority ~= "" then
+		if t and t.debuffs and t.debuffs.priority and t.debuffs.priority ~= '' then
 			z = filterMatch(t.debuffs.priority, E:EscapeString(value))
-			if z then E.db.nameplates.units[n].debuffs.priority = gsub(t.debuffs.priority, z, "") end
+			if z then E.db.nameplates.units[n].debuffs.priority = gsub(t.debuffs.priority, z, '') end
 		end
 	end
 end
@@ -140,7 +140,7 @@ local function SetSpellList()
 		list = E.global.unitframe.AuraBarColors
 	elseif selectedFilter == 'Aura Indicator (Pet)' or selectedFilter == 'Aura Indicator (Profile)' or selectedFilter == 'Aura Indicator (Class)' or selectedFilter == 'Aura Indicator (Global)' then
 		list = GetSelectedFilters()
-	elseif E.global.unitframe.aurafilters[selectedFilter] then
+	else
 		list = E.global.unitframe.aurafilters[selectedFilter].spells
 	end
 
@@ -154,7 +154,7 @@ local function SetSpellList()
 		end
 
 		local spellName = tonumber(filter) and GetSpellInfo(filter)
-		local name = (spellName and format("%s |cFF888888(%s)|r", spellName, filter)) or tostring(filter)
+		local name = (spellName and format('%s |cFF888888(%s)|r', spellName, filter)) or tostring(filter)
 
 		if name:lower():find(searchText) then
 			spellList[filter] = name
@@ -300,7 +300,7 @@ E.Options.args.filters = {
 							},
 							get = function() return E.global.unitframe.aurafilters[selectedFilter].type end,
 							set = function(info, value) E.global.unitframe.aurafilters[selectedFilter].type = value; UF:Update_AllFrames(); end,
-							hidden = function() return (selectedFilter == 'Aura Highlight' or selectedFilter == 'AuraBar Colors' or selectedFilter == 'Aura Indicator (Pet)' or selectedFilter == 'Aura Indicator (Profile)' or selectedFilter == 'Aura Indicator (Class)' or selectedFilter == 'Aura Indicator (Global)' or selectedFilter == 'Whitelist' or selectedFilter == 'Blacklist') end,
+							hidden = function() return (selectedFilter == 'Aura Highlight' or selectedFilter == 'AuraBar Colors' or selectedFilter == 'Aura Indicator (Pet)' or selectedFilter == 'Aura Indicator (Profile)' or selectedFilter == 'Aura Indicator (Class)' or selectedFilter == 'Aura Indicator (Global)' or selectedFilter == 'Whitelist' or selectedFilter == 'Blacklist') or G.unitframe.aurafilters[selectedFilter] end,
 						},
 						removeSpell = {
 							order = 4,
@@ -361,7 +361,7 @@ E.Options.args.filters = {
 
 								if selectedFilter == 'Aura Highlight' then
 									if not E.global.unitframe.AuraHighlightColors[value] then
-										E.global.unitframe.AuraHighlightColors[value] = { enable = true, style = 'GLOW', color = {r = 0.8, g = 0, b = 0, a = 0.85} }
+										E.global.unitframe.AuraHighlightColors[value] = { enable = true, style = 'GLOW', color = {r = 0.8, g = 0, b = 0, a = 0.85}, ownOnly = false }
 									end
 								elseif selectedFilter == 'AuraBar Colors' then
 									if not E.global.unitframe.AuraBarColors[value] then
@@ -694,6 +694,31 @@ E.Options.args.filters = {
 								},
 							},
 						},
+						ownOnly = {
+							name = L["Casted by Player Only"],
+							desc = L["Only highlight the aura that originated from you and not others."],
+							order = 5,
+							type = 'toggle',
+							hidden = function() return selectedFilter ~= 'Aura Highlight' end,
+							get = function(info)
+								local spell = GetSelectedSpell()
+								if not spell then return end
+
+								if selectedFilter == 'Aura Highlight' then
+									return E.global.unitframe.AuraHighlightColors[spell].ownOnly or false
+								end
+							end,
+							set = function(info, value)
+								local spell = GetSelectedSpell()
+								if not spell then return end
+
+								if selectedFilter == 'Aura Highlight' then
+									E.global.unitframe.AuraHighlightColors[spell].ownOnly = value
+								end
+
+								UF:Update_AllFrames();
+							end,
+						},
 					},
 				}
 			},
@@ -741,5 +766,5 @@ function E:SetToFilterConfig(filter)
 	selectedSpell = nil
 	quickSearchText = ''
 	selectedFilter = filter or ''
-	E.Libs.AceConfigDialog:SelectGroup("ElvUI", "filters")
+	E.Libs.AceConfigDialog:SelectGroup('ElvUI', 'filters')
 end
