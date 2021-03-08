@@ -1167,6 +1167,7 @@ E.TagInfo = {
 	['race'] = { category = 'Miscellaneous', description = "Displays the race" },
 	['smartclass'] = { category = 'Miscellaneous', description = "Displays the player's class or creature's type" },
 	['specialization'] = { category = 'Miscellaneous', description = "Displays your current specialization as text" },
+	['ElvUI-Users'] = { category = 'Miscellaneous', description = "Displays ElvUI users and their version" },
 	--Names
 	['name:abbrev:long'] = { category = 'Names', description = "Displays the name of the unit with abbreviation (limited to 20 letters)" },
 	['name:abbrev:medium'] = { category = 'Names', description = "Displays the name of the unit with abbreviation (limited to 15 letters)" },
@@ -1261,11 +1262,6 @@ E.TagInfo = {
 	['target:veryshort:translit'] = { category = 'Target', description = "Displays the current target of the unit with transliteration for cyrillic letters (limited to 5 letters)" },
 	['target:veryshort'] = { category = 'Target', description = "Displays the current target of the unit (limited to 5 letters)" },
 	['target'] = { category = 'Target', description = "Displays the current target of the unit" },
-	--Miscellanous
-	['affix'] = { category = 'Miscellanous', description = "Displays low level critter mobs" },
-	['class'] = { category = 'Miscellanous', description = "Displays the class of the unit, if that unit is a player" },
-	['ElvUI-Users'] = { category = 'Miscellanous', description = "Displays ElvUI users and their version" },
-	['race'] = { category = 'Miscellanous', description = "Displays the race" },
 	--Range
 	['distance'] = { category = 'Range', description = "Displays the distance" },
 	['nearbyplayers:10'] = { category = 'Range', description = "Displays all players within 10 yards" },
