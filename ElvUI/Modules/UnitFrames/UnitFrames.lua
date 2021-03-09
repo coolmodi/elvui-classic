@@ -1373,8 +1373,10 @@ function UF:AfterStyleCallback()
 	-- even when they are disabled. this makes sure the update happens after so its proper.
 	if self.unitframeType == "tank" or self.unitframeType == "tanktarget" then
 		UF:Update_TankFrames(self, E.db.unitframe.units.tank)
+		UF:Update_FontStrings()
 	elseif self.unitframeType == "assist" or self.unitframeType == "assisttarget" then
 		UF:Update_AssistFrames(self, E.db.unitframe.units.assist)
+		UF:Update_FontStrings()
 	end
 end
 
