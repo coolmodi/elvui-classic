@@ -414,9 +414,9 @@ function UF:Update_FontString(object)
 end
 
 function UF:Update_FontStrings()
-	local stringFont = LSM:Fetch("font", self.db.font)
-	for font in pairs(UF.fontstrings) do
-		font:FontTemplate(stringFont, self.db.fontSize, self.db.fontOutline)
+	local font, size, outline = LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline
+	for obj in pairs(UF.fontstrings) do
+		obj:FontTemplate(font, size, outline)
 	end
 end
 
