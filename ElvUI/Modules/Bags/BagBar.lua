@@ -178,5 +178,6 @@ function B:LoadBagBar()
 	E:CreateMover(B.BagBar, 'BagsMover', L["Bags"], nil, nil, nil, nil, nil, 'bags,general')
 	B.BagBar:SetPoint('BOTTOMLEFT', B.BagBar.mover)
 	B:RegisterEvent('BAG_SLOT_FLAGS_UPDATED', 'SizeAndPositionBagBar')
+	B:RegisterEvent('BAG_UPDATE_DELAYED', 'SizeAndPositionBagBar')
 	B:SizeAndPositionBagBar()
 end
