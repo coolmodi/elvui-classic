@@ -4,6 +4,7 @@ local LSM = E.Libs.LSM
 
 --Lua functions
 local _G = _G
+local wipe, tinsert = wipe, tinsert
 local sort, ceil, huge = sort, ceil, math.huge
 local select, unpack, next, format = select, unpack, next, format
 local strfind, strsplit, strmatch = strfind, strsplit, strmatch
@@ -232,6 +233,7 @@ function UF:Configure_Auras(frame, which)
 	auras.initialAnchor = E.InversePoints[auras.anchorPoint]
 	auras["growth-y"] = strfind(auras.anchorPoint, 'TOP') and 'UP' or 'DOWN'
 	auras["growth-x"] = auras.anchorPoint == 'LEFT' and 'LEFT' or  auras.anchorPoint == 'RIGHT' and 'RIGHT' or (strfind(auras.anchorPoint, 'LEFT') and 'RIGHT' or 'LEFT')
+	auras.filterList = UF:ConvertFilters(auras, auras.db.priority)
 
 	local x, y = E:GetXYOffset(auras.anchorPoint, frame.SPACING) --Use frame.SPACING override since it may be different from E.Spacing due to forced thin borders
 	if auras.attachTo == "FRAME" then
@@ -390,21 +392,42 @@ function UF:PostUpdateAura(unit, button)
 	end
 end
 
-function UF:CheckFilter(caster, spellName, spellID, canDispell, isFriend, isPlayer, unitIsCaster, myPet, otherPet, isBossDebuff, allowDuration, noDuration, casterIsPlayer, ...)
-	local special, filters = G.unitframe.specialFilters, E.global.unitframe.aurafilters
+function UF:ConvertFilters(auras, priority)
+	local list = auras.filterList or {}
+	if next(list) then wipe(list) end
 
-	for i = 1, select('#', ...) do
-		local name = select(i, ...)
-		local check = (isFriend and strmatch(name, "^Friendly:([^,]*)")) or (not isFriend and strmatch(name, "^Enemy:([^,]*)")) or nil
-		if check ~= false then
-			if check ~= nil and (special[check] or filters[check]) then
-				name = check -- this is for our filters to handle Friendly and Enemy
+	if priority and priority ~= '' then
+		local special, filters = G.unitframe.specialFilters, E.global.unitframe.aurafilters
+
+		for _, name in next, {strsplit(',', priority)} do
+			local friend, enemy = strmatch(name, '^Friendly:([^,]*)'), strmatch(name, '^Enemy:([^,]*)')
+			local real = friend or enemy or name
+			local custom = filters[real]
+
+			if special[real] or custom then
+				tinsert(list, {
+					name = real,
+					custom = custom,
+					status = (friend and 1) or (enemy and 2) or true
+				})
 			end
+		end
+	end
 
+	if next(list) then
+		return list
+	end
+end
+
+function UF:CheckFilter(caster, spellName, spellID, canDispell, isFriend, isPlayer, unitIsCaster, myPet, otherPet, isBossDebuff, allowDuration, noDuration, casterIsPlayer, filterList)
+	for _, data in next, filterList do
+		local status = data.status
+		local skip = (status == 1 and not isFriend) or (status == 2 and isFriend)
+		if not skip then
 			-- Custom Filters
-			local filter = filters[name]
-			if filter then
-				local which, list = filter.type, filter.spells
+			local custom = data.custom
+			if custom then
+				local which, list = custom.type, custom.spells
 				if which and list and next(list) then
 					local spell = list[spellID] or list[spellName]
 					if spell and spell.enable then
@@ -418,6 +441,7 @@ function UF:CheckFilter(caster, spellName, spellID, canDispell, isFriend, isPlay
 			-- Special Filters
 			else
 				-- Whitelists
+				local name = data.name
 				local found = (allowDuration and ((name == 'Personal' and isPlayer)
 					or (name == 'nonPersonal' and not isPlayer)
 					or (name == 'Boss' and isBossDebuff)
@@ -472,8 +496,8 @@ function UF:AuraFilter(unit, button, name, _, count, debuffType, duration, expir
 	local noDuration = (not duration or duration == 0)
 	local allowDuration = noDuration or (duration and duration > 0 and (not db.maxDuration or db.maxDuration == 0 or duration <= db.maxDuration) and (not db.minDuration or db.minDuration == 0 or duration >= db.minDuration))
 
-	if db.priority and db.priority ~= '' then
-		local filterCheck, spellPriority = UF:CheckFilter(caster, name, spellID, button.canDispell, button.isFriend, button.isPlayer, button.unitIsCaster, button.myPet, button.otherPet, isBossDebuff, allowDuration, noDuration, casterIsPlayer, strsplit(',', db.priority))
+	if self.filterList then
+		local filterCheck, spellPriority = UF:CheckFilter(caster, name, spellID, button.canDispell, button.isFriend, button.isPlayer, button.unitIsCaster, button.myPet, button.otherPet, isBossDebuff, allowDuration, noDuration, casterIsPlayer, self.filterList)
 		if spellPriority then button.priority = spellPriority end -- this is the only difference from auarbars code
 		return filterCheck
 	else
