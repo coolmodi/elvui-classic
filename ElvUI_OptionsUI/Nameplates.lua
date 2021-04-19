@@ -3729,7 +3729,7 @@ E.Options.args.nameplate = {
 							end,
 							values = {
 								nameplateOtherAtBase = L["Nameplate At Base"],
-								nameplateShowOnlyNames = L["Show Only Names:],
+								nameplateShowOnlyNames = L["Show Only Names"],
 							},
 						},
 						plateVisibility = {
