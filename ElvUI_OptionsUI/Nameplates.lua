@@ -551,7 +551,7 @@ local function UpdateFilterGroup()
 								notInterruptible = {
 									type = 'toggle',
 									order = 7,
-									name = L["Non-Interruptable"],
+									name = L["Non-Interruptible"],
 									desc = L["If enabled then the filter will only activate if the unit is casting not interruptible spells."],
 								},
 							}
@@ -3729,7 +3729,7 @@ E.Options.args.nameplate = {
 							end,
 							values = {
 								nameplateOtherAtBase = L["Nameplate At Base"],
-								nameplateShowOnlyNames = 'Show Only Names',
+								nameplateShowOnlyNames = L["Show Only Names:],
 							},
 						},
 						plateVisibility = {
