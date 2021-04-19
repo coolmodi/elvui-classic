@@ -289,7 +289,7 @@ function DT:PanelLayoutOptions()
 						options[name].args[tostring(option)] = {
 							type = 'select',
 							order = option,
-							name = L[format("Position %d", option)],
+							name = format(L["Position %d"], option),
 							values = dts,
 							get = function(info) return E.db.datatexts.panels[name][tonumber(info[#info])] end,
 							set = function(info, value)
