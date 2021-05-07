@@ -1,12 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local AB = E:GetModule('ActionBars')
 
---Lua functions
 local _G = _G
 local pairs = pairs
 local assert = assert
 local unpack = unpack
---WoW API / Variables
+
 local CreateFrame = CreateFrame
 local RegisterStateDriver = RegisterStateDriver
 local InCombatLockdown = InCombatLockdown

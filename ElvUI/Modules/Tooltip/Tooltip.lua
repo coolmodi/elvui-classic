@@ -2,7 +2,6 @@ local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateD
 local TT = E:GetModule('Tooltip')
 local Skins = E:GetModule('Skins')
 
---Lua functions
 local _G = _G
 local strmatch = strmatch
 local unpack, select, ipairs = unpack, select, ipairs

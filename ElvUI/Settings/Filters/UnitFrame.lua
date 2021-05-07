@@ -1,11 +1,10 @@
-local E, L, V, P, G = unpack(select(2, ...)) --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule('UnitFrames');
 
---Lua functions
 local unpack = unpack
 local strlower = strlower
 local strfind = strfind
---WoW API / Variables
+
 local IsPlayerSpell = IsPlayerSpell
 local GetSpellSubtext = GetSpellSubtext
 local GetSpellInfo = GetSpellInfo

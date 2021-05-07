@@ -2,12 +2,11 @@ local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateD
 local M = E:GetModule('Misc')
 local Bags = E:GetModule('Bags')
 
---Lua functions
 local _G = _G
 local select = select
 local format = format
 local strmatch = strmatch
---WoW API / Variables
+
 local CreateFrame = CreateFrame
 local AcceptGroup = AcceptGroup
 local BNGetGameAccountInfoByGUID = BNGetGameAccountInfoByGUID

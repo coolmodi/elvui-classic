@@ -5,7 +5,6 @@ assert(ElvUF, 'ElvUI was unable to locate ElvUF.')
 local Translit = E.Libs.Translit
 local translitMark = '!'
 
---Lua functions
 local _G = _G
 local tonumber, next = tonumber, next
 local pairs, wipe, floor, ceil = pairs, wipe, floor, ceil
@@ -13,7 +12,6 @@ local gmatch, gsub, format, select = gmatch, gsub, format, select
 local strfind, strmatch, strlower, strsplit = strfind, strmatch, strlower, strsplit
 local utf8lower, utf8sub, utf8len = string.utf8lower, string.utf8sub, string.utf8len
 
---WoW API / Variables
 local UnitIsFeignDeath = UnitIsFeignDeath
 local CreateTextureMarkup = CreateTextureMarkup
 local UnitFactionGroup = UnitFactionGroup

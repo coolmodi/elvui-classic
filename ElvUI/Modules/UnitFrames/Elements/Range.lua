@@ -2,7 +2,6 @@ local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateD
 local UF = E:GetModule('UnitFrames');
 local RC = E.Libs.RC
 
---WoW API / Variables
 local CheckInteractDistance = CheckInteractDistance
 
 function UF:UpdateRange(unit)

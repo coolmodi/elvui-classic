@@ -5,7 +5,6 @@ local Misc = E:GetModule('Misc')
 local Bags = E:GetModule('Bags')
 local Skins = E:GetModule('Skins')
 
---Lua functions
 local _G = _G
 local pairs, type, unpack, assert = pairs, type, unpack, assert
 local tremove, tContains, tinsert, wipe = tremove, tContains, tinsert, wipe

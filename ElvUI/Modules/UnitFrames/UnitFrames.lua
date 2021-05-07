@@ -3,12 +3,11 @@ local UF = E:GetModule('UnitFrames');
 local LSM = E.Libs.LSM
 UF.LSM = E.Libs.LSM
 
---Lua functions
 local _G = _G
 local select, type, unpack, assert, tostring = select, type, unpack, assert, tostring
 local min, pairs, ipairs, tinsert, strsub = min, pairs, ipairs, tinsert, strsub
 local strfind, gsub, format = strfind, gsub, format
---WoW API / Variables
+
 local CompactRaidFrameManager_SetSetting = CompactRaidFrameManager_SetSetting
 local CreateFrame = CreateFrame
 local GetInstanceInfo = GetInstanceInfo

@@ -4,14 +4,13 @@ local UF = E:GetModule('UnitFrames')
 local CH = E:GetModule('Chat')
 local S = E:GetModule('Skins')
 
---Lua functions
 local _G = _G
 local unpack = unpack
 local format = format
 local pairs = pairs
 local ipairs = ipairs
 local tinsert = tinsert
---WoW API / Variables
+
 local CreateFrame = CreateFrame
 local SetCVar = SetCVar
 local PlaySound = PlaySound

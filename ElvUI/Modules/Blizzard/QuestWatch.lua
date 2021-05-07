@@ -2,9 +2,9 @@ local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateD
 local B = E:GetModule('Blizzard')
 
 local _G = _G
---Lua functions
+
 local min = math.min
---WoW API / Variables
+
 local CreateFrame = CreateFrame
 local GetNumQuestWatches = GetNumQuestWatches
 local GetQuestIndexForWatch = GetQuestIndexForWatch
