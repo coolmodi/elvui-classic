@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Engine
+local E, L, V, P, G = unpack(select(2, ...)) --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule('UnitFrames');
 
 --Lua functions
