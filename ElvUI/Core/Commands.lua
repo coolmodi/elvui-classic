@@ -173,6 +173,7 @@ local BLIZZARD_ADDONS = {
 	'Blizzard_CompactRaidFrames',
 	'Blizzard_CUFProfiles',
 	'Blizzard_DebugTools',
+	'Blizzard_EventTrace',
 	'Blizzard_FlightMap',
 	'Blizzard_GMChatUI',
 	'Blizzard_GMSurveyUI',

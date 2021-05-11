@@ -73,6 +73,7 @@ V.skins = {
 		trainer = true,
 		loot = true,
 		lootRoll = true,
+		eventLog = true,
 		alertframes = true,
 		bgscore = true,
 		merchant = true,
