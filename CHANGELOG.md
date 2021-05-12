@@ -1,5 +1,6 @@
 ### Version 1.43 [ETA: 🍨]
 **Bags:** Fixed button spacing option  
+**Config:** Updated General, Media, BlizzUI Improvements config  
 **Libraries:** Updated LibClassicDurations, LibClassicCasterino  
 **Libraries:** Updated LibRangeCheck, LibActionButton  
 **Skins:** Updated Trade Skin  
