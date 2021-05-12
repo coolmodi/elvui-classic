@@ -1,11 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule('Skins')
 
---Cache global variables
---Lua functions
 local _G = _G
 local format, strsplit = format, strsplit
---WoW API / Variables
+
 local FauxScrollFrame_GetOffset = FauxScrollFrame_GetOffset
 local GetBattlefieldScore = GetBattlefieldScore
 local hooksecurefunc = hooksecurefunc

@@ -1,13 +1,11 @@
 local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule('Skins')
 
---Cache global variables
---Lua functions
 local _G = _G
 local unpack = unpack
 local pairs = pairs
 local strfind = strfind
---WoW API / Variables
+
 local HasPetUI = HasPetUI
 local GetPetHappiness = GetPetHappiness
 local GetInventoryItemQuality = GetInventoryItemQuality

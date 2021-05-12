@@ -1,12 +1,11 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 
---Lua functions
 local tinsert, tremove, next, wipe, ipairs = tinsert, tremove, next, wipe, ipairs
 local select, tonumber, type, unpack, strmatch = select, tonumber, type, unpack, strmatch
 local modf, atan2, ceil, floor, abs, sqrt, mod = math.modf, atan2, ceil, floor, abs, sqrt, mod
 local format, strsub, strupper, gsub, gmatch = format, strsub, strupper, gsub, gmatch
 local tostring, pairs, utf8sub, utf8len = tostring, pairs, string.utf8sub, string.utf8len
---WoW API / Variables
+
 local CreateFrame = CreateFrame
 local UnitPosition = UnitPosition
 local GetPlayerFacing = GetPlayerFacing

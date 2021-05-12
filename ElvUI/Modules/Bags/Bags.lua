@@ -1,16 +1,15 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local B = E:GetModule('Bags')
 local TT = E:GetModule('Tooltip')
 local Skins = E:GetModule('Skins')
 local Search = E.Libs.ItemSearch
 
---Lua functions
 local _G = _G
 local type, ipairs, next, unpack, select, pcall = type, ipairs, next, unpack, select, pcall
 local tinsert, tremove, twipe, tmaxn = tinsert, tremove, wipe, table.maxn
 local floor, ceil, abs = floor, ceil, abs
 local format, sub = format, strsub
---WoW API / Variables
+
 local BankFrameItemButton_Update = BankFrameItemButton_Update
 local BankFrameItemButton_UpdateLocked = BankFrameItemButton_UpdateLocked
 local CloseBag, CloseBackpack, CloseBankFrame = CloseBag, CloseBackpack, CloseBankFrame
@@ -437,6 +436,9 @@ function B:UpdateSlot(frame, bagID, slotID)
 	--	r, g, b, a = unpack(B.QuestColors.questStarter)
 	elseif isQuestItem then
 		r, g, b, a = unpack(B.QuestColors.questItem)
+		if slot.questIcon and B.db.questIcon then
+			slot.questIcon:Show()
+		end
 	elseif not link or B.db.qualityColors and slot.rarity and slot.rarity <= LE_ITEM_QUALITY_COMMON then
 		r, g, b, a = unpack(E.media.bordercolor)
 		forceColor = nil
@@ -558,7 +560,7 @@ function B:Layout(isBank)
 	if not f then return end
 
 	local buttonSize = isBank and B.db.bankSize or B.db.bagSize
-	local buttonSpacing = E.Border * 2
+	local buttonSpacing = isBank and B.db.bankButtonSpacing or B.db.bagButtonSpacing
 	local containerWidth = ((isBank and B.db.bankWidth) or B.db.bagWidth)
 	local numContainerColumns = floor(containerWidth / (buttonSize + buttonSpacing))
 	local holderWidth = ((buttonSize + buttonSpacing) * numContainerColumns) - buttonSpacing

@@ -1,13 +1,13 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule('UnitFrames');
 
 local _G = _G
---Lua functions
+
 local pairs = pairs
 local select = select
 local assert = assert
 local tinsert = tinsert
---WoW API / Variables
+
 local CreateFrame = CreateFrame
 local UnitClass = UnitClass
 local UnitExists = UnitExists

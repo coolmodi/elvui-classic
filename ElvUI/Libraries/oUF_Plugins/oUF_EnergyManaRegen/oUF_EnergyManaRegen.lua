@@ -1,7 +1,6 @@
 local _, ns = ...
 local oUF = ns.oUF
 
---Lua functions
 local _G = _G
 local GetTime = GetTime
 local UnitPower = UnitPower

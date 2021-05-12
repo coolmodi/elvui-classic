@@ -1,12 +1,11 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule('DataTexts')
 
---Lua functions
 local _G = _G
 local type, ipairs, pairs, select = type, ipairs, pairs, select
 local sort, next, wipe, tremove, tinsert = sort, next, wipe, tremove, tinsert
 local format, gsub, strfind, strjoin = format, gsub, strfind, strjoin
---WoW API / Variables
+
 local BNet_GetValidatedCharacterName = BNet_GetValidatedCharacterName
 local BNGetFriendGameAccountInfo = BNGetFriendGameAccountInfo
 local BNGetFriendInfo = BNGetFriendInfo

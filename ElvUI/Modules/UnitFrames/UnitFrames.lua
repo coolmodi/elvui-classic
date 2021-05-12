@@ -1,14 +1,13 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule('UnitFrames');
 local LSM = E.Libs.LSM
 UF.LSM = E.Libs.LSM
 
---Lua functions
 local _G = _G
 local select, type, unpack, assert, tostring = select, type, unpack, assert, tostring
 local min, pairs, ipairs, tinsert, strsub = min, pairs, ipairs, tinsert, strsub
 local strfind, gsub, format = strfind, gsub, format
---WoW API / Variables
+
 local CompactRaidFrameManager_SetSetting = CompactRaidFrameManager_SetSetting
 local CreateFrame = CreateFrame
 local GetInstanceInfo = GetInstanceInfo
@@ -414,9 +413,9 @@ function UF:Update_FontString(object)
 end
 
 function UF:Update_FontStrings()
-	local stringFont = LSM:Fetch("font", self.db.font)
-	for font in pairs(UF.fontstrings) do
-		font:FontTemplate(stringFont, self.db.fontSize, self.db.fontOutline)
+	local font, size, outline = LSM:Fetch("font", self.db.font), self.db.fontSize, self.db.fontOutline
+	for obj in pairs(UF.fontstrings) do
+		obj:FontTemplate(font, size, outline)
 	end
 end
 
@@ -827,7 +826,7 @@ function UF:CreateHeader(parent, groupFilter, overrideName, template, groupName,
 
 	local header = ElvUF:SpawnHeader(overrideName, headerTemplate, nil,
 		'oUF-initialConfigFunction', format('self:SetWidth(%d); self:SetHeight(%d);', db.width, db.height),
-		'groupFilter', groupFilter, 'showParty', true, 'showRaid', true, 'showSolo', true,
+		'groupFilter', groupFilter, 'showParty', true, 'showRaid', group ~= 'party', 'showSolo', true,
 		template and 'template', template
 	)
 
@@ -1373,8 +1372,10 @@ function UF:AfterStyleCallback()
 	-- even when they are disabled. this makes sure the update happens after so its proper.
 	if self.unitframeType == "tank" or self.unitframeType == "tanktarget" then
 		UF:Update_TankFrames(self, E.db.unitframe.units.tank)
+		UF:Update_FontStrings()
 	elseif self.unitframeType == "assist" or self.unitframeType == "assisttarget" then
 		UF:Update_AssistFrames(self, E.db.unitframe.units.assist)
+		UF:Update_FontStrings()
 	end
 end
 
@@ -1388,12 +1389,13 @@ function UF:Initialize()
 	E.ElvUF_Parent:SetFrameStrata("LOW")
 	RegisterStateDriver(E.ElvUF_Parent, "visibility", "[petbattle] hide; show")
 
-	UF:UpdateColors()
 	ElvUF:RegisterInitCallback(UF.AfterStyleCallback)
 	ElvUF:RegisterStyle('ElvUF', function(frame, unit)
 		UF:Construct_UF(frame, unit)
 	end)
 	ElvUF:SetActiveStyle("ElvUF")
+
+	UF:UpdateColors()
 	UF:LoadUnits()
 
 	UF:RegisterEvent('PLAYER_ENTERING_WORLD')

@@ -1,8 +1,7 @@
 local ElvUI = select(2, ...)
 ElvUI[2] = ElvUI[1].Libs.ACL:GetLocale('ElvUI', ElvUI[1]:GetLocale()) -- Locale doesn't exist yet, make it exist.
-local E, L, V, P, G = unpack(ElvUI); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(ElvUI) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 
---Lua functions
 local _G = _G
 local tonumber, pairs, ipairs, error, unpack, select, tostring = tonumber, pairs, ipairs, error, unpack, select, tostring
 local strjoin, twipe, tinsert, tremove, tContains = strjoin, wipe, tinsert, tremove, tContains
@@ -328,6 +327,53 @@ function E:UpdateMedia()
 
 	E:ValueFuncCall()
 	E:UpdateBlizzardFonts()
+end
+
+function E:GeneralMedia_ApplyToAll()
+	local font = E.db.general.font
+	local fontSize = E.db.general.fontSize
+
+	E.db.bags.itemLevelFont = font
+	E.db.bags.itemLevelFontSize = fontSize
+	E.db.bags.countFont = font
+	E.db.bags.countFontSize = fontSize
+	E.db.nameplates.font = font
+	--E.db.nameplate.fontSize = fontSize --Dont use this because nameplate font it somewhat smaller than the rest of the font sizes
+	--E.db.nameplate.buffs.font = font
+	--E.db.nameplate.buffs.fontSize = fontSize  --Dont use this because nameplate font it somewhat smaller than the rest of the font sizes
+	--E.db.nameplate.debuffs.font = font
+	--E.db.nameplate.debuffs.fontSize = fontSize   --Dont use this because nameplate font it somewhat smaller than the rest of the font sizes
+	E.db.actionbar.font = font
+	--E.db.actionbar.fontSize = fontSize	--This may not look good if a big font size is chosen
+	E.db.auras.buffs.countFont = font
+	E.db.auras.buffs.countFontSize = fontSize
+	E.db.auras.buffs.timeFont = font
+	E.db.auras.buffs.timeFontSize = fontSize
+	E.db.auras.debuffs.countFont = font
+	E.db.auras.debuffs.countFontSize = fontSize
+	E.db.auras.debuffs.timeFont = font
+	E.db.auras.debuffs.timeFontSize = fontSize
+	E.db.chat.font = font
+	E.db.chat.fontSize = fontSize
+	E.db.chat.tabFont = font
+	E.db.chat.tabFontSize = fontSize
+	E.db.datatexts.font = font
+	E.db.datatexts.fontSize = fontSize
+	E.db.general.minimap.locationFont = font
+	E.db.tooltip.font = font
+	E.db.tooltip.fontSize = fontSize
+	E.db.tooltip.headerFontSize = fontSize
+	E.db.tooltip.textFontSize = fontSize
+	E.db.tooltip.smallTextFontSize = fontSize
+	E.db.tooltip.healthBar.font = font
+	--E.db.tooltip.healthbar.fontSize = fontSize -- Size is smaller than default
+	E.db.unitframe.font = font
+	--E.db.unitframe.fontSize = fontSize  -- Size is smaller than default
+	E.db.unitframe.units.party.rdebuffs.font = font
+	E.db.unitframe.units.raid.rdebuffs.font = font
+	E.db.unitframe.units.raid40.rdebuffs.font = font
+
+	E:StaggeredUpdateAll(nil, true)
 end
 
 do	--Update font/texture paths when they are registered by the addon providing them
@@ -1679,7 +1725,7 @@ function E:DBConversions()
 		E.db.actionbar.stanceBar.buttonspacing = nil
 	end
 	-- Convert Pages
-	if not E.db.convertPages and E.db.layoutSet then
+	if not E.db.convertPages then
 		local bar2, bar3, bar5, bar6 = E.db.actionbar.bar2, E.db.actionbar.bar3, E.db.actionbar.bar5, E.db.actionbar.bar6
 		E.db.actionbar.bar2, E.db.actionbar.bar3, E.db.actionbar.bar5, E.db.actionbar.bar6 = E:CopyTable({}, bar6), E:CopyTable({}, bar5), E:CopyTable({}, bar2), E:CopyTable({}, bar3)
 
@@ -1703,6 +1749,12 @@ function E:DBConversions()
 	end
 	if E.db.unitframe.units.raidpet.groupBy == 'ROLE2' or E.db.unitframe.units.raidpet.groupBy == 'CLASSROLE' then
 		E.db.unitframe.units.raidpet.groupBy = 'ROLE'
+	end
+
+	for name, infoTable in pairs(G.unitframe.aurafilters) do -- cause people change things they aren't supposed to.
+		if E.global.unitframe.aurafilters[name] and E.global.unitframe.aurafilters[name].type ~= infoTable.type then
+			E.global.unitframe.aurafilters[name].type = infoTable.type
+		end
 	end
 end
 

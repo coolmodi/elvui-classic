@@ -1,10 +1,9 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule('DataTexts')
 
---Lua functions
 local max = math.max
 local format, strjoin = format, strjoin
---WoW API / Variables
+
 local UnitAttackPower = UnitAttackPower
 local UnitRangedAttackPower = UnitRangedAttackPower
 local ATTACK_POWER = ATTACK_POWER

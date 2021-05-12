@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------------------------------
 -- Locked Settings, These settings are stored for your character only regardless of profile options.
 ------------------------------------------------------------------------------------------------------
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 
 V.general = {
 	loot = true,
@@ -73,6 +73,7 @@ V.skins = {
 		trainer = true,
 		loot = true,
 		lootRoll = true,
+		eventLog = true,
 		alertframes = true,
 		bgscore = true,
 		merchant = true,

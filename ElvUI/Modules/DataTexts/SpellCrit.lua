@@ -1,9 +1,8 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule('DataTexts')
 
---Lua functions
 local strjoin = strjoin
---WoW API / Variables
+
 local GetSpellCritChance = GetSpellCritChance
 local CRIT_ABBR = CRIT_ABBR
 local STAT_CATEGORY_ENHANCEMENTS = STAT_CATEGORY_ENHANCEMENTS

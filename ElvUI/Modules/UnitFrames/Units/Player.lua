@@ -1,14 +1,13 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule('UnitFrames');
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
 
---Lua functions
 local _G = _G
 local tinsert = tinsert
 local max = math.max
---WoW API / Variables
+
 local CreateFrame = CreateFrame
 local CastingBarFrame_OnLoad = CastingBarFrame_OnLoad
 local CastingBarFrame_SetUnit = CastingBarFrame_SetUnit
