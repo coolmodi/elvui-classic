@@ -6,6 +6,7 @@
 **DataTexts:** Updated Avoidance (Credits: Jeff Blanda)  
 **Libraries:** Updated LibClassicDurations, LibClassicCasterino  
 **Libraries:** Updated LibRangeCheck, LibActionButton  
+**Libraries:** Updated LibHealComm  
 **Skins:** Updated Trade Skin  
 ___
 ### Version 1.42 [01/08/2021]
