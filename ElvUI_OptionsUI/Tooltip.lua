@@ -19,30 +19,32 @@ local modifierValues = {
 E.Options.args.tooltip = ACH:Group(L["Tooltip"], nil, 2, "tree", function(info) return E.db.tooltip[info[#info]] end, function(info, value) E.db.tooltip[info[#info]] = value; end)
 E.Options.args.tooltip.args.intro = ACH:Description(L["TOOLTIP_DESC"], 1)
 E.Options.args.tooltip.args.enable = ACH:Toggle(L["Enable"], nil, 2, nil, nil, nil, function(info) return E.private.tooltip[info[#info]] end, function(info, value) E.private.tooltip[info[#info]] = value; E:StaticPopup_Show("PRIVATE_RL") end)
-E.Options.args.tooltip.args.role = ACH:Toggle(L["ROLE"], L["Display the unit role in the tooltip."], 3)
-E.Options.args.tooltip.args.targetInfo = ACH:Toggle(L["Target Info"], L["When in a raid group display if anyone in your raid is targeting the current tooltip unit."], 4)
-E.Options.args.tooltip.args.modifierID = ACH:Select(L["Modifier for IDs"], nil, 5, modifierValues)
-E.Options.args.tooltip.args.playerTitles = ACH:Toggle(L["Player Titles"], L["Display player titles."], 6)
-E.Options.args.tooltip.args.guildRanks = ACH:Toggle(L["Guild Ranks"], L["Display guild ranks if a unit is guilded."], 7)
-E.Options.args.tooltip.args.showMount = ACH:Toggle(L["Current Mount"], L["Display current mount the unit is riding."], 8)
-E.Options.args.tooltip.args.alwaysShowRealm = ACH:Toggle(L["Always Show Realm"], nil, 9)
-E.Options.args.tooltip.args.showElvUIUsers = ACH:Toggle(L["Show ElvUI Users"], L["Show ElvUI users and their version of ElvUI."], 10)
-E.Options.args.tooltip.args.itemCount = ACH:Select(L["Item Count"], L["Display how many of a certain item you have in your possession."], 11, { BAGS_ONLY = L["Bags Only"], BANK_ONLY = L["Bank Only"], BOTH = L["Both"], NONE = L["NONE"] })
-E.Options.args.tooltip.args.colorAlpha = ACH:Range(L["OPACITY"], nil, 12, { isPercent = true, min = 0, max = 1, step = 0.01 })
-E.Options.args.tooltip.args.cursorAnchor = ACH:Toggle(L["Cursor Anchor"], L["Should tooltip be anchored to mouse cursor"], 13)
-E.Options.args.tooltip.args.cursorAnchorType = ACH:Select(L["Cursor Anchor Type"], nil, 14, { ANCHOR_CURSOR = L["ANCHOR_CURSOR"], ANCHOR_CURSOR_LEFT = L["ANCHOR_CURSOR_LEFT"], ANCHOR_CURSOR_RIGHT = L["ANCHOR_CURSOR_RIGHT"] }, nil, nil, nil, nil, nil, function() return (not E.db.tooltip.cursorAnchor) end)
-E.Options.args.tooltip.args.cursorAnchorX = ACH:Range(L["Cursor Anchor Offset X"], nil, 15, { min = -128, max = 128, step = 1 }, nil, nil, nil, nil, function() return (not E.db.tooltip.cursorAnchor) or (E.db.tooltip.cursorAnchorType == "ANCHOR_CURSOR") end)
-E.Options.args.tooltip.args.cursorAnchorY = ACH:Range(L["Cursor Anchor Offset Y"], nil, 16, { min = -128, max = 128, step = 1 }, nil, nil, nil, nil, function() return (not E.db.tooltip.cursorAnchor) or (E.db.tooltip.cursorAnchorType == "ANCHOR_CURSOR") end)
-E.Options.args.tooltip.args.itemQualityBorderColor = {
-			order = 10,
-			type = 'toggle',
-			name = L["Item Border Color"],
-			desc = L["Colorize the tooltip border based on item quality."],
-			set = function(info, value)
-				E.db.tooltip.itemQualityBorderColor = value
-				TT:ToggleItemQualityBorderColor()
-			end
-		}
+E.Options.args.tooltip.args.modifierID = ACH:Select(L["Modifier for IDs"], nil, 3, modifierValues)
+E.Options.args.tooltip.args.itemCount = ACH:Select(L["Item Count"], L["Display how many of a certain item you have in your possession."], 4, { BAGS_ONLY = L["Bags Only"], BANK_ONLY = L["Bank Only"], BOTH = L["Both"], NONE = L["NONE"] })
+E.Options.args.tooltip.args.colorAlpha = ACH:Range(L["OPACITY"], nil, 5, { isPercent = true, min = 0, max = 1, step = 0.01 })
+
+E.Options.args.tooltip.args.general = ACH:Group(L["General"], nil, 6)
+E.Options.args.tooltip.args.general.inline = true
+
+E.Options.args.tooltip.args.general.args.targetInfo = ACH:Toggle(L["Target Info"], L["When in a raid group display if anyone in your raid is targeting the current tooltip unit."], 7)
+E.Options.args.tooltip.args.general.args.playerTitles = ACH:Toggle(L["Player Titles"], L["Display player titles."], 8)
+E.Options.args.tooltip.args.general.args.guildRanks = ACH:Toggle(L["Guild Ranks"], L["Display guild ranks if a unit is guilded."], 9)
+E.Options.args.tooltip.args.general.args.alwaysShowRealm = ACH:Toggle(L["Always Show Realm"], nil, 10)
+E.Options.args.tooltip.args.general.args.itemQualityBorderColor = {
+	order = 11,
+	type = 'toggle',
+	name = L["Item Border Color"],
+	desc = L["Colorize the tooltip border based on item quality."],
+	set = function(info, value)
+		E.db.tooltip.itemQualityBorderColor = value
+		TT:ToggleItemQualityBorderColor()
+	end
+}
+E.Options.args.tooltip.args.general.args.showElvUIUsers = ACH:Toggle(L["Show ElvUI Users"], L["Show ElvUI users and their version of ElvUI."], 12)
+E.Options.args.tooltip.args.general.args.cursorAnchor = ACH:Toggle(L["Cursor Anchor"], L["Should tooltip be anchored to mouse cursor"], 13)
+E.Options.args.tooltip.args.general.args.cursorAnchorType = ACH:Select(L["Cursor Anchor Type"], nil, 14, { ANCHOR_CURSOR = L["ANCHOR_CURSOR"], ANCHOR_CURSOR_LEFT = L["ANCHOR_CURSOR_LEFT"], ANCHOR_CURSOR_RIGHT = L["ANCHOR_CURSOR_RIGHT"] }, nil, nil, nil, nil, nil, function() return (not E.db.tooltip.cursorAnchor) end)
+E.Options.args.tooltip.args.general.args.cursorAnchorX = ACH:Range(L["Cursor Anchor Offset X"], nil, 15, { min = -128, max = 128, step = 1 }, nil, nil, nil, nil, function() return (not E.db.tooltip.cursorAnchor) or (E.db.tooltip.cursorAnchorType == "ANCHOR_CURSOR") end)
+E.Options.args.tooltip.args.general.args.cursorAnchorY = ACH:Range(L["Cursor Anchor Offset Y"], nil, 16, { min = -128, max = 128, step = 1 }, nil, nil, nil, nil, function() return (not E.db.tooltip.cursorAnchor) or (E.db.tooltip.cursorAnchorType == "ANCHOR_CURSOR") end)
 
 E.Options.args.tooltip.args.fontGroup = ACH:Group(L["Font"], nil, nil, nil, function(info) return E.db.tooltip[info[#info]] end, function(info, value) E.db.tooltip[info[#info]] = value; TT:SetTooltipFonts() end)
 E.Options.args.tooltip.args.fontGroup.args.font = ACH:SharedMediaFont(L["Font"], nil, 1)
