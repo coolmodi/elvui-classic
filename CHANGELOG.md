@@ -1,5 +1,36 @@
-### Version 1.37 [ETA: 🍨]
-**Tags:** power:current works on NPCs again  
+### Version 1.43 [ETA: 🍨]
+**Bags:** Fixed button spacing option  
+**Libraries:** Updated LibClassicDurations, LibClassicCasterino  
+**Libraries:** Updated LibRangeCheck, LibActionButton  
+**Skins:** Updated Trade Skin  
+___
+### Version 1.42 [01/08/2021]
+**Options:** Fixed Typo  
+___
+### Version 1.41 [01/08/2021]
+**ActionBars:** Added Slash Command "/fixabswap" this will swap the settings on profiles that never went through the install steps  
+This is why some profiles and spells have not swapped positions  
+**ActionBars:** Loss of Control Color added back  
+**ActionBars:** Masque disables have been tweaked  
+**ActionBars:** Border Fixed  
+___
+### Version 1.40 [01/06/2021]
+**ActionBars:** Fixed Action Pages  
+**ActionBars:** Apply To All Group Added to apply option to all bars at once  
+**Bags:** Fixed the Color by Quality  
+___
+### Version 1.39 [01/06/2021]
+**Version:** Corrected "Update Popup"  
+___
+### Version 1.38 [01/05/2021]
+**ActionBars:** Assign correct action page according to Blizzard Bars  
+**ActionBars:** Fix MicroBar Visuals  
+___
+### Version 1.37 [01/04/2021]
+**Aura:** Assign right type  
+**Loot:** Loot Roll show stacks  
+**DataBars:** Pet Expereience  
+**Libraries:** Updated LibClassicDurations, LibClassicCasterino  
 ___
 ### Version 1.36 [10/27/2020]
 **Auras:** Update  
