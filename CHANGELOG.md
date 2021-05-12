@@ -1,4 +1,5 @@
 ### Version 1.43 [ETA: 🍨]
+**Auras:** Fixed Font issue  
 **Bags:** Fixed button spacing option  
 **Config:** Updated General, Media, BlizzUI Improvements options  
 **Config:** Updated Tooltip, DisabledBlizzardFrames options  
