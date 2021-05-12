@@ -13,13 +13,15 @@ function S:TradeFrame()
 	if not (E.private.skins.blizzard.enable and E.private.skins.blizzard.trade) then return end
 
 	local TradeFrame = _G.TradeFrame
-	S:HandleFrame(TradeFrame, true, nil, -5, 0, -7)
+	S:HandleFrame(TradeFrame, true, nil, -5, 0, 0)
 
 	S:HandleButton(_G.TradeFrameTradeButton, true)
 	S:HandleButton(_G.TradeFrameCancelButton, true)
 
-	S:HandlePointXY(_G.TradeFrameCloseButton, -6, 2)
-	S:HandlePointXY(_G.TradeFrameTradeButton, -91)
+	S:HandlePointXY(_G.TradeFrameCloseButton, -5)
+	S:HandlePointXY(_G.TradeFrameTradeButton, -85)
+	S:HandlePointXY(_G.TradeFrameTradeButton, -85, 2)
+	S:HandlePointXY(_G.TradeFrameCancelButton, 3)
 	S:HandlePointXY(_G.TradePlayerItem1, 8)
 
 	S:HandleEditBox(_G.TradePlayerInputMoneyFrameGold)
