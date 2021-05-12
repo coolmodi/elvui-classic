@@ -3,6 +3,7 @@
 **Bags:** Fixed button spacing option  
 **Config:** Updated General, Media, BlizzUI Improvements options  
 **Config:** Updated Tooltip, DisabledBlizzardFrames options  
+**DataTexts:** Updated Avoidance (Credits: Jeff Blanda)  
 **Libraries:** Updated LibClassicDurations, LibClassicCasterino  
 **Libraries:** Updated LibRangeCheck, LibActionButton  
 **Skins:** Updated Trade Skin  
