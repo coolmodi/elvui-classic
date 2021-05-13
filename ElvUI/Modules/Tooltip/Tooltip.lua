@@ -1,8 +1,7 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local TT = E:GetModule('Tooltip')
 local Skins = E:GetModule('Skins')
 
---Lua functions
 local _G = _G
 local strmatch = strmatch
 local unpack, select, ipairs = unpack, select, ipairs
@@ -67,7 +66,8 @@ end
 
 function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 	if E.private.tooltip.enable ~= true then return end
-	if tt:IsForbidden() or not TT.db.visibility then return end
+	if tt:IsForbidden() then return end
+	if not TT.db.visibility then return end
 	if tt:GetAnchorType() ~= 'ANCHOR_NONE' then return end
 
 	if InCombatLockdown() and not TT:IsModKeyDown(TT.db.visibility.combatOverride) then

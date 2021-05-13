@@ -3,15 +3,14 @@
 -- Harlem Shake: 	Try it out with the command /harlemshake
 -- Hello Kitty: 	Try it out with the command /hellokitty (pay attention to the popups, read what it says)
 ------------------------------------------------------------------------
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule('UnitFrames')
 local AB = E:GetModule('ActionBars')
 
---Lua functions
 local _G = _G
 local pairs = pairs
 local twipe, tinsert = wipe, tinsert
---WoW API / Variables
+
 local CreateFrame = CreateFrame
 local DoEmote = DoEmote
 local GetCVar, SetCVar = GetCVar, SetCVar

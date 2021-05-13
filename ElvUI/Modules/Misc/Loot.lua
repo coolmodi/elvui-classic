@@ -1,13 +1,12 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local M = E:GetModule('Misc')
 local LBG = E.Libs.ButtonGlow
 
---Lua functions
 local _G = _G
 local unpack, pairs = unpack, pairs
 local tinsert = tinsert
 local max = max
---WoW API / Variables
+
 local CloseLoot = CloseLoot
 local CreateFrame = CreateFrame
 local CursorOnUpdate = CursorOnUpdate

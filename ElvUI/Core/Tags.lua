@@ -1,11 +1,10 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, 'ElvUI was unable to locate ElvUF.')
 local Translit = E.Libs.Translit
 local translitMark = '!'
 
---Lua functions
 local _G = _G
 local tonumber, next = tonumber, next
 local pairs, wipe, floor, ceil = pairs, wipe, floor, ceil
@@ -13,7 +12,6 @@ local gmatch, gsub, format, select = gmatch, gsub, format, select
 local strfind, strmatch, strlower, strsplit = strfind, strmatch, strlower, strsplit
 local utf8lower, utf8sub, utf8len = string.utf8lower, string.utf8sub, string.utf8len
 
---WoW API / Variables
 local UnitIsFeignDeath = UnitIsFeignDeath
 local CreateTextureMarkup = CreateTextureMarkup
 local UnitFactionGroup = UnitFactionGroup
@@ -1167,6 +1165,7 @@ E.TagInfo = {
 	['race'] = { category = 'Miscellaneous', description = "Displays the race" },
 	['smartclass'] = { category = 'Miscellaneous', description = "Displays the player's class or creature's type" },
 	['specialization'] = { category = 'Miscellaneous', description = "Displays your current specialization as text" },
+	['ElvUI-Users'] = { category = 'Miscellaneous', description = "Displays ElvUI users and their version" },
 	--Names
 	['name:abbrev:long'] = { category = 'Names', description = "Displays the name of the unit with abbreviation (limited to 20 letters)" },
 	['name:abbrev:medium'] = { category = 'Names', description = "Displays the name of the unit with abbreviation (limited to 15 letters)" },
@@ -1261,11 +1260,6 @@ E.TagInfo = {
 	['target:veryshort:translit'] = { category = 'Target', description = "Displays the current target of the unit with transliteration for cyrillic letters (limited to 5 letters)" },
 	['target:veryshort'] = { category = 'Target', description = "Displays the current target of the unit (limited to 5 letters)" },
 	['target'] = { category = 'Target', description = "Displays the current target of the unit" },
-	--Miscellanous
-	['affix'] = { category = 'Miscellanous', description = "Displays low level critter mobs" },
-	['class'] = { category = 'Miscellanous', description = "Displays the class of the unit, if that unit is a player" },
-	['ElvUI-Users'] = { category = 'Miscellanous', description = "Displays ElvUI users and their version" },
-	['race'] = { category = 'Miscellanous', description = "Displays the race" },
 	--Range
 	['distance'] = { category = 'Range', description = "Displays the distance" },
 	['nearbyplayers:10'] = { category = 'Range', description = "Displays all players within 10 yards" },
@@ -1277,8 +1271,15 @@ E.TagInfo = {
 	['threat'] = { category = 'Threat', description = "Displays the current threat situation (Aggro is secure tanking, -- is losing threat and ++ is gaining threat)" },
 }
 
+--[[
+	tagName = Tag Name
+	category = Category that you want it to fall in
+	description = self explainitory
+	order = This is optional. It's used for sorting the tags by order and not by name. The +10 is not a rule. I reserve the first 10 slots.
+]]
+
 function E:AddTagInfo(tagName, category, description, order)
-	if order then order = tonumber(order) + 10 end
+	if type(order) == 'number' then order = order + 10 else order = nil end
 
 	E.TagInfo[tagName] = E.TagInfo[tagName] or {}
 	E.TagInfo[tagName].category = category or 'Miscellaneous'

@@ -3153,7 +3153,7 @@ E.Options.args.unitframe = {
 									order = 5,
 									name = L["Health Speed"],
 									type = "range",
-									min = .1, max = .5, step = .05,
+									min = .01, max = .5, bigStep = .05, step = .01,
 									disabled = function() return not E.global.unitframe.effectiveHealth end,
 									get = function(info) return E.global.unitframe[info[#info]] end,
 									set = function(info, value) E.global.unitframe[info[#info]] = value; UF:Update_AllFrames() end
@@ -3162,7 +3162,7 @@ E.Options.args.unitframe = {
 									order = 6,
 									name = L["Power Speed"],
 									type = "range",
-									min = .1, max = .5, step = .05,
+									min = .01, max = .5, bigStep = .05, step = .01,
 									disabled = function() return not E.global.unitframe.effectivePower end,
 									get = function(info) return E.global.unitframe[info[#info]] end,
 									set = function(info, value) E.global.unitframe[info[#info]] = value; UF:Update_AllFrames() end
@@ -4054,27 +4054,43 @@ E.Options.args.unitframe = {
 					get = function(info) return E.private.unitframe.disabledBlizzardFrames[info[#info]] end,
 					set = function(info, value) E.private.unitframe.disabledBlizzardFrames[info[#info]] = value; E:StaticPopup_Show("PRIVATE_RL") end,
 					args = {
-						player = {
+						individual = {
 							order = 1,
-							type = 'toggle',
-							name = L["Player"],
-							desc = L["Disables the player and pet unitframes."],
+							type = 'group',
+							name = L["Individual Units"],
+							inline = true,
+							args = {
+								player = {
+									order = 1,
+									type = 'toggle',
+									name = L["Player"],
+									desc = L["Disables the player and pet unitframes."],
+								},
+								target = {
+									order = 2,
+									type = 'toggle',
+									name = L["TARGET"],
+									desc = L["Disables the target and target of target unitframes."],
+								},
+							},
 						},
-						target = {
+						group = {
 							order = 2,
-							type = 'toggle',
-							name = L["TARGET"],
-							desc = L["Disables the target and target of target unitframes."],
-						},
-						party = {
-							order = 6,
-							type = 'toggle',
-							name = L["PARTY"],
-						},
-						raid = {
-							order = 7,
-							type = 'toggle',
-							name = L["Raid"],
+							type = 'group',
+							name = L["Group Units"],
+							inline = true,
+							args = {
+								party = {
+									order = 1,
+									type = 'toggle',
+									name = L["PARTY"],
+								},
+								raid = {
+									order = 2,
+									type = 'toggle',
+									name = L["Raid"],
+								},
+							},
 						},
 					},
 				},

@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule('UnitFrames');
 
 local _G = _G
@@ -101,6 +101,7 @@ function UF:Configure_AuraBars(frame)
 		auraBars.maxBars = db.aurabar.maxBars
 		auraBars.spacing = db.aurabar.spacing
 		auraBars.width = frame.UNIT_WIDTH - auraBars.height - (frame.BORDER * 4)
+		auraBars.filterList = UF:ConvertFilters(auraBars, db.aurabar.priority)
 
 		local colors = UF.db.colors.auraBarBuff
 		if E:CheckClassColor(colors.r, colors.g, colors.b) then

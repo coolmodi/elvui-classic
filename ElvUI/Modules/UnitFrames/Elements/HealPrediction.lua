@@ -1,8 +1,7 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local UF = E:GetModule('UnitFrames');
 local HealComm = LibStub("LibHealComm-4.0")
 
---WoW API / Variables
 local CreateFrame = CreateFrame
 
 function UF.HealthClipFrame_HealComm(frame)

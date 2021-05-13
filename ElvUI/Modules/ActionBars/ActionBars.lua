@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local AB = E:GetModule('ActionBars')
 
 local _G = _G
@@ -512,14 +512,6 @@ function AB:RemoveBindings()
 	end
 
 	AB:RegisterEvent('PLAYER_REGEN_DISABLED', 'ReassignBindings')
-end
-
-function AB:UpdateBar1Paging()
-	if AB.db.bar2.enabled then
-		AB.barDefaults.bar1.conditions = '[bonusbar:5] 11; [shapeshift] 13; [form,noform] 0; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;'
-	else
-		AB.barDefaults.bar1.conditions = '[bonusbar:5] 11; [shapeshift] 13; [form,noform] 0; [bar:2] 2; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;'
-	end
 end
 
 function AB:ApplyFontToAll()
@@ -1092,7 +1084,7 @@ function AB:ToggleCooldownOptions()
 end
 
 function AB:SetButtonDesaturation(button, duration)
-	if AB.db.desaturateOnCooldown and (duration and duration > 1.5) then
+	if AB.db.desaturateOnCooldown and (duration and duration > 2) then
 		button.icon:SetDesaturated(true)
 		button.saturationLocked = true
 	else
@@ -1187,7 +1179,6 @@ function AB:Initialize()
 
 	AB:DisableBlizzard()
 	AB:SetupMicroBar()
-	AB:UpdateBar1Paging()
 
 	for i = 1, 10 do
 		AB:CreateBar(i)

@@ -55,16 +55,15 @@
 	StepTitleTextJustification	- The justification of the text on each step button ('LEFT', 'RIGHT', 'CENTER'). Default: 'CENTER'
 --------------------------------------------------------------------]]--
 
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB, Localize Underscore
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB, Localize Underscore
 local PI = E:GetModule('PluginInstaller')
 local S = E:GetModule('Skins')
 
---Lua functions
 local _G = _G
 local pairs, unpack = pairs, unpack
 local tinsert, tremove = tinsert, tremove
 local format = format
---WoW API / Variables
+
 local CreateFrame = CreateFrame
 local PlaySound = PlaySound
 local UIFrameFadeOut = UIFrameFadeOut

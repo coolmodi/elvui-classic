@@ -1,10 +1,9 @@
 local E, L, V, P, G = unpack(select(2, ...)) -- Import Functions/Constants, Config, Locales
 local RU = E:GetModule('RaidUtility')
 
---Lua functions
 local _G = _G
 local unpack, pairs, strfind = unpack, pairs, strfind
---WoW API / Variables
+
 local CreateFrame = CreateFrame
 local DoReadyCheck = DoReadyCheck
 local GetInstanceInfo = GetInstanceInfo

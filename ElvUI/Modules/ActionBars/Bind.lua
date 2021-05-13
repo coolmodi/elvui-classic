@@ -1,11 +1,11 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+local E, L, V, P, G = unpack(select(2, ...)) --Import: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local AB = E:GetModule('ActionBars')
 local Skins = E:GetModule('Skins')
 
 local _G = _G
 local select, tonumber, pairs = select, tonumber, pairs
 local floor, format = floor, format
---WoW API / Variables
+
 local hooksecurefunc = hooksecurefunc
 local CreateFrame = CreateFrame
 local GetSpellInfo = GetSpellInfo

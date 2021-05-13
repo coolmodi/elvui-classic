@@ -1,8 +1,7 @@
---Lua functions
 local _G = _G
 local print, tostring, select = print, tostring, select
 local strlower = strlower
---WoW API / Variables
+
 local GetAddOnEnableState = GetAddOnEnableState
 local UIParentLoadAddOn = UIParentLoadAddOn
 local GetMouseFocus = GetMouseFocus
